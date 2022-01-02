@@ -20,6 +20,9 @@ I started this project December 5, 2020.
 
 It was inspired, in part, by https://github.com/ekumanov/cybrid
 
+## Block Diagram
+![alt text](block_diagram.png)
+
 ## Documentation on YouTube
 
 Along the way I have been documenting progress in YouTube:
