@@ -5,6 +5,9 @@
 % exactly which keys were struck to create the data.
 % This data was taken about 6 months ago.
 
+% To be specific: these samples are the motion of the hammer
+% shank at a point close to the flange.
+
 % Data is normalized to 1.0 as max ADC range.
 % Variation in amplitude is due to non-uniform sensor placement.
 
@@ -31,19 +34,26 @@ time = [0:len-1]/sample_rate;
 
 % Back of the envelope velocity computation:
 
-% Derivative filter to compute velocity.
+% Digital filter approximating a derivative to compute velocity.
 % The filter is [1 -1] convolved with a boxcar filter.
 % The boxcar is to remove some noise.
 M = 10;
 b = [1 zeros(1,M) -1];
 D = round(length(b)/2);  % Filter delay in units of samples.
 
-% Velocity estimate in meters per second.
-% Units: The hammer moves approximately 5/16 of an inch when
-% traveling the normalized distance (0 to 1 on vertical axis).
+% The shank at the sensor location moves approximately
+% 5/16 of an inch when traveling the normalized distance
+% (0 to 1 on vertical axis).
+% Sensor location velocity:
 % (5/16 inch * .0254 inches/meter) = the distance covered in meters.
+%
+% The hammer head moves approximately 2 inches.
+% Hammer location velocity:
+% (2 inches * .0254 inches/meter) = the distance covered in meters.
+%
 % Velocity can be sanity checked by dx/dt with a ruler on the plots.
-dx = filter(b,[1],samples) * 5/16 * 0.0254 * sample_rate / (M+2);
+%
+dx = filter(b,[1],samples) * 2 * 0.0254 * sample_rate / (M+2);
 % Remove the filter initialization transient.
 dx(1:length(b),:) = zeros(length(b),size(dx)(2));
 
