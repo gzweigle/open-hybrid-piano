@@ -20,7 +20,9 @@ I started this project December 5, 2020.  For the first year I documented on You
 
 It was inspired, in part, by https://github.com/ekumanov/cybrid
 
-Another related project is https://github.com/jkominek/piano-conversion/
+Other related projects:
+* https://github.com/jkominek/piano-conversion/
+* https://github.com/davidedelvento/Mybrid
 
 ## Block Diagram
 ![alt text](block_diagram.png)
