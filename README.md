@@ -152,7 +152,8 @@ Step 13 - Eight Channel Analog https://www.youtube.com/watch?v=e2ARDHr45-I
 
 The following are in progress or planned, and the order may change:
 
-Step 14 - Network and PPS (in progress, 80% finished)
+Step 14 - Network and PPS https://www.youtube.com/watch?v=ryVUUPXWy0Q
+
 1. Design a network protocol for sending hammer strike events (basically, MIDI information) and high-speed streaming hammer samples (for data analysis and visualization).
 2. Design the protocol such that it avoids the latency issues seen in Step 11.
 3. Writing protocol C++ code for TPS/RPS.
