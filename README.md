@@ -16,18 +16,19 @@ It is a great way to learn so many new things.
 
 ## History
 
-I started this project December 5, 2020.
+I started December 5, 2020.
+
+Please see [video_documentation.md](video_documentation.md) for historical documentation in video form.
 
 ## Related Projects:
 
 Work was inspired, in part, by https://github.com/ekumanov/cybrid
 
+See also:
+
 * https://github.com/jkominek/piano-conversion/
 * https://github.com/davidedelvento/Mybrid
-
-## Documentation
-
-Please see the file video_documentation.md in this directory.
+* https://www.youtube.com/watch?v=nRBsudMpwwc
 
 ## Roadmap
 
