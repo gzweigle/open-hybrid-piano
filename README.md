@@ -25,9 +25,6 @@ Work was inspired, in part, by https://github.com/ekumanov/cybrid
 * https://github.com/jkominek/piano-conversion/
 * https://github.com/davidedelvento/Mybrid
 
-## Block Diagram
-![alt text](block_diagram.png)
-
 ## Documentation
 
 Please see the file video_documentation.md in this directory.
@@ -39,3 +36,6 @@ Create and build every component. This includes both sampled and modelled piano 
 Design and build architectural variants, to address different use cases.
 
 Helping others build and create based on this work (for example, possibly open source options or kits).
+
+## Block Diagram
+![alt text](block_diagram.png)
