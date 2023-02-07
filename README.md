@@ -204,16 +204,43 @@ Step 19 - Sixteen Key Piano https://www.youtube.com/watch?v=oMMNmDyscmQ
 3. TPS 0.2 - Modifications for case fit, 0.1" alignment, add missing LED resistors.
 4. Shorten LCD side-mounting PCB so fits better in case.  Add 2 LED.
 
+Step 20 - Sensor Improvement https://www.youtube.com/watch?v=C9174TC4kLs
+
+1. HPS 0.4 - Remove top ground plane. Not needed and looks better with the dark PCB option.
+2. Investigate uneven hammer max height signal - discover cause is CNY70 variations.
+3. Could address either with firmware calibration or external trimmer resistor.
+4. Design and build HPS 0.5 with a trimmer resistor. This gives ability to test both options.
+5. HPS 0.5 also switches to surface mount resistors to give space for the trimmer.
+
+Step 21 - Twentyfour Key Piano https://www.youtube.com/watch?v=uJTaKLZaluc
+
+1. ECA 0.3 - Larger pads for voltage regulator.
+2. TPS 0.3 - Move LCD forward to give additional TFT to ECA clearance. Add card detect pull-up resistor.
+3. Build one additional ECA/TPS to achieve a total of 24 keys.
+4. Build 24 of the new HPS 0.5.
+5. Adjust HPS 0.5 trimmers to get a flat hammer max height signal.
+
+Step 22 - 40 Keys, 3 Pedals https://www.youtube.com/watch?v=9sqkgVXceJU
+
+1. Design and build a voltage divider circuit with three pedal inputs.
+2. Design algorithms (not covered in video) to estimate pedal resistance from voltage divider output.
+3. Use an existing ECA/TPS 0.3 for processing voltage divider output.
+4. Write new C++ for Teensy pedal processing and Teensy pedal TFT display.
+5. Modify PPS Python to support pedals.
+6. Build 16 of a new HPS 0.6 design (will be covered in future video).
+7. ECA 0.4 - Small changes to help soldering.
+8. TPS 0.4 - Move a couple LEDs to make more visible.
+9. TPS goes back to original TFT position, and I built new vertical stand PCB to fine-tune position.
+10. Build three new ECA/TPS.
+
 The following are in progress or planned, and the order may change:
 
-1. Resolve unacceptably large variation in hammer height signal.
-2. Add more piano keys, eight at a time - probably will continue to spin boards because it's fun.
-3. Design, hardware, and software to add pedals.
-4. Documentation of software, pushing more to Github.
+1. Documentation of software, pushing more to Github.
    1. C++ on DSP TPS ((Arduino) Teensy 4.1) - real-time data processing.
    2. C++ on RPS (Raspberry Pi 4B) - real-time data processing.
    3. C++ on GPU TPS ((Arduino) Teensy 4.1) - graphics processing and display.
    4. Python on PPS (Raspberry Pi 4B) - digital keyboard features.
    5. Matlab / Octave on desktop computer - analytics and visualization.
    6. Python / Javascript on desktop computer - analytics and visualization.
-5. PPS software to remove need for external MIDI connection and generate the piano sounds internally.
+2. PPS software to remove need for external MIDI connection and generate the piano sounds internally.
+3. I am considering a new (additional) design/architecture to address another use case.
