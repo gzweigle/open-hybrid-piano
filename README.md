@@ -49,3 +49,16 @@ A new single board architecure is designed for simplicity and lower cost.
 Total system = piano action, one board with MIDI output plus 88 small sensor boards.
 The result should be more suitable for others to try than the performance architecture.
 ![alt text](block_diagram_single_board.png)
+
+## Components include the following:
+Teensy 4.1 ARM Processor - https://www.pjrc.com/store/teensy41.html
+Texas Instruments ADS131M08 - https://www.ti.com/product/ADS131M08
+LTC6930 Precision Oscillator
+300mA Low Dropout Linear Regulator
+Teensy to ADC interface logic ICs
+CNY70 Sensor - https://www.vishay.com/en/product/83751/
+Adafruit 2.8 inch TFT display - https://www.adafruit.com/product/1770
+Raspberry Pi - https://www.raspberrypi.com/
+Python - https://www.python.org/
+Matlab - https://www.mathworks.com/products/matlab.html
+C++
