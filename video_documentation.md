@@ -209,3 +209,7 @@ Step 23 - Single Board Architecture https://www.youtube.com/watch?v=DxdRO3M7cgg
 3. Board design.
 4. Initial testing: Teensy-ADC logic and new C++ software.
 5. The new board is called Integrated Processing System, or IPS.  Video covers IPS 0.0.
+
+Playing 61 key piano (16 inputs on IPS + existing 5*8=40 TPS/ECA + 5 free inputs on the pedal unit) with 3 pedals.
+
+Playing 88 key piano (6 ADC on IPS + 5 TPS/ECA) with 3 pedals.
