@@ -202,14 +202,10 @@ Step 22 - 40 Keys, 3 Pedals https://www.youtube.com/watch?v=9sqkgVXceJU
 9. TPS goes back to original TFT position, and I built new vertical stand PCB to fine-tune position.
 10. Build three new ECA/TPS.
 
-Possible future videos:
+Step 23 - Single Board Architecture https://www.youtube.com/watch?v=DxdRO3M7cgg
 
-1. Documentation of software, pushing more to Github.
-   1. C++ on DSP TPS ((Arduino) Teensy 4.1) - real-time data processing.
-   2. C++ on RPS (Raspberry Pi 4B) - real-time data processing.
-   3. C++ on GPU TPS ((Arduino) Teensy 4.1) - graphics processing and display.
-   4. Python on PPS (Raspberry Pi 4B) - digital keyboard features.
-   5. Matlab / Octave on desktop computer - analytics and visualization.
-   6. Python / Javascript on desktop computer - analytics and visualization.
-2. PPS software to remove need for external MIDI connection and generate the piano sounds internally.
-3. I am working on a new (additional) design/architecture to address another use case.
+1. Introducing the single board architecture.
+2. Why?
+3. Board design.
+4. Initial testing: Teensy-ADC logic and new C++ software.
+5. The new board is called Integrated Processing System, or IPS.  Video covers IPS 0.0.

@@ -4,7 +4,9 @@
 
 Build a full-custom hybrid digital piano using a complete grand piano action. 
 
-In the spirit of "everything worth doing is worth overdoing", the design will be intentionally overdesigned and include many marginally useful features.
+In the spirit of "everything worth doing is worth overdoing", the performance design option will be intentionally overdesigned and include many marginally useful features.
+
+Additionally, a simpler single board architecture is under development.
 
 This is a hobby and so the approach may be driven primarily by curiosity on a subject, and not by efficiently getting to completion.
 
@@ -38,5 +40,12 @@ Design and build architectural variants, to address different use cases.
 
 Helping others build and create based on this work (for example, possibly open source options or kits).
 
-## Block Diagram
-![alt text](block_diagram.png)
+## Performance Architecture Block Diagram
+The original architecture is designed for maximum performance, without constraining cost.
+![alt text](block_diagram_performance.png)
+
+## Single Board Architecture Block Diagram
+A new single board architecure is designed for simplicity and lower cost.
+Total system = piano action, one board with MIDI output plus 88 small sensor boards.
+The result should be more suitable for others to try than the performance architecture.
+![alt text](block_diagram_single_board.png)
