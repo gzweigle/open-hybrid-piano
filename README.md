@@ -1,4 +1,4 @@
-# DIY-Grand-Digital-Piano
+# DIY Hybrid Digital / Analog Grand Piano
 
 ## Goal
 
