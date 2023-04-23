@@ -210,6 +210,15 @@ Step 23 - Single Board Architecture https://www.youtube.com/watch?v=DxdRO3M7cgg
 4. Initial testing: Teensy-ADC logic and new C++ software.
 5. The new board is called Integrated Processing System, or IPS.  Video covers IPS 0.0.
 
-Playing 61 key piano (16 inputs on IPS + existing 5*8=40 TPS/ECA + 5 free inputs on the pedal unit) with 3 pedals.
+Step 24 - 88-Key Piano Build https://www.youtube.com/watch?v=w0TpXvcRCsM
+1. While attempting to play subsets of Mozart K331 Andante grazioso:
+2. Build updated version of all 88 sensors (HPS circuit boards).
+3. Solder 6 of 12 analog-to-digital converters, plus associated circuitry, on IPS 0.0.
+4. Test and correct bugs in software for multiple sets of analog-to-digital converters.
+5. Test and correct an issue with printed circuit board.
+6. Finally - a working 88-key custom hybrid digital piano!
 
-Playing 88 key piano (6 ADC on IPS + 5 TPS/ECA) with 3 pedals.
+In process:
+- IPS board spin and all 12 converters.
+- A video explaining the DSP and sampling rate design decisions on performance vs single board architecture.
+- Sensors on damper rail.
