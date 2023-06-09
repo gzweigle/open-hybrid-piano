@@ -211,12 +211,27 @@ Step 23 - Single Board Architecture https://www.youtube.com/watch?v=DxdRO3M7cgg
 5. The new board is called Integrated Processing System, or IPS.  Video covers IPS 0.0.
 
 Step 24 - 88-Key Piano Build https://www.youtube.com/watch?v=w0TpXvcRCsM
+
 1. While attempting to play subsets of Mozart K331 Andante grazioso:
 2. Build updated version of all 88 sensors (HPS circuit boards).
 3. Solder 6 of 12 analog-to-digital converters, plus associated circuitry, on IPS 0.0.
 4. Test and correct bugs in software for multiple sets of analog-to-digital converters.
 5. Test and correct an issue with printed circuit board.
 6. Finally - a working 88-key custom hybrid digital piano!
+
+Step 25 - MIDI: PCB and Software Problems https://www.youtube.com/watch?v=gNeLMGaxmG0
+
+1. Solder a single new ADC plus pedal circuit and MIDI circuit onto the board used for Step 23 and Step 24.
+2. The new ADC is connected to the pedal circuit.
+3. The new ADC is also connected to the second (Treble) Teensy.
+4. This setup enables testing code for full ADC data synchronization and using both Teensy processors.
+5. This setup also enables testing the custom Teensy2Teensy communication link.
+6. Modify PCB to connect only a single clock (LTC6930 Precision Oscillator) to all ADC.
+7. Modify PCB to merge ADC resynchronization lines into a single line, controlled by the Base Teensy.
+8. Test triple pedal works.
+9. Stress test MIDI and debug.
+10. Stress test MIDI and debug.
+11. Stress test MIDI and debug.
 
 In process:
 - IPS board spin and all 12 converters.
