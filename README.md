@@ -57,7 +57,7 @@ While the hammer processing boards use fully parallel ADC, the board for damper 
 * Teensy 4.1 ARM Processor - https://www.pjrc.com/store/teensy41.html
 * Texas Instruments ADS131M08 - https://www.ti.com/product/ADS131M08
 * Texas Instruments ADCS7476 - https://www.ti.com/product/ADCS7476
-* LTC6930 Precision Oscillator
+* LTC6930 Precision Oscillator - https://www.analog.com/en/products/ltc6930.html
 * 300mA Low Dropout Linear Regulator
 * Teensy to ADC interface logic ICs
 * CNY70 Sensor - https://www.vishay.com/en/product/83751/
