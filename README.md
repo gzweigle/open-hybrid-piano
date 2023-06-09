@@ -50,9 +50,13 @@ Total system = piano action, one board with MIDI output plus 88 small sensor boa
 The result should be more suitable for others to try than the performance architecture.
 ![alt text](block_diagram_single_board.png)
 
+## Damper Position Processor Block Diagram
+While the hammer processing boards use fully parallel ADC, the board for damper processing uses a muxed ADC approach.
+
 ## Components include the following:
 * Teensy 4.1 ARM Processor - https://www.pjrc.com/store/teensy41.html
 * Texas Instruments ADS131M08 - https://www.ti.com/product/ADS131M08
+* Texas Instruments ADCS7476 - https://www.ti.com/product/ADCS7476
 * LTC6930 Precision Oscillator
 * 300mA Low Dropout Linear Regulator
 * Teensy to ADC interface logic ICs
