@@ -64,22 +64,40 @@ void loop() {
   Adc.NormalizeAdcValues(normalized_array, adc_array);
 
   led_count++;
-  if (led_count == 2000) {
+  if (led_count == 1000) {
     // Make the LEDs flash so I know the board is ok.
     digitalWrite(pin_tp11, HIGH);
     digitalWrite(pin_tp10, HIGH);
     digitalWrite(pin_tp9, HIGH);
   }
-  else if (led_count == 4000) {
+  else if (led_count == 2000) {
     led_count = 0;
     digitalWrite(pin_tp11, LOW);
     digitalWrite(pin_tp10, LOW);
     digitalWrite(pin_tp9, LOW);
     // Display ADC output for two of the analog inputs.
-    Serial.print("adc0 = ");
+    Serial.print("CNY70 output = ");
     Serial.print(adc_array[0]);
-    Serial.print("  adc1 = ");
-    Serial.println(adc_array[1]);
+    Serial.print("  low analog = ");
+    Serial.print(adc_array[1]);
+    Serial.print("  high analog = ");
+    Serial.print(adc_array[2]);
+    Serial.print("  floating analog = ");
+    Serial.println(adc_array[3]);
   }
+
+  // Testing using the following analog 16:1 multiplexer inputs:
+  //    analog 0 = CNY70 output (using R1=50, R2=5600, Rvar=200)
+  //    analog 1 = tied to ground
+  //    analog 2 = tied to Vdd
+  //    analog 3 = floating.
+  //
+  // Results:
+  // CNY70 d = 0
+  //    CNY70 output = 3832  low analog = 0  high analog = 4095  floating analog = 3951
+  // CNY70 d = max
+  //    CNY70 output = 261  low analog = 0  high analog = 4095  floating analog = 3950
+  //
+  // TODO - R2=5600 maybe is too large as CNY70 out of linear range as d->0?
 
 }
