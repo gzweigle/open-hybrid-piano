@@ -4,8 +4,8 @@
 
 Diagnostics::Diagnostics() {}
 
-void Diagnostics::Setup(int samples_per_second, Switches *Dip) {
-  samples_per_second_ = samples_per_second;
+void Diagnostics::Setup(int display_interval, Switches *Dip) {
+  display_interval_ = display_interval;
 
   led_flash_count_ = 0;
   serial_display_count_ = 0;
@@ -25,9 +25,9 @@ void Diagnostics::Setup(int samples_per_second, Switches *Dip) {
 
 void Diagnostics::DisplayState() {
   serial_display_count_++;
-  if (serial_display_count_ == 2*samples_per_second_) {
+  if (serial_display_count_ == 2*display_interval_) {
     serial_display_count_ = 0;
-    Serial.print("Damper Position Processor");
+    Serial.print("DPP");
     if (Dip_->read_switch_11() == true) Serial.print(" 11=1");
     else                                Serial.print(" 11=0");
     if (Dip_->read_switch_12() == true) Serial.print(" 12=1");
@@ -44,16 +44,15 @@ void Diagnostics::DisplayState() {
     else                                Serial.print(" 41=0");
     if (Dip_->read_switch_42() == true) Serial.print(" 42=1");
     else                                Serial.print(" 42=0");
-    Serial.println(".");
   }
 }
 
 void Diagnostics::ControlEthernetLed() {
   led_flash_count_++;
-  if (led_flash_count_ == samples_per_second_) {
+  if (led_flash_count_ == display_interval_) {
     digitalWrite(23, LOW);
   }
-  else if (led_flash_count_ == 2*samples_per_second_) {
+  else if (led_flash_count_ == 2*display_interval_) {
     digitalWrite(23, HIGH);
     led_flash_count_ = 0;
   }

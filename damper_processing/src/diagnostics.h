@@ -20,7 +20,7 @@ class Diagnostics
     void SetTp8(bool);
 
   private:
-    int samples_per_second_;
+    int display_interval_;
     int led_flash_count_;
     int serial_display_count_;
     Switches *Dip_;
