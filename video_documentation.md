@@ -233,7 +233,13 @@ Step 25 - MIDI: PCB and Software Problems https://www.youtube.com/watch?v=gNeLMG
 10. Stress test MIDI and debug.
 11. Stress test MIDI and debug.
 
-In process:
-- IPS board spin and all 12 converters.
-- A video explaining the DSP and sampling rate design decisions on performance vs single board architecture.
-- Sensors on damper rail.
+Step 26 - Damper Velocity https://www.youtube.com/watch?v=ZMxMio3L9dk
+1. Damper sensor mechanical.
+2. Damper sensor PCB, called Damper Position Processor (DPP).
+3. Testing DPP.
+4. Reusing the Hammer Position Sensor (HPS) for DPP. Since using sensor for both hammer and damper, will need to rename.
+5. CAN Bus for sending data between DPP and hammer board (either IPS or TPS).
+6. Adding display to DPP.
+
+In process -
+Modifying DPP so can use for both damper and hammer.  Calling this new board the Integrated Processing System 2.0 (IPS 2.0).
