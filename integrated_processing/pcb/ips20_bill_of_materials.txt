@@ -148,12 +148,12 @@ U7      Teensy4.1             -          -                    Yes          35.00
 
 U8      CAN Bus driver        SOIC-8     TCAN330G             No            3.00        Install if need CAN Bus for board to board communication.
 
-U11     LDO voltage regulator SOIC-23    TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
-U15     LDO voltage regulator SOIC-23    TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
-U16     LDO voltage regulator SOIC-23    TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
-U17     LDO voltage regulator SOIC-23    TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
-U18     LDO voltage regulator SOIC-23    TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
-U19     LDO voltage regulator SOIC-23    TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
+U11     LDO voltage regulator SOT-23     TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
+U15     LDO voltage regulator SOT-23     TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
+U16     LDO voltage regulator SOT-23     TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
+U17     LDO voltage regulator SOT-23     TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
+U18     LDO voltage regulator SOT-23     TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
+U19     LDO voltage regulator SOT-23     TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
 
 U14     3.0 volt output ref   VSSOP-8    REF6030              Yes           8.00        -
 U21     ADC                   MSOP-10    See comment          Yes          20.00        ADS8861 (16-bit) or ADS8860 (16-bit).
