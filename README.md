@@ -4,33 +4,13 @@ Also known as **stem piano**
 
 ![alt text](documentation/ips00_stem_piano_small.jpg)
 
-## Goal
+## Goals
 
 Build a full-custom hybrid digital piano using a complete grand piano action. 
 
-This is a hobby and so the approach may be driven by curiosity on a subject, not by efficiently getting to completion.
+Platform and code that easily adapts to building a range of other unique and innovative musical instruments.
 
-## Why?
-
-Fun.
-
-Great way to learn new things.
-
-## History
-
-Started December 2020.
-
-Please see [YouTube Posts](documentation/video_documentation.md) for historical, how-to, and other documentation in video form.
-
-## Related Projects:
-
-Work was inspired, in part, by https://github.com/ekumanov/cybrid
-
-See also:
-
-* https://github.com/jkominek/piano-conversion/
-* https://github.com/davidedelvento/Mybrid
-* https://www.youtube.com/watch?v=nRBsudMpwwc
+This is a hobby and so the approach may be driven by curiosity on a subject, not by efficiently getting done.
 
 ## Directory Organization
 
@@ -62,11 +42,33 @@ All printed circuit boards and related parts and design.
 
 Code running on a standard computer or Raspberry Pi connected to the piano over Ethernet or MIDI.
 
+## Why?
+
+Fun.
+
+Great way to learn new things.
+
+## History
+
+Started December 2020.
+
+Please see [YouTube Posts](documentation/video_documentation.md) for historical, how-to, and other documentation in video form.
+
+## Related Projects:
+
+Work was inspired, in part, by https://github.com/ekumanov/cybrid
+
+See also:
+
+* https://github.com/jkominek/piano-conversion/
+* https://github.com/davidedelvento/Mybrid
+* https://www.youtube.com/watch?v=nRBsudMpwwc
+
 ## "stem piano" because?
 
 * science technology engineering math
 * like a plant stem, everything here is one component of the overall instrument
 * like a note stem, everything here is one component of...
-* 12 leaves on the brand logo, matches 12 piano notes
+* 12 leaves on the logo, matches 12 piano notes
 * sounds cool
 * does not sound cool

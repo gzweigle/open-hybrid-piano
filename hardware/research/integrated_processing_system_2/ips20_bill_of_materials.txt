@@ -1,6 +1,7 @@
 Label   Description           Package    Part Number          Required?    Est Cost     Comment
 
 -       IPS 2.0 circuit board -          -                    Yes          50.00        -
+U9      SCA 0.0 circuit board -          -                    Yes          10.00        -
 
 C1      1uF Ceramic           0805       -                    Yes           0.02        -
 C2      1uF Ceramic           0805       -                    Yes           0.02        -
@@ -16,19 +17,14 @@ C11     1uF Ceramic           0805       -                    Yes           0.02
 C12     1uF Ceramic           0805       -                    Yes           0.02        -
 C13     1uF Ceramic           0805       -                    Yes           0.02        -
 C14     1uF Ceramic           0805       -                    Yes           0.02        -
-C15     1uF Ceramic           0805       -                    Yes           0.02        -
-C16     1uF Ceramic           0805       -                    Yes           0.02        -
-C17     10uF Ceramic          0805       -                    Yes           0.02        -
-C21     47uF Ceramic          0805       -                    Yes           0.02        -
-C22     1uF Ceramic           0805       -                    Yes           0.02        -
-C23     1uF Ceramic           0805       -                    Yes           0.02        -
-C27     10uF Ceramic          0805       -                    Yes           0.02        -
 
 D1      LED - any color       0805       -                    No            0.05        Any SMD LED in an 0805 package.
 D2      LED - any color       0805       -                    No            0.05        Any SMD LED in an 0805 package.
 D3      LED - any color       0805       -                    No            0.05        Any SMD LED in an 0805 package.
 D4      LED - any color       0805       -                    No            0.05        Any SMD LED in an 0805 package.
 D5      LED - any color       0805       -                    No            0.05        Any SMD LED in an 0805 package.
+D6      LED - any color       0805       -                    No            0.05        Any SMD LED in an 0805 package.
+D7      LED - any color       0805       -                    No            0.05        Any SMD LED in an 0805 package.
 
 J1      Barrel Jack           -          -                    No            0.50        Not required if powering via Teensy USB. Any breadboard compatible should work.
 J2      Ethernet Jack         -          Cetus J1B1211CCD     No            5.00        Header that comes in Teensy 4.1 Ethernet kit.  Only install if using Ethernet.
@@ -97,8 +93,11 @@ R8      47   ohms             0805       -                    Yes           0.20
 R9      100K ohms             0805       -                    No            0.20        Install if using display.
 R10     100K ohms             0805       -                    No            0.20        Install if using display.
 R11     100K ohms             0805       -                    No            0.20        Install if using display.
-R12     120K ohms             0805       -                    No            0.20        Analog circuit.
-R15     0.1  ohms             0805       -                    Yes           0.20        Any value < 0.5 ohms.  Possibly can short with wire.
+R12        0 ohms             0805       -                    No            0.20        SPI option.
+R13        0 ohms             0805       -                    No            0.20        SPI option.
+R14        0 ohms             0805       -                    No            0.20        SPI option.
+R15     7500 ohms             0805       -                    No            0.20        For LED.
+R16     7500 ohms             0805       -                    No            0.20        For LED.
 R22     1000 ohms             0805       -                    Yes           0.20        Required for pedals.
 R26     1000 ohms             0805       -                    Yes           0.20        Required for pedals.
 R29     1000 ohms             0805       -                    Yes           0.20        Required for pedals.
@@ -108,12 +107,7 @@ R28     4700 ohms             0805       -                    Yes           0.20
 
 SW1     2 position switch     -          DS04-254-01-02BK-SMT No            0.75        Install if would like switch for configuration functions.
 SW2     2 position switch     -          DS04-254-01-02BK-SMT No            0.75        Install if would like switch for configuration functions.
-SW3     2 position switch     -          DS04-254-01-02BK-SMT No            0.75        Install if would like switch for configuration functions.
-SW4     2 position switch     -          DS04-254-01-02BK-SMT No            0.75        Install if would like switch for configuration functions.
 
-TP1     cs                    -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
-TP2     sdata                 -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
-TP3     sclk                  -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
 TP4     gnd                   -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
 TP5     u1_com                -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
 TP6     canh                  -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
@@ -140,7 +134,6 @@ U3      16:1 multiplexer      SOIC-24    CD74HC4067           Yes           1.00
 U4      16:1 multiplexer      SOIC-24    CD74HC4067           Yes           1.00        Equivalent is ok.
 U5      16:1 multiplexer      SOIC-24    CD74HC4067           Yes           1.00        Equivalent is ok.
 U6      16:1 multiplexer      SOIC-24    CD74HC4067           Yes           1.00        Equivalent is ok.
-U9      8:1 multiplexer       TSSOP-15   SN74LV4051           Yes           1.00        Equivalent is ok.
 
 U7      Teensy4.1             -          -                    Yes          35.00        To avoid soldering onto PCB, can use the two 1x24 headers.
 -       1x24 pin female 0.1in -          -                    Yes           0.10        Solder onto PCB so can socket the Teensy instead of soldering the Teensy to PCB.
@@ -155,12 +148,10 @@ U17     LDO voltage regulator SOT-23     TLV73333PQDB         Yes           1.00
 U18     LDO voltage regulator SOT-23     TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
 U19     LDO voltage regulator SOT-23     TLV73333PQDB         Yes           1.00        Any 5V-in, 3.3V-out, and at least 300mA drive current will work.
 
-U14     3.0 volt output ref   VSSOP-8    REF6030              Yes           8.00        -
-U21     ADC                   MSOP-10    See comment          Yes          20.00        ADS8861 (16-bit) or ADS8860 (16-bit).
-
 -       Adafruit TFT LCD      -          Product ID 1770      No           30.00        Install if using display. Connect display to J11 and U12.
 
 H1      Mounting hole 2.2mm   -          -                    -             -           Nothing to install, just noting the mounting hole diameter.
 H2      Mounting hole 2.2mm   -          -                    -             -           Nothing to install, just noting the mounting hole diameter.
 H3      Mounting hole 2.2mm   -          -                    -             -           Nothing to install, just noting the mounting hole diameter.
 H4      Mounting hole 2.2mm   -          -                    -             -           Nothing to install, just noting the mounting hole diameter.
+H5      Mounting hole 2.2mm   -          -                    -             -           Nothing to install, just noting the mounting hole diameter - for SCA hold down.

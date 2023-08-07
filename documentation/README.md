@@ -1,4 +1,4 @@
-# DIY Hybrid Digital Grand Piano - Root Level Documentation
+# DIY Hybrid Digital Grand Piano - High Level Documentation
 
 Three versions of the piano are in development. More are likely in the future. Further details, design, code, and hardware is in the root level *firmware*, *hardware*, and *software* subdirectories.
 
