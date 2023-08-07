@@ -1,26 +1,26 @@
 # DIY Hybrid Digital Grand Piano
 
+Also known as **stem piano**
+
+![alt text](documentation/ips00_stem_piano_small.jpg)
+
 ## Goal
 
 Build a full-custom hybrid digital piano using a complete grand piano action. 
 
-In the spirit of "everything worth doing is worth overdoing", the performance design option will be intentionally overdesigned and include many marginally useful features.
-
-Additionally, a simpler single board architecture is under development.
-
-This is a hobby and so the approach may be driven primarily by curiosity on a subject, and not by efficiently getting to completion.
+This is a hobby and so the approach may be driven by curiosity on a subject, not by efficiently getting to completion.
 
 ## Why?
 
-It is fun.
+Fun.
 
-It is a great way to learn so many new things.
+Great way to learn new things.
 
 ## History
 
-I started December 5, 2020.
+Started December 2020.
 
-Please see [video_documentation.md](video_documentation.md) for historical documentation in video form.
+Please see [YouTube Posts](documentation/video_documentation.md) for historical, how-to, and other documentation in video form.
 
 ## Related Projects:
 
@@ -32,37 +32,41 @@ See also:
 * https://github.com/davidedelvento/Mybrid
 * https://www.youtube.com/watch?v=nRBsudMpwwc
 
-## Roadmap
+## Directory Organization
 
-Create and build every component. This includes both sampled and modelled piano sounds.
+The components required to build a piano are located in the *firmware*, *hardware*, and *software* directories. Within each of these directories is a *research* subdirectory and a *releases* subdirectory.
 
-Design and build architectural variants, to address different use cases.
+Each *research* subdirectory contains code and hardware for work in progress. It could have major bugs. It could be incomplete.
 
-Helping others build and create based on this work (for example, possibly open source options or kits).
+Each *releases* subdirectory contains code and hardware ready for use. The material in *releases* could partially duplicate material in one or more *research* subdirectories. However, the requirement is that anything in *releases* is well-tested, complete, and ready-to-use.
 
-## Performance Architecture Block Diagram
-The original architecture is designed for maximum performance, without constraining cost.
-![alt text](block_diagram_performance.png)
+More details on each subdirectory:
 
-## Single Board Architecture Block Diagram
-A new single board architecure is designed for simplicity and lower cost.
-Total system = piano action, one board with MIDI output plus 88 small sensor boards.
-The result should be more suitable for others to try than the performance architecture.
-![alt text](block_diagram_single_board.png)
+#### documentation/
 
-## Damper Position Processor Block Diagram
-While the hammer processing boards use fully parallel ADC, the board for damper processing uses a muxed ADC approach.
+High level documentation. More detailed documentation is located throughout the repo.
 
-## Components include the following:
-* Teensy 4.1 ARM Processor - https://www.pjrc.com/store/teensy41.html
-* Texas Instruments ADS131M08 - https://www.ti.com/product/ADS131M08
-* Texas Instruments ADCS7476 - https://www.ti.com/product/ADCS7476
-* LTC6930 Precision Oscillator - https://www.analog.com/en/products/ltc6930.html
-* 300mA Low Dropout Linear Regulator
-* Teensy to ADC interface logic ICs
-* CNY70 Sensor - https://www.vishay.com/en/product/83751/
-* Adafruit 2.8 inch TFT display - https://www.adafruit.com/product/1770
-* Raspberry Pi - https://www.raspberrypi.com/
-* Python - https://www.python.org/
-* Matlab - https://www.mathworks.com/products/matlab.html
-* C++
+#### packages/
+
+Building a complete piano requires firmware, hardware, and sometimes software. The packages/ directory provides information on everything needed to build a specific version of a musical instrument.
+
+#### firmware/
+
+Real-time code running on custom hardware from *hardware* subdirectory.
+
+#### hardware/
+
+All printed circuit boards and related parts and design.
+
+#### software/
+
+Code running on a standard computer or Raspberry Pi connected to the piano over Ethernet or MIDI.
+
+## "stem piano" because?
+
+* science technology engineering math
+* like a plant stem, everything here is one component of the overall instrument
+* like a note stem, everything here is one component of...
+* 12 leaves on the brand logo, matches 12 piano notes
+* sounds cool
+* does not sound cool
