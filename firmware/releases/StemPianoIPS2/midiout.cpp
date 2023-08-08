@@ -1,8 +1,6 @@
 // gcz 2023
 //
 // Output data over MIDI
-//
-// TODO - Fix SendPedal() so do not need to know the index pedal meaning.
 
 #include "midiout.h"
 
@@ -11,7 +9,7 @@ MidiOut::MidiOut() {}
 void MidiOut::Setup(int midi_channel, MY_MIDI_INTERFACE *MidiInstance) {
   midi_channel_ = midi_channel;
   mi_ = MidiInstance;
-  midi_value_for_A0_ = 21;  // Standardized by MIDI.
+  midi_value_for_A0_ = 21;  // MIDI standard.
   mi_->begin();
 }
 
@@ -23,35 +21,28 @@ void MidiOut::SendNoteOff(const bool *event, const float *velocity) {
   SendNote(event, velocity, false);
 }
 
-// From pedals.cpp:
-//  0 = on to off
-//  1 = off to on
-// -1 = no change
-// Index 0 is sustain.
-// Index 1 is sostenuto.
-// Index 2 is una corda.
-void MidiOut::SendPedal(const int *pedal_state) {
-  if (pedal_state[0] == 1) {
+void MidiOut::SendPedal(DspPedal *DspP) {
+  if (DspP->GetSustainCrossedDownThreshold() == true) {
     mi_->sendControlChange(64, 127, midi_channel_);
     Serial.println("MIDI sustain is now ON.");
   }
-  else if (pedal_state[0] == 0) {
+  else if (DspP->GetSustainCrossedUpThreshold() == true) {
     mi_->sendControlChange(64, 0, midi_channel_);
     Serial.println("MIDI sustain is now OFF.");
   }
-  if (pedal_state[1] == 1) {
+  if (DspP->GetSostenutoCrossedDownThreshold() == true) {
     mi_->sendControlChange(66, 127, midi_channel_);
     Serial.println("MIDI sostenuto is now ON.");
   }
-  else if (pedal_state[1] == 0) {
+  else if (DspP->GetSostenutoCrossedUpThreshold() == true) {
     mi_->sendControlChange(66, 0, midi_channel_);
     Serial.println("MIDI sostenuto is now OFF.");
   }
-  if (pedal_state[2] == 1) {
+  if (DspP->GetUnaCordaCrossedDownThreshold() == true) {
     mi_->sendControlChange(67, 127, midi_channel_);
     Serial.println("MIDI una corda is now ON.");
   }
-  else if (pedal_state[2] == 0) {
+  else if (DspP->GetUnaCordaCrossedUpThreshold() == true) {
     mi_->sendControlChange(67, 0, midi_channel_);
     Serial.println("MIDI una corda is now OFF.");
   }

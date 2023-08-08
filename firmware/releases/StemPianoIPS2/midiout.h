@@ -7,6 +7,7 @@
 
 #include <MIDI.h>
 #include "stem_piano_ips2.h"
+#include "dsp_pedal.h"
 
 #define MY_SERIAL_MIDI MIDI_NAMESPACE::SerialMIDI<HardwareSerial>
 #define MY_MIDI_INTERFACE MIDI_NAMESPACE::MidiInterface<MY_SERIAL_MIDI>
@@ -18,7 +19,7 @@ class MidiOut
         void Setup(int, MY_MIDI_INTERFACE *);
         void SendNoteOn(const bool *, const float *);
         void SendNoteOff(const bool *, const float *);
-        void SendPedal(const int *);
+        void SendPedal(DspPedal *);
 
     private:
         int midi_channel_;
