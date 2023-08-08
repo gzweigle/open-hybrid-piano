@@ -1,8 +1,6 @@
-###############################################################################
-In place of the license covering contents of the repository that includes this
-harware/ directory, the following license applies to the contents of this hardware/
-directory and to all subdirectories and content under the hardware/ directory.
-###############################################################################
+##########################################################################
+The following license applies to the contents of this hardware/ directory.
+##########################################################################
 
 
 CERN Open Hardware Licence Version 2 - Weakly Reciprocal
