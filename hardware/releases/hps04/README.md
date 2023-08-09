@@ -1,8 +1,10 @@
-# Hammer Position Sensor (HPS) Version 0.6
+# Hammer Position Sensor (HPS) Version 0.4
 
 Originally, the HPS PCB was for hammers.
-However, the sensor also works for dampers. 
+However, the board also works for dampers. 
 Not changing the name because many circuit boards have already been built.
+
+Version 0.4 uses fixed resistors which trades lower accuracy for lower cost.
 
 ## Requirements
 
@@ -17,5 +19,5 @@ Not changing the name because many circuit boards have already been built.
 
 ### Capabilties
 * CNY70 sensor.
-* Trimming resistor to fine tune output voltage maximum value.
-* All resistors are surface mount packages.
+* Fixed resistors.
+* All resistors are through hole.
