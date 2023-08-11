@@ -36,7 +36,7 @@ Real-time code running on custom hardware from *hardware* subdirectory.
 
 #### hardware/
 
-All printed circuit boards and related parts and design.
+All printed circuit boards and related parts and design. A separate open source license for the hardware is in this directory and applies only to the contents of this *hardware/* directory.
 
 #### software/
 
