@@ -4,6 +4,11 @@ Also known as **stem piano**
 
 ![alt text](documentation/ips00_stem_piano_small.jpg)
 
+## How to Build Your Own Piano
+Go straight to the *packages/* directory!
+
+And, if you would like to contribute hardware, software, or firmware to the project, see the [CONTRIBUTING](CONTRIBUTING.md) file.
+
 ## Goals
 
 Build a full-custom hybrid digital piano using a complete grand piano action. 
@@ -20,7 +25,7 @@ Each *research* subdirectory contains code and hardware for work in progress. It
 
 Each *releases* subdirectory contains code and hardware ready for use. The material in *releases* could partially duplicate material in one or more *research* subdirectories. However, the requirement is that anything in *releases* is well-tested, complete, and ready-to-use.
 
-More details on each subdirectory:
+More details on each directory:
 
 #### documentation/
 
@@ -32,7 +37,7 @@ Building a complete piano requires firmware, hardware, and sometimes software. T
 
 #### firmware/
 
-Real-time code running on custom hardware from *hardware* subdirectory.
+Real-time code running on custom hardware from *hardware* directory.
 
 #### hardware/
 
