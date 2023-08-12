@@ -5,7 +5,7 @@ Also known as **stem piano**
 ![alt text](documentation/ips00_stem_piano_small.jpg)
 
 ## How to Build Your Own Piano
-Go straight to the *packages/* directory!
+Go straight to the [packages/](packages/) directory!
 
 And, if you would like to contribute hardware, software, or firmware to the project, see the [CONTRIBUTING](CONTRIBUTING.md) file.
 
@@ -19,7 +19,7 @@ This is a hobby and so the approach may be driven by curiosity on a subject, not
 
 ## Directory Organization
 
-The components required to build a piano are located in the *firmware*, *hardware*, and *software* directories. Within each of these directories is a *research* subdirectory and a *releases* subdirectory.
+The components required to build a piano are located in the [firmware/](firmware/), [hardware/](hardware/), and [software/](software/) directories. Within each of these directories is a *research* subdirectory and a *releases* subdirectory.
 
 Each *research* subdirectory contains code and hardware for work in progress. It could have major bugs. It could be incomplete.
 

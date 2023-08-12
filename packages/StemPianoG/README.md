@@ -2,6 +2,10 @@
 
 The first release of Stem Piano is the Model G.
 
+## Timeline
+
+Release is presently **under construction**.  Goal is everything posted no later than October, 2023.
+
 ## Features
 
 * Will work on grand and upright pianos.
