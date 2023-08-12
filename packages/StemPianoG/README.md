@@ -121,10 +121,12 @@ When mounting Stem Piano Model G inside a piano, it is possible to break each ba
 * Cannot download code to Teensy
 * System does not power-up
 * Board hangs at power-up
+* Ethernet does not work
 * Using two boards and dampers do not work
 * Random dropped notes
 * Note repetition is erratic
 * Some notes work, but some do not
+* Some notes are quieter or louder than others
 * Pedals do not work
 * Sustain, sostenuto, or una corda does not release
 * TFT screen is blank
