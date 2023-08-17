@@ -95,6 +95,9 @@ When mounting Stem Piano Model G inside a piano, it is possible to break each ba
 
 ## Firmware Compiling and Running
 -- instructions in progress --
+Warnings - Ethernet, ImageReader
+Wire2
+SdFAT
 
 ## Firmware Features
 -- instructions in progress --
@@ -116,6 +119,8 @@ When mounting Stem Piano Model G inside a piano, it is possible to break each ba
 * Static sensitive.
 * Recommend lead free solder.
 * Do not simultaneously connect external +5V power and USB Teensy connection.
+* Use an external fuse on +5V power or a surface mount fuse across J12.
+* Use Low Dropout Regulators (LDO) that include short-circuit protection.
 
 ## Troubleshooting
 -- instructions in progress --
@@ -131,8 +136,11 @@ When mounting Stem Piano Model G inside a piano, it is possible to break each ba
 * Note repetition is erratic
 * Some notes work, but some do not
 * Some notes are quieter or louder than others
+* MIDI command overload
+* No MIDI messages received by MIDI receiver
 * Pedals do not work
 * Sustain, sostenuto, or una corda does not release
 * TFT screen is blank
 * TFT works but touch screen features do not work
 * Teensy continuously reboots
+* Why are there so many warnings when building the code?
