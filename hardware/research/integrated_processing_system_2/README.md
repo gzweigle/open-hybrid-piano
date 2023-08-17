@@ -156,6 +156,6 @@ According to the Can bus datasheet, the Can bus integrated circuit (middle botto
 
 When designing an SCA board that uses the +3.3V Digital input, the current draw of TFT display and Can bus must be considered.
 
-According to a Teensy 4.1 schematic on the PJRC website, there is an LDO on the Teensy 4.1 that drives the 3.3V digital power supply, from the +5V power input. This LDO appears to tolerate a shorted output indefinitely.
+According to a Teensy 4.1 schematic on the PJRC website, there is an LDO on the Teensy 4.1 that drives the 3.3V digital power supply, from the +5V power input. Reading information from PJRC website, the LDO appears maybe can tolerate a shorted output indefinitely. However, for safety, do not accidentally short the +3.3 Volt Digital line to ground.
 
 ![ips20_33dv_pcb](ips20_33dv_power.png)
