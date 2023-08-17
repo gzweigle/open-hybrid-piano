@@ -93,11 +93,11 @@ The +5V power arrives simultaneously from two inputs:
 * An external power supply through the +5V power jack
 * An external computer through the USB at Teensy 4.1
 
+**IMPORANT** - It is recommended to use an external power supply that automatically protects from short circuits and other failure conditions. Or, use an external fuse. Select protection or fuse level based on current and power values from analysis below.
+
 **WARNING** - Do not connect both power inputs at the same time. See the PJRC website for more information, including how to cut a Teensy 4.1 pad to avoid shorting the two power inputs together.
 
 The external power supply must be able to deliver 2.5 A nominally and 3 A max. The nominal current value is calculated by summing all current values in sections below.
-
-**IMPORANT** - It is recommended to use an external power supply that automatically protects from short circuits. Or, use an external fuse. Select protection or fuse level based on current and power values in the following sections.
 
 A typical USB port may not be able to supply a full 3 A. Therefore, it is possible that the board will not be able to run all 88 keys sensors unless the board is powered by an external +5V power supply, through the +5V power jack. In this case (and in all cases when using the +5V external power), disconnect the USB cable from the Teensy 4.1.
 
