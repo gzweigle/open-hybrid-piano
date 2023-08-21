@@ -115,32 +115,36 @@ SdFAT
 -- instructions in progress --
 
 ## Warnings
--- instructions in progress --
+-- instructions in progress (all warnings will eventually be consoldiated into one location) --
 * Static sensitive.
 * Recommend lead free solder.
 * Do not simultaneously connect external +5V power and USB Teensy connection.
-* Use an external fuse on +5V power or a surface mount fuse across J12.
+* Use an external fuse on +5V power input.
 * Use Low Dropout Regulators (LDO) that include short-circuit protection.
+* Some pins are at power and some at ground. Be careful not to connect them together.
+* Use the 2.8" TFT unmodified. For example, the TFT IM1, IM2, and IM3 pins are connected to +3.3V on the PCB. Therefore, these jumpers internal to the TFT should *not* be soldered together, as described on manufacturers website.
 
 ## Troubleshooting
 -- instructions in progress --
-* No sound
-* Very quiet sound
+* No sound - (1) verify not in board bring-up mode, (2) put an oscilloscope on *analog* test point of SCA card and verify that the signal is changing when press a key, (3) set debug mode and check that serial output prints that MIDI commands are being sent, (4) try connecting MIDI cable to another keyboard, (5) turn on speakers.
+* Very quiet sound - (1) check distance of sensor to hammer.
 * Very loud sounds
-* Cannot download code to Teensy
-* System does not power-up
-* Board hangs at power-up
-* Ethernet does not work
+* Cannot download code to Teensy - (1) try pushing download button, (2) sometimes this can appear to be happening but it is due to a buffer overflow in code
+* System does not power-up - (1) not good!
+* Board hangs at power-up - (1) potential buffer overflow in code
+* Ethernet does not work - (1) on correct subnet? (2) have a VPN running? (3) going through a switch or router? (4) try wireshark.
 * Using two boards and dampers do not work
-* Random dropped notes
-* Note repetition is erratic
-* Some notes work, but some do not
+* Random dropped notes - (1) probably due to hammer settings... (TODO - more details)
+* Note repetition is erratic - (1) probably due to hammer settings... (TODO - more details)
+* Some notes work, but some do not - (1) probably due to hammer settings... (TODO - more details), (2) verify not in board bring-up mode.
 * Some notes are quieter or louder than others
-* MIDI command overload
+* MIDI command overload - (1) restart everything with MIDI disconnected, then connect.
 * No MIDI messages received by MIDI receiver
-* Pedals do not work
+* Pedals do not work - (1) double check wiring
+* Pressing a pedal causes a note to play - (1) pedals are probably connected to one of the 1-88 inputs that are supposed to be for hammers
 * Sustain, sostenuto, or una corda does not release
 * TFT screen is blank
 * TFT works but touch screen features do not work
-* Teensy continuously reboots
-* Why are there so many warnings when building the code?
+* TFT SD card does not work - (1) try a different card, (2) does it make a difference if using USB or external power? try restarting via USB
+* Teensy continuously reboots - (1) potential buffer overflow in code
+* Why are there so many warnings when building the code? - (1) long story (SD card hack)... but they will mostly go away on second build.

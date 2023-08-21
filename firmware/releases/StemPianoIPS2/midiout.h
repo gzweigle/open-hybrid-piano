@@ -1,5 +1,7 @@
 // gcz 2023
 //
+// This class is not hardware dependent.
+//
 // Output data over MIDI
 
 #ifndef MIDIOUT_H_
@@ -14,18 +16,18 @@
 
 class MidiOut
 {
-    public:
-        MidiOut();
-        void Setup(int, MY_MIDI_INTERFACE *);
-        void SendNoteOn(const bool *, const float *);
-        void SendNoteOff(const bool *, const float *);
-        void SendPedal(DspPedal *);
+  public:
+    MidiOut();
+    void Setup(int, MY_MIDI_INTERFACE *);
+    void SendNoteOn(const bool *, const float *);
+    void SendNoteOff(const bool *, const float *);
+    void SendPedal(DspPedal *);
 
-    private:
-        int midi_channel_;
-        int midi_value_for_A0_;
-        MY_MIDI_INTERFACE *mi_;
-        void SendNote(const bool *, const float *, bool);
+  private:
+    int midi_channel_;
+    int midi_value_for_A0_;
+    MY_MIDI_INTERFACE *mi_;
+    void SendNote(const bool *, const float *, bool);
 
 };
 

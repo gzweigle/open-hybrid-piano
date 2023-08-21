@@ -1,6 +1,10 @@
 // gcz 2023
 //
+// This class is not hardware dependent.
+//
 // Output data over MIDI
+//
+// TODO - Easily support other pedal functions.
 
 #include "midiout.h"
 
@@ -24,27 +28,39 @@ void MidiOut::SendNoteOff(const bool *event, const float *velocity) {
 void MidiOut::SendPedal(DspPedal *DspP) {
   if (DspP->GetSustainCrossedDownThreshold() == true) {
     mi_->sendControlChange(64, 127, midi_channel_);
-    Serial.println("MIDI sustain is now ON.");
+    #if DEBUG_LEVEL >= 1
+      Serial.println("MIDI sustain is now ON.");
+    #endif
   }
   else if (DspP->GetSustainCrossedUpThreshold() == true) {
     mi_->sendControlChange(64, 0, midi_channel_);
-    Serial.println("MIDI sustain is now OFF.");
+    #if DEBUG_LEVEL >= 1
+      Serial.println("MIDI sustain is now OFF.");
+    #endif
   }
   if (DspP->GetSostenutoCrossedDownThreshold() == true) {
+    #if DEBUG_LEVEL >= 1
     mi_->sendControlChange(66, 127, midi_channel_);
-    Serial.println("MIDI sostenuto is now ON.");
+      Serial.println("MIDI sostenuto is now ON.");
+    #endif
   }
   else if (DspP->GetSostenutoCrossedUpThreshold() == true) {
+    #if DEBUG_LEVEL >= 1
     mi_->sendControlChange(66, 0, midi_channel_);
-    Serial.println("MIDI sostenuto is now OFF.");
+      Serial.println("MIDI sostenuto is now OFF.");
+    #endif
   }
   if (DspP->GetUnaCordaCrossedDownThreshold() == true) {
+    #if DEBUG_LEVEL >= 1
     mi_->sendControlChange(67, 127, midi_channel_);
-    Serial.println("MIDI una corda is now ON.");
+      Serial.println("MIDI una corda is now ON.");
+    #endif
   }
   else if (DspP->GetUnaCordaCrossedUpThreshold() == true) {
+    #if DEBUG_LEVEL >= 1
     mi_->sendControlChange(67, 0, midi_channel_);
-    Serial.println("MIDI una corda is now OFF.");
+      Serial.println("MIDI una corda is now OFF.");
+    #endif
   }
 }
 
@@ -61,17 +77,23 @@ void MidiOut::SendNote(const bool *event, const float *velocity, bool send_on) {
       if (velocity_int > 127) {
         velocity_int = 127;
       }
-      Serial.print("MIDI note (");
-      Serial.print(midi_note);
-      Serial.print(") velocity (");
-      Serial.print(velocity_int);
-      Serial.print(")");
+      #if DEBUG_LEVEL >= 1
+        Serial.print("MIDI note (");
+        Serial.print(midi_note);
+        Serial.print(") velocity (");
+        Serial.print(velocity_int);
+        Serial.print(")");
+        if (send_on == true) {
+          Serial.println(" is now ON.");
+        }
+        else {
+        Serial.println(" is now OFF.");
+        }
+      #endif
       if (send_on == true) {
-        Serial.println(" is now ON.");
         mi_->sendNoteOn(midi_note, velocity_int, midi_channel_);
       }
       else {
-        Serial.println(" is now OFF.");
         mi_->sendNoteOff(midi_note, velocity_int, midi_channel_);
       }
     }
