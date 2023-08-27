@@ -1,11 +1,59 @@
-// gcz 2023
+// Copyright (C) 2023 Greg C. Zweigle
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+// Location of documentation, code, and design:
+// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+//
+// stem_piano_ips2.h
 //
 // For ips pcb version 2.X
+//
+// The only extra libraries needed for Stem Piano IPS 2.X
+// are for the TFT display. Because the TFT is not required
+// for system functionality, normally the TFT_INSTALLED #define
+// (see code below) is not set. See Adafruit TFT documentation
+// for the libraries that need to be installed.
+//
+// TODO - Find a better solution for SdFat library conflict (see below).
+// TODO - If using a keyboard with more than 88 keys, the NUM_NOTES
+//        value and associated functionality needs work. 
 
 #ifndef STEM_PIANO_IPS2_H_
 #define STEM_PIANO_IPS2_H_
 
 #include <Arduino.h>
+
+// The following steps are required for the TFT.
+//
+//  1. Purchase and connect the 2.8 inch TFT from AdaFruit.
+//
+//  2. Install libraries required fro 2.8 inch TFT per AdaFruit documentation.
+//
+//  3. The TFT is using an AdaFruit library for SD card that conflicts
+//     with the library for SD card on Teensy.  As a temorary fix,
+//     delete the SdFat/ directory from Teensy library.
+//     (instead of deleting its probably better to move it to another
+//     location in case it is needed for another project in future).
+//     Deleting SdFat/ will cause warnings when building the project.
+//
+// The TFT is not necessary for the piano to work. If comment out the
+// following #define, then the above steps are not required.
+// #define TFT_INSTALLED
+
+// If Ethernet was not soldered onto the IPS 2.X board, comment this out.
+#define ETHERNET_INSTALLED
 
 // Comment this out during normal operation.
 // Uncomment when using the minimal hardware described in documentation.
@@ -13,22 +61,26 @@
 
 // Set this to zero during normal operation.
 // DEBUG_LEVEL 0 = No debug information on serial port.
+//                 Will print whether a hammer or damper board.
 // DEBUG_LEVEL 1 = Small amount of debug information.
+//                 Errors and warnings.
+//                 MIDI send notification.
+//                 Change of switch state.
 // DEBUG_LEVEL 2 = Large amount of debug information.
+//                 Details internal to the algorithms.
 #define DEBUG_LEVEL 1
 
 // Hardcode based on pcb layout.
-// Using a #define because this is used for statically allocated arrays.
+// Using a #define because statically allocates arrays.
 #define NUM_CHANNELS (16*6)
 
 // Hardcode that the first 88 connections are A0 - C7.
-// This could be a setting variable but it makes me
-// feel better that the #define is immediately below
-// NUM_CHANNELS so I am reminded of the relationship.
+// This could be a setting variable but having the #define
+// immediately below NUM_CHANNELS reminds of the relationship.
 #define NUM_NOTES 88
 
 #if NUM_NOTES > NUM_CHANNELS
-#error "ERROR. Number of notes is greater than number of physical channels."
+#error "ERROR - number of notes is greater than number of physical channels."
 #endif
 
 #endif

@@ -16,43 +16,33 @@
 // Location of documentation, code, and design:
 // https://github.com/gzweigle/DIY-Grand-Digital-Piano
 //
-// tft_text.cpp
+// timing.cpp
 //
 // This class is not hardware dependent.
 //
-// Text drawing on TFT display.
+// Control how often something runs
 
-#include "tft_text.h"
+#include "timing.h"
 
-#ifdef TFT_INSTALLED
+Timing::Timing() {}
 
-TftText::TftText() {}
-
-void TftText::Setup(Adafruit_ILI9341 *tft, int display_height) {
-  TftPointer_ = tft;
-  display_height_ = display_height;
+void Timing::Setup(int processing_interval) {
+  last_micros_ = micros();
+  processing_interval_ = (unsigned long) processing_interval;
 }
 
-// mode: 0=wrap print, 1=no wrap print, 2=no wrap println.
-// use x<0 and y<0 to avoid specifying.
-void TftText::Print(char const *text, int x, int y, int color, int size, int mode) {
-  if (mode == 0) {
-    TftPointer_->setTextWrap(true);
-  }
-  else {
-    TftPointer_->setTextWrap(false);
-  }
-  TftPointer_->setTextColor(color);
-  TftPointer_->setTextSize(size);
-  if (x >= 0 && y >= 0) {
-    TftPointer_->setCursor(x, display_height_ - y);
-  }
-  if (mode == 0 || mode == 1) {
-    TftPointer_->print(text);
-  }
-  else {
-    TftPointer_->println(text);
-  }
+// Use a separate function for changing the processing interval
+// during runtime because Setup() functions are reserved for init.
+void Timing::ResetInterval(int processing_interval) {
+  processing_interval_ = (unsigned long) processing_interval;
 }
 
-#endif
+bool Timing::AllowProcessing() {
+  if (micros() - last_micros_ > processing_interval_) {
+    last_micros_ = micros();
+    return true;
+  }
+  else {
+    return false;
+  }
+}

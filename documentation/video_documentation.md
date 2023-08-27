@@ -242,4 +242,4 @@ Step 26 - Damper Velocity https://www.youtube.com/watch?v=ZMxMio3L9dk
 6. Adding display to DPP.
 
 In process -
-Modifying DPP so can use for both damper and hammer.  Calling this new board the Integrated Processing System 2.0 (IPS 2.0).
+Open source!

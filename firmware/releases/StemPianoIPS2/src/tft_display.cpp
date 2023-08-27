@@ -1,11 +1,33 @@
-// gcz 2023
+// Copyright (C) 2023 Greg C. Zweigle
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+// Location of documentation, code, and design:
+// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+//
+// tft_display.cpp
 //
 // For ips pcb version 2.X
 //
 // Control of 2.8" TFT display
 //
+// TODO - Lots of cool possibilities for the display.
+// TODO - Could use during real-time by writing just one value at a time?
 
 #include "tft_display.h"
+
+#ifdef TFT_INSTALLED
 
 TftDisplay::TftDisplay() : Reader_(SD_) {}
 
@@ -43,7 +65,7 @@ void TftDisplay::Setup(bool using_display) {
 
     // This sets up the SPI interface for display as well as SD card.
     Tft_ = new Adafruit_ILI9341(cs_, dc_);
-    Ts_ = new Adafruit_FT6206_Wire2();
+    Ts_ = new Adafruit_FT6206();
 
     Tft_->begin();
     Tft_->fillScreen(ILI9341_BLACK);
@@ -54,7 +76,8 @@ void TftDisplay::Setup(bool using_display) {
     // Internally instantiated classes.
     Text_.Setup(Tft_, height_);
 
-    bool ts_status = Ts_->begin();
+    // Touch screen.
+    bool ts_status = Ts_->begin(FT62XX_DEFAULT_THRESHOLD, &Wire2);
     if (ts_status == false) {
       using_display_ = false;
       #if DEBUG_LEVEL >= 1
@@ -98,7 +121,7 @@ void TftDisplay::StartupDisplay() {
     Tft_->setCursor(15, 64+28);
     Tft_->print("stem piano");
     Tft_->setCursor(15, 64+56);
-    Tft_->print("by gcz");
+    Tft_->print("by greg zweigle");
     delay(1500);
     Clear();
   }
@@ -122,6 +145,7 @@ void TftDisplay::Clear() {
 //   Because then can push one key at a time and
 //   get a display of the largest value read out
 //   from the sensor for that key.
+//   Use to check sensor physical position and / or calibrate sensor.
 void TftDisplay::Display(bool tft_switch, const float *hp, const float *dp) {
   static float max_value_last = 0.0;
   static int max_key_last = 0;
@@ -142,7 +166,8 @@ void TftDisplay::Display(bool tft_switch, const float *hp, const float *dp) {
       float max_value = 0.0;
       int max_key = 0;
       bool was_hammer = true;
-      int tx, ty;
+      int tx = 0;
+      int ty = 0;
       for (int key = 0; key < NUM_CHANNELS; key++) {
         if (hp[key] > max_value) {
           max_value = hp[key];
@@ -182,7 +207,7 @@ void TftDisplay::Display(bool tft_switch, const float *hp, const float *dp) {
       was_hammer_last = was_hammer;
 
       // If touch the lower right corner, display an image for 0.5 seconds!
-      if (tx > 300 && ty < 20) {
+      if (tx > 250 && ty < 50) {
         Picture();
         delay(500);
         Clear();
@@ -242,7 +267,7 @@ void TftDisplay::GetTouchPosition(int *x, int *y) {
       touch_point = Ts_->getPoint();
       *x = width_ - touch_point.y;
       *y = height_ - touch_point.x;
-      #if DEBUG_LEVEL >= 1
+      #if DEBUG_LEVEL >= 2
         Serial.print("Touchscreen position (x=");
         Serial.print(*x);
         Serial.print(",y=");
@@ -282,7 +307,7 @@ void TftDisplay::Picture() {
     }
     if (sd_card_started_ == true) {
       ImageReturnCode stat;
-      #if DEBUG_LEVEL >= 1
+      #if DEBUG_LEVEL >= 2
         Serial.println("New TFT picture.");
       #endif
       if (picture_number == 0) {
@@ -312,3 +337,19 @@ void TftDisplay::Picture() {
     }
   }
 }
+
+#else
+
+TftDisplay::TftDisplay() {}
+
+void TftDisplay::Setup(bool not_used) {
+  #if DEBUG_LEVEL >= 1
+  Serial.println("TFT Display is not in build and is not used.");
+  #endif
+}
+
+void TftDisplay::StartupDisplay() {}
+
+void TftDisplay::Display(bool a, const float *b, const float *c) {}
+
+#endif

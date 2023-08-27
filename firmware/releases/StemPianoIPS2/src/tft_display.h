@@ -1,4 +1,22 @@
-// gcz, 2023
+// Copyright (C) 2023 Greg C. Zweigle
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+// Location of documentation, code, and design:
+// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+//
+// tft_display.h
 //
 // For ips pcb version 2.X
 //
@@ -7,16 +25,19 @@
 #ifndef TFT_DISPLAY_H_
 #define TFT_DISPLAY_H_
 
+#include "stem_piano_ips2.h"
+
+#ifdef TFT_INSTALLED
+
 #include <SPI.h>
 #include "Adafruit_GFX.h"
 #include "Adafruit_ILI9341.h"
-#include "Adafruit_FT6206_Wire2.h"
+#include "Adafruit_FT6206.h"
 
 #include <SdFat.h>
 #include <Adafruit_SPIFlash.h>
 #include <Adafruit_ImageReader.h>
 
-#include "stem_piano_ips2.h"
 #include "tft_text.h"
 
 class TftDisplay
@@ -40,7 +61,7 @@ class TftDisplay
     TftText Text_;
 
     Adafruit_ILI9341 *Tft_;
-    Adafruit_FT6206_Wire2 *Ts_;
+    Adafruit_FT6206 *Ts_;
     Adafruit_ImageReader Reader_;
     SdFat SD_;
 
@@ -63,5 +84,19 @@ class TftDisplay
     bool sd_card_detected_;
 
 };
+
+#else
+
+class TftDisplay
+{
+  public:
+    TftDisplay();
+    void Setup(bool);
+    void StartupDisplay();
+    void Display(bool, const float *, const float *);
+
+};
+
+#endif
 
 #endif

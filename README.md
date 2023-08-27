@@ -7,7 +7,9 @@ Also known as **stem piano**
 ## How to Build Your Own Piano
 Go straight to the [packages/](packages/) directory!
 
-And, if you would like to contribute hardware, software, or firmware to the project, see the [CONTRIBUTING](CONTRIBUTING.md) file.
+But first, please read the [WARNINGS](WARNINGS.md) and [HELP](HELP.md) files that are located in this root directory.
+
+If you would like to contribute hardware, software, mechanical, or firmware to the project, see the [CONTRIBUTING](CONTRIBUTING.md) file.
 
 ## Goals
 
@@ -19,7 +21,7 @@ This is a hobby and so the approach may be driven by curiosity on a subject, not
 
 ## Directory Organization
 
-The components required to build a piano are located in the [firmware/](firmware/), [hardware/](hardware/), and [software/](software/) directories. Within each of these directories is a *research* subdirectory and a *releases* subdirectory.
+The components required to build a piano are located in the [firmware/](firmware/), [hardware/](hardware/), [mechanical/](mechanical/) and [software/](software/) directories. Within each of these directories is a *research* subdirectory and a *releases* subdirectory.
 
 Each *research* subdirectory contains code and hardware for work in progress. It could have major bugs. It could be incomplete.
 
@@ -29,11 +31,11 @@ More details on each directory:
 
 #### documentation/
 
-High level documentation. More detailed documentation is located throughout the repo.
+High level documentation. Additionally, detailed documentation is located throughout the repo.
 
 #### packages/
 
-Building a complete piano requires firmware, hardware, and sometimes software. The packages/ directory provides information on everything needed to build a specific version of a musical instrument.
+Building a complete piano requires firmware, hardware, mechanical, and sometimes software. The packages/ directory provides information on everything needed to build a specific version of a musical instrument.
 
 #### firmware/
 
@@ -41,7 +43,11 @@ Real-time code running on custom hardware from *hardware* directory.
 
 #### hardware/
 
-All printed circuit boards and related parts and design. A separate open source license for the hardware is in this directory and applies only to the contents of this *hardware/* directory.
+All printed circuit boards and related parts and design. A separate open-source license for the hardware is in this directory and applies only to the contents of this *hardware/* directory.
+
+#### mechanical/
+
+Anything to physically build a piano. A separate open-source license for mechanical is in this directory and applies only to the contents of this *mechanical/* directory.
 
 #### software/
 
@@ -52,6 +58,8 @@ Code running on a standard computer or Raspberry Pi connected to the piano over 
 Fun.
 
 Great way to learn new things.
+
+New: make hybrid pianos and tools to create innovate musical instruments more accessible.
 
 ## History
 

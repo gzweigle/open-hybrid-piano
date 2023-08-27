@@ -1,4 +1,22 @@
-// gcz 2023
+// Copyright (C) 2023 Greg C. Zweigle
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+// Location of documentation, code, and design:
+// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+//
+// dsp_pedal.cpp
 //
 // This class is not hardware dependent.
 //
@@ -65,6 +83,7 @@ int una_corda_connected_pin) {
     max_position_valid_[ind] = false;
     threshold_[ind] = initial_threshold_;
   }
+  enable_ = true;
 }
 
 // Position measurement is [0.0 to 1.0], where 1.0 is maximum ADC value.
@@ -152,6 +171,10 @@ void DspPedal::UpdateSustainMaxValue(float position) {
   if (max_position_valid_[Ind::sustain] == true) {
     if (position > max_position_[Ind::sustain]) {
       max_position_[Ind::sustain] = position;
+      #if DEBUG_LEVEL >= 2
+        Serial.print("UpdateSustainMaxValue() new max = ");
+        Serial.println(position);
+      #endif
     }
   }
 }
@@ -159,6 +182,10 @@ void DspPedal::UpdateSostenutoMaxValue(float position) {
   if (max_position_valid_[Ind::sostenuto] == true) {
     if (position > max_position_[Ind::sostenuto]) {
       max_position_[Ind::sostenuto] = position;
+      #if DEBUG_LEVEL >= 2
+        Serial.print("UpdateSostenutoMaxValue() new max = ");
+        Serial.println(position);
+      #endif
     }
   }
 }
@@ -166,6 +193,10 @@ void DspPedal::UpdateUnaCordaMaxValue(float position) {
   if (max_position_valid_[Ind::una_corda] == true) {
     if (position > max_position_[Ind::una_corda]) {
       max_position_[Ind::una_corda] = position;
+      #if DEBUG_LEVEL >= 2
+        Serial.print("UpdateUnaCordaMaxValue() new max = ");
+        Serial.println(position);
+      #endif
     }
   }
 }
@@ -244,4 +275,8 @@ bool DspPedal::GetUnaCordaCrossedUpThreshold() {
     return true;
   else
     return false;
+}
+
+void DspPedal::Enable(bool enable) {
+  enable_ = enable;
 }

@@ -16,43 +16,29 @@
 // Location of documentation, code, and design:
 // https://github.com/gzweigle/DIY-Grand-Digital-Piano
 //
-// tft_text.cpp
+// timing.h
 //
 // This class is not hardware dependent.
 //
-// Text drawing on TFT display.
+// Control how often something runs
 
-#include "tft_text.h"
+#ifndef TIMING_H_
+#define TIMING_H_
 
-#ifdef TFT_INSTALLED
+#include "stem_piano_ips2.h"
 
-TftText::TftText() {}
+class Timing
+{
+  public:
+    Timing();
+    void Setup(int);
+    bool AllowProcessing();
+    void ResetInterval(int);
+ 
+  private:
+    unsigned long last_micros_;
+    unsigned long processing_interval_;
 
-void TftText::Setup(Adafruit_ILI9341 *tft, int display_height) {
-  TftPointer_ = tft;
-  display_height_ = display_height;
-}
-
-// mode: 0=wrap print, 1=no wrap print, 2=no wrap println.
-// use x<0 and y<0 to avoid specifying.
-void TftText::Print(char const *text, int x, int y, int color, int size, int mode) {
-  if (mode == 0) {
-    TftPointer_->setTextWrap(true);
-  }
-  else {
-    TftPointer_->setTextWrap(false);
-  }
-  TftPointer_->setTextColor(color);
-  TftPointer_->setTextSize(size);
-  if (x >= 0 && y >= 0) {
-    TftPointer_->setCursor(x, display_height_ - y);
-  }
-  if (mode == 0 || mode == 1) {
-    TftPointer_->print(text);
-  }
-  else {
-    TftPointer_->println(text);
-  }
-}
+};
 
 #endif
