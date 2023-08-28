@@ -59,7 +59,7 @@ Fun.
 
 Great way to learn new things.
 
-New: make hybrid pianos and tools to create innovate musical instruments more accessible.
+Make inventing new kinds of pianos and other musical instruments more accessible for anyone.
 
 ## History
 
