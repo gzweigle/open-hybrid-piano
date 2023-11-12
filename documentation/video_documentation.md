@@ -1,5 +1,7 @@
 # DIY-Grand-Digital-Piano Video Documentation
 
+Some videos may no longer be posted or the URL may have changed.
+
 Step 1 - Architecture https://www.youtube.com/watch?v=P3PVIuGSpIk
 
 1. High-performance digital architecture approach.
@@ -241,5 +243,10 @@ Step 26 - Damper Velocity https://www.youtube.com/watch?v=ZMxMio3L9dk
 5. CAN Bus for sending data between DPP and hammer board (either IPS or TPS).
 6. Adding display to DPP.
 
-In process -
-Open source!
+Step 27 - Hammer and Damper Processing https://www.youtube.com/watch?v=NmziaIYKS1g
+1. Extend board for dampers (last video) to support hammers and dampers.
+2. Fully multiplexed architecture.
+3. Testing various analog designs.
+4. All 88 keys are working with the new architecture.
+5. For the dampers, some use direct sensors and some are estimated based on hammer position.
+6. Testing boards and code.

@@ -4,7 +4,7 @@ The first release of Stem Piano is the Model G.
 
 ## Timeline
 
-Release is presently **under construction**.  Goal is everything posted no later than October, 2023.
+Release is presently **under construction**.  Goal is everything posted this year.
 
 ## Features
 
