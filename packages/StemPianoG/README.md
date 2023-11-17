@@ -8,9 +8,9 @@ Release is presently **under construction**.  Goal is everything posted this yea
 
 ## Features
 
-* Will work on grand and upright pianos.
-* Will work with the action separate from the piano or as a silent system in a full piano.
-* Will work with a digital keyboard, using sensors on the digital keys.
+* Works on grand and upright pianos.
+* Works with the action separate from the piano or as a silent system in a full piano.
+* Works with a digital keyboard, using sensors on the digital keys.
 * Can use as part of innovative new musical instruments.
 * Sends data via 5-pin serial MIDI.
 * Measures and sends hammer velocity and, optionally, damper velocity over MIDI.
@@ -28,39 +28,37 @@ research/ directories.
 This will all be cleaned up at time of full (official) release.
 
 #### [StemPianoIPS2 Library link](../../firmware/releases/StemPianoIPS2/)
-Arduino library firmware that runs on the Integrated Processing System 2 (IPS2) hardware. Must manually copy to the location where Arduino library code is located.
+Arduino library firmware that runs on the Integrated Processing System (IPS) hardware. Copy this code to the Arduino library location.
 
 #### [Hammer Firmware link](../../firmware/research/ips2_hammer/)
-Main Arduino code for the Teensy 4.1 processor on the IPS2 hardware.
-Use this code as the Arduino sketch code.
+Main Arduino code for the Teensy 4.1 processor on the IPS hardware connected to hammer sensors.
+Use this code as the Arduino sketch code. May need to rename the top level file from .cpp to .ino.
 
 The settings file is located in this directory.
 
-#### [Six Channel Analog 0 link](../../hardware/research/six_channel_analog/)
-The six channel analog card with ADC that removably connects into the IPS2 mainboard.
+#### [Six Channel Analog link](../../hardware/research/six_channel_analog/)
+The six channel analog card with ADC that removably connects into the IPS mainboard.
+In this directory are the files needed for PCB fabrication and a list of all components for the board.
 
-#### [Integrated Processing System 2 link](../../hardware/research/integrated_processing_system_2/)
-The Integrated Processing System 2 mainboard.  In this directory is a detailed PCB diagram.
-
+#### [Integrated Processing System link](../../hardware/research/integrated_processing_system_2/)
+The Integrated Processing System 2 mainboard.  In this directory are the files needed for PCB fabrication and a list of all components for the board.
 
 #### [IPS2Analytics Library link](../../software/research/ips2_analytics/)
-Example Python software that gets data from the Ethernet connection.
+Optional Python software for acquiring data from the Ethernet connection.
 
 #### [Mechanical link](../../mechanical)
-Any of the mechanical configurations will work.
+Examples of mechanical configurations.
 
 ## Optional Components
 
 #### [Damper Firmware link](../../firmware/research/ips2_damper/)
-Main Arduino code for the Teensy 4.1 processor on the IPS2 mainboard.
-
-With a damper measurement system, a second IPS2 mainboard and second SCA0 card are required.
-Also, 88 HPS (or more) boards are required, one for each damper.
+Main Arduino code for the Teensy 4.1 processor on the IPS mainboard connected to damper sensors. When using a damper measurement system, a second IPS mainboard and second SCA0 card are required.
 
 #### [Hammer Position Sensor 0.6 link](../../hardware/releases/hps06/)
 #### [Hammer Position Sensor 0.4 link](../../hardware/releases/hps04/)
-Either hammer position sensor (HPS) board will work.
-Eighty-eight (or more) boards are required, one for each hammer.
+Either hammer position sensor (HPS) board at these links will work.
+Eighty-eight (or more) sensor boards are required, one for each hammer.
+When using a damper board, 88 HPS (or more) sensor boards are required, one for each damper.
 
 It is also possible to use other sensors, which is why these boards are listed as optional. However, some form of sensor is required.
 
@@ -78,13 +76,15 @@ For PCB fabrication, use the gerber files in each *hardware/* subdirectory. Ofte
 
 Please see the following YouTube video (*NOT DONE YET*) for soldering, build, and assembly instructions in video form.
 
-All components on IPS2 were selected for ease of soldering. They are also mature parts that should have good availability or with good substitute options.
+All components on IPS were selected for ease of soldering. They are also mature parts that should have good availability or with good substitute options.
 
-The analog-to-digital conversion (ADC) subsystem is on a separate, removable, card (SCA0) that connects to the IPS printed circuit board. This simplifies and reduces the cost of testing an ADC and enables experimenting with different hammer or damper ADC resolution and sampling rates. Also, ADC parts can often be in packages that are difficult to solder. A separate circuit board lowers the cost and impact of soldering mistakes.
+The analog-to-digital conversion (ADC) subsystem is on a separate, removable, card (SCA) that connects to the IP printed circuit board. This simplifies and reduces the cost of testing an ADC and enables experimenting with different hammer or damper ADC resolution and sampling rates. Also, ADC parts can often be in packages that are difficult to solder. A separate circuit board lowers the cost and impact of soldering mistakes.
 
-The IPS2 board comes with an optional external +5V supply connection. The external supply must be able to deliver at least five amps.
+The IPS board comes with an optional external +5V supply connection. The external supply must be able to deliver at least five amps.
 
-**WARNING** --- Do not connect an external +5V supply at the same time as the Teensy 4.1 USB programming cable is connected. This could short the computer connected to the USB, with the +5V supply connected to the IPS2, and damage the computer. Please see the PJRC Teensy 4.1 website for more details on this issue [PJRC](http://prjc.com). The IPS2 circuit board has a dedicated jumper as an extra reminder. --- **WARNING**
+**WARNING** --- Do not connect an external +5V supply at the same time as the Teensy 4.1 USB programming cable is connected. This could short the computer connected to the USB, with the +5V supply connected to the IPS, and damage the computer. Please see the PJRC Teensy 4.1 website for more details on this issue [PJRC](http://prjc.com). The IPS circuit board has a dedicated jumper as an extra reminder. --- **WARNING**
+
+**WARNING** --- When all 88 sensors are connected, the total current draw of the IPS will likely exceed the capability of an external computer that is trying to power the IPS through a USB cable connected to the Teensy 4.1. Therefore, the external +5V power source on the IPS is needed. The PJRC website has information on how to use a USB cable under this scenario. -- **WARNING**
 
 ## Hardware Connections
 ### Hammer Connections

@@ -16,6 +16,8 @@ Internally the Teensy 4.1 shorts the its USB connection and the +5V power pin.
 
 Be careful to **NEVER** connect the Teensy 4.1 USB cable and the external +5V power input at the same time. This could damage the computer connected to the USB.
 
+When all 88 sensors are connected, the total current draw of the system will likely exceed the capability of an external computer that is trying to power the system through a USB cable connected to the Teensy 4.1. Therefore, the external +5V power source on the circuit board is needed. The PJRC website has information on how to use a USB cable under this scenario.
+
 Please see the [PJRC website](https://www.pjrc.com) for more information.
 
 ## Fuses and Short Circuit Protection

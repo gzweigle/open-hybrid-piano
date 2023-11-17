@@ -30,23 +30,17 @@ import time
 
 sample_rate = 2000
 file_length = 10*sample_rate
-max_packet_size = 8
+max_packet_size = 16
 
-#####################
-
-# THE FOLLOWING MUST BE FILLED IN BEFORE USE
-
-# This computer's IP address. Must match value in Teensy.
-UDP_IP =
-# Port number must match value in Teensy.
-UDP_PORT =
-
-#####################
+# This computer's IP address. Must match value in Hammer Board Teensy.
+UDP_IP = # FILL IN
+# Port number must match value in Hammer Board Teensy.
+UDP_PORT = # FILL IN
 
 client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 client.bind((UDP_IP, UDP_PORT))
-print("Client socket is setup")
-file = open('ethernet_data.txt', 'w')
+print("Client socket is setup - for hammer")
+file = open('ethernet_data_hammer.txt', 'w')
 last_time = time.perf_counter()
 
 while file_length >= 0:
@@ -54,7 +48,7 @@ while file_length >= 0:
     try:
         data, addr = client.recvfrom(max_packet_size)
     except socket.timeout as e:
-        data = [0, 0, 0, 0, 0, 0, 0, 0]
+        data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     dat0  =  int(data[0])&255
     dat0 |= (int(data[1])&255)<<8
@@ -64,15 +58,27 @@ while file_length >= 0:
     dat2 |= (int(data[5])&255)<<8
     dat3  =  int(data[6])&255
     dat3 |= (int(data[7])&255)<<8
+    dat4  =  int(data[8])&255
+    dat4 |= (int(data[9])&255)<<8
+    dat5  =  int(data[10])&255
+    dat5 |= (int(data[11])&255)<<8
+    dat6  =  int(data[12])&255
+    dat6 |= (int(data[13])&255)<<8
+    dat7  =  int(data[14])&255
+    dat7 |= (int(data[15])&255)<<8
 
     dat0 /= 65536
     dat1 /= 65536
     dat2 /= 65536
     dat3 /= 65536
+    dat4 /= 65536
+    dat5 /= 65536
+    dat6 /= 65536
+    dat7 /= 65536
 
-    file.write(str(dat0)+' '+str(dat1)+' '+str(dat2)+' '+str(dat3)+'\n')
+    file.write(str(dat0)+' '+str(dat1)+' '+str(dat2)+' '+str(dat3)+' '+str(dat4)+' '+str(dat5)+' '+str(dat6)+' '+str(dat7)+'\n')
     file_length = file_length - 1
 
     if time.perf_counter() - last_time > 0.5:
         last_time = time.perf_counter()
-        print("num={0}  dat = {1} {2} {3} {4}".format(file_length, dat0, dat1, dat2, dat3))
+        print("num={0}  dat = {1} {2} {3} {4} {5} {6} {7} {8}".format(file_length, dat0, dat1, dat2, dat3, dat4, dat5, dat6, dat7))

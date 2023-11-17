@@ -1,7 +1,5 @@
 # Integrated Processing System 2 (IPS2) specification
 
-Requires a Six Channel Analog (SCA0) card.
-
 ## Requirements
 
 ### I/O
@@ -11,7 +9,7 @@ Requires a Six Channel Analog (SCA0) card.
 * 3 pedal inputs: 1/4 inch.
 * MIDI output.
 * Ethernet interface (optional).
-* 5 volt, 2.5 amp power input. *WARNING* - do not connect when a USB cable is connected to the Teensy 4.1.
+* 5 volt, 2.5 amp power input. *WARNING* - do not connect when a USB cable is connected to the Teensy 4.1, and the USB cable is supplying power from an external computer.
 * CAN bus.
 
 ### Capabilities
@@ -24,8 +22,9 @@ Requires a Six Channel Analog (SCA0) card.
 * Optional TFT display for setup.
 
 ### Components
-* Highly available, not likely supply chain constrained.
-* Relatively large pitch, easy to solder parts.
+* Selected for availability.
+* Relatively large pitch, relatively easy to solder parts.
+* Requires a Six Channel Analog (SCA) card.
 
 ## Form
 * 8.5 inches by 4.0 inches.
@@ -36,20 +35,23 @@ Requires a Six Channel Analog (SCA0) card.
 
 ![ips20_pcb](ips20_pcb.png)
 
-### HPS connectors
-0.1 inch spaced connectors for connecting wires to the Hammer Position Sensor boards.
+### Sensor connectors
+0.1 inch spaced connectors for connecting wires to the Hammer Position Sensor (HPS) boards. Does not require HPS boards. Can connect to any sensor system that meets input signal requirements.
 
 ### Quarter inch pedal jacks
 For connecting pedals.
 
 ### Pedal connectors
-0.1 inch spaced connectors. Connect to six of the HPS connectors. See instructions in the *packages/* directory for this board.
+0.1 inch spaced connectors J46. Connect to six of the sensor connectors. See instructions in the *packages/* directory for this board.
 
 ### +5V power
-External power connection. **WARNING** - Do not connect external +5V power while Teensy 4.1 is connected to a USB cable.
+External power connection. **WARNING** - Do not connect external +5V power while Teensy 4.1 is connected to a USB cable that is supplying power from an external source.
+
+### Fuse
+Location for fuses.
 
 ### Power jumper
-**IMPORTANT** - As an extra safety measure, disconnect this jumper and the +5V power input when Teensy 4.1 is connected to a USB cable.
+**IMPORTANT** - As an extra safety measure, disconnect this jumper J12 and the +5V power input when Teensy 4.1 is connected to a USB cable.
 
 ### MIDI Out
 Five-pin MIDI output connection. The board does not have a MIDI input.
@@ -63,6 +65,8 @@ For simple configuration settings. Programmable with the Teensy firmware. See co
 ### SCA circuit board connectors
 The analog-to-digital conversion (ADC) subsystem is on a separate, removable, card that connects to the IPS printed circuit board. This simplifies and reduces the cost of testing an ADC and enables experimenting with different hammer or damper ADC resolution and sampling rates. Also, ADC parts can often be in packages that are difficult to solder. A separate circuit board lowers the cost and impact of soldering mistakes.
 
+Headers J3, J47, and J48 make it possible to increase the size of the SCA. This allows larger and more complex analog circuits. In this case, either do not use the TFT, or use longer connectors so the TFT is above the SCA.
+
 ### Generic test points and LEDs
 Programmable test points and LEDs through the Teensy firmware.
 
@@ -70,7 +74,7 @@ Programmable test points and LEDs through the Teensy firmware.
 What makes everything possible.
 
 ### TFT jumpers
-Zero-ohm resistors. If not using a TFT, can leave these out.
+Zero-ohm resistors R12, R13, and R14. Only needed if TFT display is connected.
 
 ### CAN bus connector
 Connect two wires between hammer and damper circuit boards. If not using a damper circuit board then leave these disconnected. Connect each wire to the same location on the other board (left side of connection to left side, right side to right side).
@@ -82,8 +86,6 @@ Connection for optional 2.8-inch display.
 Yeah!!
 
 ## Power Supplies and Connections
-
-**WARNING** - The IPS board and anything connected to it (including a computer through USB) is *not* protected by fuses. Please read the information below carefully.
 
 ### +5 Volt Input
 
@@ -99,7 +101,7 @@ The +5V power arrives simultaneously from two inputs:
 
 The external power supply must be able to deliver 2.5 A. This nominal current value is calculated by summing all current values in sections below.
 
-A typical USB port may not be able to supply a full 2.5 A. Therefore, it is possible that the board will not be able to run all 88 keys sensors unless the board is powered by an external +5V power supply, through the +5V power jack. In this case (and in all cases when using the +5V external power), disconnect the USB cable from the Teensy 4.1.
+A typical USB port on a computer may not be able to supply a full 2.5 A. Therefore, it is possible that the board will not be able to run all 88 keys sensors unless the board is powered by an external +5V power supply, through the +5V power jack. In this case (and in all cases when using the +5V external power), see instructions on [PJRC](http://prjc.com) website.
 
 ![ips20_5v_pcb](ips20_5v_power.png)
 
@@ -132,15 +134,11 @@ Select the LDO based on above math.
 
 ### +3.3 Volt Analog Ground
 
-See orange lines in figure below.
+Ground pins are labeled on the PCB.
 
-The following figure shows the sensor pins which are soldered to ground (orange). The figure does not highlight ground test points or other places on the circuit board that could be grounded.
-
-**WARNING** - Be careful not to accidentally short a +3.3V pin (blue) with a ground pin (orange).
+**WARNING** - Be careful not to accidentally short a +3.3V pin with a ground pin.
 
 **IMPORTANT** - For safety, select an LDO that tolerates a shorted output indefinitely.
-
-![ips20_33avg_pcb](ips20_33av_power_ground.png)
 
 ### +3.3 Volt Digital
 
@@ -148,7 +146,7 @@ See green lines in figure below.
 
 The Teensy 4.1 includes a 3.3V output (green).
 
-This output is connected to the SCA, the Can bus, and the TFT display.
+This output is connected to the SCA, the Can bus, the TFT display, the MIDI connector, and one of the optional SCA headers (J48).
 
 According to the PJRC website, the maximum output current that the Teensy's +3.3V pin can tolerate is 250 mA.
 
