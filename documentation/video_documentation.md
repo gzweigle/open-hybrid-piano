@@ -250,3 +250,4 @@ Step 27 - Hammer and Damper Processing https://www.youtube.com/watch?v=NmziaIYKS
 4. All 88 keys are working with the new architecture.
 5. For the dampers, some use direct sensors and some are estimated based on hammer position.
 6. Testing boards and code.
+7. This is the hardware and firmware of the initial Stem Piano Model G release - [Stem Piano Model G](../packages/StemPianoG/)
