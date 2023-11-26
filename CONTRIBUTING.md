@@ -4,10 +4,6 @@ Not sure this will be a popular project.
 
 However, if others would like to contribute, I welcome the collaboration.
 
-## Status
-
-Presently the repo is **under construction**. Until I have a first piano fully released, I am not ready for contributions. Goal is to be ready no later than October 2023.
-
 ## Timeliness
 If you are reading this and it has been multiple years since a change to the repo, that means my DIY Time Machine worked and I am presently living approximately 1500 years in the past. Unlikely to see a pull request or issue.
 
