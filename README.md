@@ -13,11 +13,9 @@ If you would like to contribute hardware, software, mechanical, or firmware to t
 
 ## Goals
 
-Build a full-custom hybrid digital piano using a complete grand piano action. 
+Full-custom hybrid digital piano using a complete grand piano action. 
 
 Platform and code that easily adapts to building a range of other unique and innovative musical instruments.
-
-This is a hobby and so the approach may be driven by curiosity on a subject, not by efficiently getting done.
 
 ## Directory Organization
 
@@ -31,7 +29,7 @@ More details on each directory:
 
 #### documentation/
 
-High level documentation. Additionally, detailed documentation is located throughout the repo.
+High level documentation.
 
 #### packages/
 
@@ -59,7 +57,7 @@ Fun.
 
 Great way to learn new things.
 
-Make inventing new kinds of pianos and other musical instruments more accessible for anyone.
+Make inventing new pianos and other musical instruments more accessible for anyone.
 
 ## History
 

@@ -31,7 +31,6 @@ To manufacture a board, send the files in [ips20_gerber/](ips20_gerber/) to a PC
 ## Form
 * 8.5 inches by 4.0 inches.
 * Single board.
-* Low profile.
 
 ## Top Level PCB Description
 

@@ -27,8 +27,8 @@ Compared to IPS 2.0, the more difficult to solder parts are on the SCA PCB. Mist
 * Optional ground connection at power interface.
 
 ### Size
-* 3.6 inches long.
-* 1.3 inches tall.
+* 3.6 inches by 1.3 inches.
+* Single board.
 
 ### Hold Down
 One optional 2.2mm screw.

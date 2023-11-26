@@ -7,10 +7,10 @@ The first release of Stem Piano is the Model G.
 * Works on grand and upright pianos.
 * Works with the action separate from the piano or as a silent system in a full piano.
 * Works with a digital keyboard, using sensors on the digital keys.
-* Can use as part of innovative new musical instruments.
+* Can use as part of creating innovative new musical instruments.
 * Sends data via 5-pin serial MIDI.
 * Measures and sends hammer velocity and, optionally, damper velocity over MIDI.
-* Includes three, quarter-inch jacks, for pedals.
+* Includes three jacks, quarter-inch, for pedals.
 * Accepts up to 96 inputs. Therefore, will work for pianos with more than 88 keys.
 * Optional 10/100 Mbit Ethernet port for configuration, status, and debug.
 * Optional 2.8" TFT display for configuration and debug.
