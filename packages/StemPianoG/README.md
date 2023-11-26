@@ -36,7 +36,7 @@ Use this code as the Arduino sketch code. May need to rename the top level file 
 
 The settings file is located in this directory.
 
-#### [Six Channel Analog link](../../hardware/research/six_channel_analog/)
+#### [Six Channel Analog link](../../hardware/releases/six_channel_analog/)
 The six channel analog card with ADC that removably connects into the IPS mainboard.
 In this directory are the files needed for PCB fabrication and a list of all components for the board.
 
