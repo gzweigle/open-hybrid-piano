@@ -1,0 +1,43 @@
+Label   Description           Package    Part Number          Required?    Est Cost     Comment
+
+-       SCA 0.0 circuit board -          -                    Yes          10.00        -
+
+C1      10uF Ceramic          0805       -                    Yes           0.02        -
+C2      1uF Ceramic           0805       -                    Yes           0.02        -
+C3      1uF Ceramic           0805       -                    Yes           0.02        -
+C4      47uF Ceramic          0805       -                    Yes           0.02        -
+C5      10uF Ceramic          0805       -                    Yes           0.02        -
+C6      1uF Ceramic           0805       -                    Yes           0.02        -
+C7      1uF Ceramic           0805       -                    Yes           0.02        -
+C8      500pF Ceramic         0805       -                    Yes           0.02        Anything in range 450pF to 550pF is ok.
+C9      1uF Ceramic           0805       -                    Yes           0.02        -
+
+J1      1x13 pin male 0.1in   -          -                    Yes           0.10        Header for connection to IPS mainboard.
+J2      1x3 pin male 0.1in    -          -                    Yes           0.10        Header for connection to IPS mainboard.
+J3      1x6 pin male 0.1in    -          -                    Yes           0.10        Header for connection to IPS mainboard.
+J4      1x3 pin male 0.1in    -          -                    Yes           0.10        Header for connection to IPS mainboard.
+J5      1x1 pin male 0.1in    -          -                    No            0.10        Header for connection to IPS mainboard.
+J6      1x1 pin male 0.1in    -          -                    No            0.10        Header for connection to IPS mainboard.
+
+R1      120K  ohms            0805       -                    Yes           0.20        High tolerance is ok.
+R2      0.01 ohms             0805       -                    Yes           0.20        Any resistance value less than 0.5 ohms is ok.
+R3      47 ohms               0805       -                    Yes           0.20        Anything in range 40 to 60 ohms is ok.
+R4      47 ohms               0805       -                    Yes           0.20        Anything in range 40 to 60 ohms is ok.
+
+SW1     2 position switch     -          DS04-254-01-02BK-SMT No            0.75        Install if would like switch for configuration functions.
+SW2     2 position switch     -          DS04-254-01-02BK-SMT No            0.75        Install if would like switch for configuration functions.
+
+TP1     analog                -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
+TP2     a                     -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
+TP3     sclk                  -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
+TP4     dout                  -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
+TP5     convst                -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
+TP6     b                     -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
+TP7     c                     -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
+
+U1      3.3v reference        VSSOP-8     REF6033             Yes           7.50        Select reference voltage based on maximum expected value from external sensor.
+U2      ADC, 1Msps, 16-bit    VSSOP-10    ADS8860             Yes          20.00        Equivalent is ok.
+U3      8:1 multiplexer       SOIC-16     SN74LV4051          Yes           0.75        Equivalent is ok.
+U4      op amp                SOT-23-5    THS4281             Yes           3.50        Equivalent is ok.
+
+H1      Mounting hole 2.2mm   -           -                   -             -           Nothing to install, just noting the mounting hole diameter for bolt selection.

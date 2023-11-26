@@ -30,7 +30,7 @@ This will all be cleaned up at time of full (official) release.
 #### [StemPianoIPS2 Library link](../../firmware/releases/StemPianoIPS2/)
 Arduino library firmware that runs on the Integrated Processing System (IPS) hardware. Copy this code to the Arduino library location.
 
-#### [Hammer Firmware link](../../firmware/research/ips2_hammer/)
+#### [Hammer Firmware link](../../firmware/releases/ips2_hammer/)
 Main Arduino code for the Teensy 4.1 processor on the IPS hardware connected to hammer sensors.
 Use this code as the Arduino sketch code. May need to rename the top level file from .cpp to .ino.
 
@@ -43,7 +43,7 @@ In this directory are the files needed for PCB fabrication and a list of all com
 #### [Integrated Processing System link](../../hardware/research/integrated_processing_system_2/)
 The Integrated Processing System 2 mainboard.  In this directory are the files needed for PCB fabrication and a list of all components for the board.
 
-#### [IPS2Analytics Library link](../../software/research/ips2_analytics/)
+#### [IPS2Analytics Library link](../../software/releases/ips2_analytics/)
 Optional Python software for acquiring data from the Ethernet connection.
 
 #### [Mechanical link](../../mechanical)
@@ -51,7 +51,7 @@ Examples of mechanical configurations.
 
 ## Optional Components
 
-#### [Damper Firmware link](../../firmware/research/ips2_damper/)
+#### [Damper Firmware link](../../firmware/releases/ips2_damper/)
 Main Arduino code for the Teensy 4.1 processor on the IPS mainboard connected to damper sensors. When using a damper measurement system, a second IPS mainboard and second SCA0 card are required.
 
 #### [Hammer Position Sensor 0.6 link](../../hardware/releases/hps06/)
@@ -119,7 +119,7 @@ The Adafruit 2.8" TFT is using an AdaFruit library for SD card that conflicts wi
 If comment out the TFT #define in stem_piano_ip2.h, then the Adafruit 2.8" TFT is not required and deleting the Teensy SD library is not required.
 
 ## Firmware Settings
-See hammer_settings.cpp in [Hammer Firmware link](../../firmware/research/ips2_hammer/). This file contains detailed comments around each setting value.
+See hammer_settings.cpp in [Hammer Firmware link](../../firmware/releases/ips2_hammer/). This file contains detailed comments around each setting value.
 
 ## Using MIDI
 Connect a 5-pin DIN to the MIDI output port on the IPS 2.X board.
@@ -127,7 +127,7 @@ Connect a 5-pin DIN to the MIDI output port on the IPS 2.X board.
 Use external software to receive MIDI, convert to musical sounds, and that sends to speakers or headphones.
 
 ## Using Ethernet
-See [Analytics link](../../software/research/ips2_analytics/) for example software that receives Ethernet data from the board.
+See [Analytics link](../../software/releases/ips2_analytics/) for example software that receives Ethernet data from the board.
 
 ## Touch Screen TFT Screens and Features
 Change DIP switch SW2 #1 to the ON position to enable the Touch Screen TFT mode. Change the DIP switch to the not-ON position to disable the Touch Screen TFT mode. When in Touch Screen TFT mode, MIDI output from the piano is disabled.
