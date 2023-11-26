@@ -1,9 +1,5 @@
 # How to contribute to Stem Piano
 
-Not sure this will be a popular project.
-
-However, if others would like to contribute, I welcome the collaboration.
-
 ## Timeliness
 If you are reading this and it has been multiple years since a change to the repo, that means my DIY Time Machine worked and I am presently living approximately 1500 years in the past. Unlikely to see a pull request or issue.
 
@@ -11,17 +7,19 @@ If you are reading this and it has been multiple years since a change to the rep
 
 Keep the repo as small as possible. Large files may not be accepted.
 
-The file headers are already too long. Checking if the license boilerplate is required and it may be removed in the future. This GitHub repo has a history of changes and contributions.
+The file headers are already too long. Please add as little as possible.
+
+If you build a piano, please share about it in the Show & Tell Discussions of this repository.
 
 ## Policies
 
 The following contribution guidelines are ordered from least to most restrictive.
 
 ### *research/* subdirectories
-Except for within the *software/* directory (see below), I will try to accept most pull requests for *research/*. It is research after all!
+Except for within the *software/* directory (see below), few restrictions.
 
 ### *releases/* subdirectories
-High bar for acceptance. Also, note that for hardware, my present thinking is only gerber files will be in the *releases/* subdirectories.
+High bar for changes. For hardware, potentially only gerber files will be in the *releases/* subdirectories.
 
 ### *packages/* directory
 Rarely changes once a package is done.

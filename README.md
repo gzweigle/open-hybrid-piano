@@ -11,6 +11,8 @@ But first, please read the [WARNINGS](WARNINGS.md) and [HELP](HELP.md) files tha
 
 If you would like to contribute hardware, software, mechanical, or firmware to the project, see the [CONTRIBUTING](CONTRIBUTING.md) file.
 
+**If you build a piano, please share about it in the Show & Tell Discussions of this repository.**
+
 ## Goals
 
 Full-custom hybrid digital piano using a complete grand piano action. 

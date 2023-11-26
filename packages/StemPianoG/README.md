@@ -2,6 +2,8 @@
 
 The first release of Stem Piano is the Model G.
 
+If you build a piano, please share about it in the Show & Tell Discussions of this repository.
+
 ## Features
 
 * Works on grand and upright pianos.
