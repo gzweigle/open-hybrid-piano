@@ -24,6 +24,7 @@
 //
 // TODO - Lots of cool possibilities for the display.
 // TODO - Could use during real-time by writing just one value at a time?
+// TODO - Instead of -8, have a setting for the pedal inputs.
 
 #include "tft_display.h"
 
@@ -31,7 +32,9 @@
 
 TftDisplay::TftDisplay() : Reader_(SD_) {}
 
-void TftDisplay::Setup(bool using_display) {
+void TftDisplay::Setup(bool using_display, int debug_level) {
+
+  debug_level_ = debug_level;
 
   using_display_ = using_display;
   startup_ = true;
@@ -80,39 +83,39 @@ void TftDisplay::Setup(bool using_display) {
     bool ts_status = Ts_->begin(FT62XX_DEFAULT_THRESHOLD, &Wire2);
     if (ts_status == false) {
       using_display_ = false;
-      #if DEBUG_LEVEL >= 1
+      if (debug_level_ >= 1) {
         Serial.println("TFT display failed, do not know why.");
         Serial.println("TFT display will not be used.");
-      #endif
+      }
     }
     else {
       if (digitalRead(sd_detect_) == HIGH) {
         sd_card_detected_ = true;
         if (!SD_.begin(sd_cs_, SD_SCK_MHZ(10))) {
           sd_card_started_ = false;
-          #if DEBUG_LEVEL >= 1
+          if (debug_level_ >= 1) {
             Serial.println("Could not start SD card.");
-          #endif
+          }
         }
         else {
           sd_card_started_ = true;
-          #if DEBUG_LEVEL >= 1
+          if (debug_level_ >= 1) {
             Serial.println("Successfully started SD card.");
-          #endif
+          }
         }
       }
       else {
         sd_card_detected_ = false;
         sd_card_started_ = false;
-        #if DEBUG_LEVEL >= 1
+        if (debug_level_ >= 1) {
           Serial.println("No card detected for displaying images.");
-        #endif
+        }
       }
     }
   }
 }
 
-void TftDisplay::StartupDisplay() {
+void TftDisplay::HelloWorld() {
   if (using_display_ == true) {
     Clear();
     Tft_->setTextColor(ILI9341_WHITE);
@@ -122,8 +125,8 @@ void TftDisplay::StartupDisplay() {
     Tft_->print("stem piano");
     Tft_->setCursor(15, 64+56);
     Tft_->print("by greg zweigle");
-    delay(1500);
-    Clear();
+    //delay(1500);
+    //Clear();
   }
 }
 
@@ -156,7 +159,7 @@ void TftDisplay::Display(bool tft_switch, const float *hp, const float *dp) {
     if (tft_switch == true) {
 
       if (tft_switch_last_ == false) {
-        StartupDisplay();
+        HelloWorld();
       }
 
       int color;
@@ -168,7 +171,8 @@ void TftDisplay::Display(bool tft_switch, const float *hp, const float *dp) {
       bool was_hammer = true;
       int tx = 0;
       int ty = 0;
-      for (int key = 0; key < NUM_CHANNELS; key++) {
+      // Instead of -8 should track which are pedal.
+      for (int key = 0; key < NUM_CHANNELS - 8; key++) {
         if (hp[key] > max_value) {
           max_value = hp[key];
           max_key = key;
@@ -217,9 +221,11 @@ void TftDisplay::Display(bool tft_switch, const float *hp, const float *dp) {
     else {
       // Done with TFT so clear the screen to avoid burn-in.
       // Clearing takes quite a bit of time, so only do this once.
-      if (tft_switch_last_ == true || startup_ == true) {
-        Clear();
-      }
+      /// TEMPORARY!!!
+      ///
+      //if (tft_switch_last_ == true || startup_ == true) {
+        //Clear();
+      //}
     }
     startup_ = false;
   }
@@ -267,13 +273,13 @@ void TftDisplay::GetTouchPosition(int *x, int *y) {
       touch_point = Ts_->getPoint();
       *x = width_ - touch_point.y;
       *y = height_ - touch_point.x;
-      #if DEBUG_LEVEL >= 2
+      if (debug_level_ >= 2) {
         Serial.print("Touchscreen position (x=");
         Serial.print(*x);
         Serial.print(",y=");
         Serial.print(*y);
         Serial.println(")");
-      #endif
+      }
     }
   }
 }
@@ -294,22 +300,22 @@ void TftDisplay::Picture() {
       SD_.end();
       if (!SD_.begin(sd_cs_, SD_SCK_MHZ(10))) {
         sd_card_started_ = false;
-        #if DEBUG_LEVEL >= 1
+        if (debug_level_ >= 1) {
           Serial.println("Continue to cannot start SD card.");
-        #endif
+        }
       }
       else {
         sd_card_started_ = true;
-        #if DEBUG_LEVEL >= 1
+        if (debug_level_ >= 1) {
           Serial.println("Started SD card after multiple tries.");
-        #endif
+        }
       }
     }
     if (sd_card_started_ == true) {
       ImageReturnCode stat;
-      #if DEBUG_LEVEL >= 2
+      if (debug_level_ >= 2) {
         Serial.println("New TFT picture.");
-      #endif
+      }
       if (picture_number == 0) {
         stat = Reader_.drawBMP("/diy_16_thumbnail.bmp", *Tft_, 0, 0);
         picture_number++;
@@ -330,10 +336,10 @@ void TftDisplay::Picture() {
         stat = Reader_.drawBMP("/diy_24_thumbnail.bmp", *Tft_, 0, 0);
         picture_number = 0;
       }
-      #if DEBUG_LEVEL >= 2
+      if (debug_level_ >= 2) {
         Serial.println("TftDisplay::Picture()");
         Serial.println(stat);
-      #endif
+      }
     }
   }
 }
@@ -342,13 +348,13 @@ void TftDisplay::Picture() {
 
 TftDisplay::TftDisplay() {}
 
-void TftDisplay::Setup(bool not_used) {
-  #if DEBUG_LEVEL >= 1
-  Serial.println("TFT Display is not in build and is not used.");
-  #endif
+void TftDisplay::Setup(bool not_used, int debug_level) {
+  if (debug_level >= 1) {
+    Serial.println("TFT Display is not in build and is not used.");
+  }
 }
 
-void TftDisplay::StartupDisplay() {}
+void TftDisplay::HelloWorld() {}
 
 void TftDisplay::Display(bool a, const float *b, const float *c) {}
 

@@ -35,7 +35,7 @@ class DspPedal
 {
   public:
     DspPedal();
-    void Setup(int, float, int, int, int, int, int, int);
+    void Setup(int, float, int, int, int, int, int, int, int);
     void UpdatePedalState(const float *);
     bool GetSustainCrossedDownThreshold();
     bool GetSustainCrossedUpThreshold();
@@ -48,6 +48,7 @@ class DspPedal
   private:
 
     bool enable_;
+    int debug_level_;
 
     bool IsSustainConnected(float);
     bool IsSostenutoConnected(float);

@@ -53,7 +53,9 @@ DspPedal::DspPedal() {}
 void DspPedal::Setup(int pedal_sample_interval_microseconds,
 float pedal_threshold, int sustain_pin, int sustain_connected_pin,
 int sostenuto_pin, int sostenuto_connected_pin, int una_corda_pin,
-int una_corda_connected_pin) {
+int una_corda_connected_pin, int debug_level) {
+
+  debug_level_ = debug_level;
  
   Timing_.Setup(pedal_sample_interval_microseconds);
 
@@ -171,10 +173,10 @@ void DspPedal::UpdateSustainMaxValue(float position) {
   if (max_position_valid_[Ind::sustain] == true) {
     if (position > max_position_[Ind::sustain]) {
       max_position_[Ind::sustain] = position;
-      #if DEBUG_LEVEL >= 2
+      if (debug_level_ >= 2) {
         Serial.print("UpdateSustainMaxValue() new max = ");
         Serial.println(position);
-      #endif
+      }
     }
   }
 }
@@ -182,10 +184,10 @@ void DspPedal::UpdateSostenutoMaxValue(float position) {
   if (max_position_valid_[Ind::sostenuto] == true) {
     if (position > max_position_[Ind::sostenuto]) {
       max_position_[Ind::sostenuto] = position;
-      #if DEBUG_LEVEL >= 2
+      if (debug_level_ >= 2) {
         Serial.print("UpdateSostenutoMaxValue() new max = ");
         Serial.println(position);
-      #endif
+      }
     }
   }
 }
@@ -193,10 +195,10 @@ void DspPedal::UpdateUnaCordaMaxValue(float position) {
   if (max_position_valid_[Ind::una_corda] == true) {
     if (position > max_position_[Ind::una_corda]) {
       max_position_[Ind::una_corda] = position;
-      #if DEBUG_LEVEL >= 2
+      if (debug_level_ >= 2) {
         Serial.print("UpdateUnaCordaMaxValue() new max = ");
         Serial.println(position);
-      #endif
+      }
     }
   }
 }

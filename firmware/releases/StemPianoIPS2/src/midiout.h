@@ -25,8 +25,9 @@
 #ifndef MIDIOUT_H_
 #define MIDIOUT_H_
 
-#include <MIDI.h>
 #include "stem_piano_ips2.h"
+
+#include <MIDI.h>
 #include "dsp_pedal.h"
 
 #define MY_SERIAL_MIDI MIDI_NAMESPACE::SerialMIDI<HardwareSerial>
@@ -36,12 +37,13 @@ class MidiOut
 {
   public:
     MidiOut();
-    void Setup(int, MY_MIDI_INTERFACE *);
+    void Setup(int, MY_MIDI_INTERFACE *, int);
     void SendNoteOn(const bool *, const float *);
     void SendNoteOff(const bool *, const float *);
     void SendPedal(DspPedal *);
 
   private:
+    int debug_level_;
     int midi_channel_;
     int midi_value_for_A0_;
     MY_MIDI_INTERFACE *mi_;

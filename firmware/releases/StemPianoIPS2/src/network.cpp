@@ -39,7 +39,9 @@
 
 Network::Network() {}
 
-void Network::Setup(const char *computer_ip, const char *teensy_ip, int udp_port) {
+void Network::Setup(const char *computer_ip, const char *teensy_ip, int udp_port,
+int debug_level) {
+  debug_level_ = debug_level;
   network_ok_ = false;
   GetMacAddress();
   SetIpAddresses(computer_ip, teensy_ip, udp_port);
@@ -48,25 +50,34 @@ void Network::Setup(const char *computer_ip, const char *teensy_ip, int udp_port
 
 // Intended to be used to send two local hammer values as direct ADC counts
 // and two remote (or local) damper values that arrive as float in range [0,1].
-void Network::SendPianoPacket(int adc0, int adc1, float fl0, float fl1) {
+void Network::SendPianoPacket(float fl0, float fl1, float fl2, float fl3,
+float fl4, float fl5, float fl6, float fl7) {
 
   if (network_ok_ == true) {
 
     // Four 16-bit values, each sent as two 8-bit values.
-    uint8_t sv[8];
-    sv[0] = adc0&255;
-    sv[1] = (adc0>>8)&255;
-    sv[2] = adc1&255;
-    sv[3] = (adc1>>8)&255;
-    sv[4] = static_cast<int>(65535*fl0)&255;
-    sv[5] = (static_cast<int>(65535*fl0)>>8)&255;
-    sv[6] = static_cast<int>(65535*fl1)&255;
-    sv[7] = (static_cast<int>(65535*fl1)>>8)&255;
+    uint8_t sv[16];
+    sv[0] = static_cast<int>(65535*fl0)&255;
+    sv[1] = (static_cast<int>(65535*fl0)>>8)&255;
+    sv[2] = static_cast<int>(65535*fl1)&255;
+    sv[3] = (static_cast<int>(65535*fl1)>>8)&255;
+    sv[4] = static_cast<int>(65535*fl2)&255;
+    sv[5] = (static_cast<int>(65535*fl2)>>8)&255;
+    sv[6] = static_cast<int>(65535*fl3)&255;
+    sv[7] = (static_cast<int>(65535*fl3)>>8)&255;
+    sv[8] = static_cast<int>(65535*fl4)&255;
+    sv[9] = (static_cast<int>(65535*fl4)>>8)&255;
+    sv[10] = static_cast<int>(65535*fl5)&255;
+    sv[11] = (static_cast<int>(65535*fl5)>>8)&255;
+    sv[12] = static_cast<int>(65535*fl6)&255;
+    sv[13] = (static_cast<int>(65535*fl6)>>8)&255;
+    sv[14] = static_cast<int>(65535*fl7)&255;
+    sv[15] = (static_cast<int>(65535*fl7)>>8)&255;
 
     // Send the data via UDP.
     IPAddress ip(computer_ip_[0], computer_ip_[1], computer_ip_[2], computer_ip_[3]);
     Udp.beginPacket(ip, udp_port_);
-    Udp.write(sv, 8);
+    Udp.write(sv, 16);
     Udp.endPacket();
     Udp.flush();
   }
@@ -93,7 +104,7 @@ int udp_port) {
 
   udp_port_ = udp_port;
 
-  #if DEBUG_LEVEL >= 1
+  if (debug_level_ >= 1) {
     Serial.println("For proper Ethernet operation the following values");
     Serial.println("must match for the program running on computer and");
     Serial.println("attempting to communicate with the IPS 2.X board.");
@@ -116,7 +127,7 @@ int udp_port) {
     Serial.println(teensy_ip_[3]);
     Serial.print("The assigned UDP port is: ");
     Serial.println(udp_port_);
-  #endif
+  }
 
 }
 
@@ -124,14 +135,14 @@ void Network::SetupNetwork() {
   IPAddress ip(teensy_ip_[0], teensy_ip_[1], teensy_ip_[2], teensy_ip_[3]);
   Ethernet.begin(mac_address_, ip);
   if (Ethernet.hardwareStatus() == EthernetNoHardware) {
-    #if DEBUG_LEVEL >= 1
+    if (debug_level_ >= 1) {
       Serial.println("Error - no hardware found.");
-    #endif
+    }
   }
   else if (Ethernet.linkStatus() == LinkOFF) {
-    #if DEBUG_LEVEL >= 1
+    if (debug_level_ >= 1) {
       Serial.println("Error - no ethernet cable.");
-    #endif
+    }
   }
   else {
     Udp.begin(udp_port_);
@@ -142,10 +153,10 @@ void Network::SetupNetwork() {
 #else
 
 Network::Network() {}
-void Network::Setup(int a, int b, int c) {
-  #if DEBUG_LEVEL >= 1
-  Serial.println("Ethernet is not in build and is not used.");
-  #endif
+void Network::Setup(int a, int b, int c, int debug_level) {
+  if (debug_level >= 1) {
+    Serial.println("Ethernet is not in build and is not used.");
+  }
 }
 void Network::SendPianoPacket(int a, int b, float c, float d) {}
 

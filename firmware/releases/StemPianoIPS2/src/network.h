@@ -36,10 +36,12 @@ class Network
 {
   public:
     Network();
-    void Setup(const char *, const char *, int);
-    void SendPianoPacket(int, int, float, float);
+    void Setup(const char *, const char *, int, int);
+    void SendPianoPacket(float, float, float, float,
+                         float, float, float, float);
 
   private:
+    int debug_level_;
     uint8_t mac_address_[6];
     int teensy_ip_[4];
     int computer_ip_[4];

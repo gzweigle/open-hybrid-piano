@@ -50,25 +50,10 @@
 //
 // The TFT is not necessary for the piano to work. If comment out the
 // following #define, then the above steps are not required.
-// #define TFT_INSTALLED
+#define TFT_INSTALLED
 
 // If Ethernet was not soldered onto the IPS 2.X board, comment this out.
 #define ETHERNET_INSTALLED
-
-// Comment this out during normal operation.
-// Uncomment when using the minimal hardware described in documentation.
-#define BOARD_BRINGUP
-
-// Set this to zero during normal operation.
-// DEBUG_LEVEL 0 = No debug information on serial port.
-//                 Will print whether a hammer or damper board.
-// DEBUG_LEVEL 1 = Small amount of debug information.
-//                 Errors and warnings.
-//                 MIDI send notification.
-//                 Change of switch state.
-// DEBUG_LEVEL 2 = Large amount of debug information.
-//                 Details internal to the algorithms.
-#define DEBUG_LEVEL 1
 
 // Hardcode based on pcb layout.
 // Using a #define because statically allocates arrays.

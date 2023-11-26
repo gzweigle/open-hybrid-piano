@@ -44,8 +44,8 @@ class TftDisplay
 {
   public:
     TftDisplay();
-    void Setup(bool);
-    void StartupDisplay();
+    void Setup(bool, int);
+    void HelloWorld();
     void Display(bool, const float *, const float *);
 
   private:
@@ -65,6 +65,7 @@ class TftDisplay
     Adafruit_ImageReader Reader_;
     SdFat SD_;
 
+    int debug_level_;
     bool using_display_;
     bool startup_;
     bool tft_switch_last_;
@@ -91,8 +92,8 @@ class TftDisplay
 {
   public:
     TftDisplay();
-    void Setup(bool);
-    void StartupDisplay();
+    void Setup(bool, int);
+    void HelloWorld();
     void Display(bool, const float *, const float *);
 
 };
