@@ -18,11 +18,6 @@ The first release of Stem Piano is the Model G.
 
 ## Required Components
 
-Until the Stem Piano Model G is fully released, and the overall repo is in a
-finished state, some code may be in releases/ directories and some in
-research/ directories.
-This will all be cleaned up at time of full (official) release.
-
 #### [StemPianoIPS2 Library link](../../firmware/releases/StemPianoIPS2/)
 Arduino library firmware that runs on the Integrated Processing System (IPS) hardware. Copy this code to the Arduino library location or to the same directory as the hammer firmware.
 
