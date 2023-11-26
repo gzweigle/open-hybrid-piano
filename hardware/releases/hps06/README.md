@@ -1,10 +1,14 @@
 # Hammer Position Sensor (HPS) Version 0.6
 
+To manufacture a board, send the files in [hps06_gerber/](hps06_gerber/) to a PCB manufacturer.
+
+## Introduction
+
 Originally, the HPS PCB was for hammers.
 However, the sensor also works for dampers. 
 Not changing the name because many circuit boards have already been built.
 
-## Requirements
+## Features
 
 ### I/O
 * Power input.

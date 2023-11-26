@@ -1,5 +1,7 @@
 # Six Channel Analog (SCA) Version 0.0
 
+To manufacture a board, send the files in [sca00_gerber/](sca00_gerber/) to a PCB manufacturer. The file [sca00_bill_of_materials.txt](sca00_bill_of_materials.txt) lists the parts required.
+
 ## Introduction
 Data conversion board for IPS 2.0.
 

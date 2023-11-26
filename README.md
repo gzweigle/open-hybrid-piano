@@ -4,10 +4,6 @@ Also known as **stem piano**
 
 ![alt text](documentation/ips00_stem_piano_small.jpg)
 
-## Status
-Testing Single Board Architecture 2.0 (this is the third generation of architecture) boards and code.
-All hardware, firmware, and software is not yet on GitHub.
-
 ## How to Build Your Own Piano
 Go straight to the [packages/](packages/) directory!
 

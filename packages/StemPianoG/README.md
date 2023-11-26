@@ -2,10 +2,6 @@
 
 The first release of Stem Piano is the Model G.
 
-## Timeline
-
-Release is presently **under construction**.  Goal is everything posted this year.
-
 ## Features
 
 * Works on grand and upright pianos.
@@ -28,7 +24,7 @@ research/ directories.
 This will all be cleaned up at time of full (official) release.
 
 #### [StemPianoIPS2 Library link](../../firmware/releases/StemPianoIPS2/)
-Arduino library firmware that runs on the Integrated Processing System (IPS) hardware. Copy this code to the Arduino library location.
+Arduino library firmware that runs on the Integrated Processing System (IPS) hardware. Copy this code to the Arduino library location or to the same directory as the hammer firmware.
 
 #### [Hammer Firmware link](../../firmware/releases/ips2_hammer/)
 Main Arduino code for the Teensy 4.1 processor on the IPS hardware connected to hammer sensors.
@@ -40,23 +36,19 @@ The settings file is located in this directory.
 The six channel analog card with ADC that removably connects into the IPS mainboard.
 In this directory are the files needed for PCB fabrication and a list of all components for the board.
 
-#### [Integrated Processing System link](../../hardware/research/integrated_processing_system_2/)
+#### [Integrated Processing System link](../../hardware/releases/ips20/)
 The Integrated Processing System 2 mainboard.  In this directory are the files needed for PCB fabrication and a list of all components for the board.
-
-#### [IPS2Analytics Library link](../../software/releases/ips2_analytics/)
-Optional Python software for acquiring data from the Ethernet connection.
-
-#### [Mechanical link](../../mechanical)
-Examples of mechanical configurations.
 
 ## Optional Components
 
 #### [Damper Firmware link](../../firmware/releases/ips2_damper/)
 Main Arduino code for the Teensy 4.1 processor on the IPS mainboard connected to damper sensors. When using a damper measurement system, a second IPS mainboard and second SCA0 card are required.
 
+If the damper measurement system is not installed, the hammer firmware will estimate the damper location based on the hammer sensor inputs.
+
 #### [Hammer Position Sensor 0.6 link](../../hardware/releases/hps06/)
 #### [Hammer Position Sensor 0.4 link](../../hardware/releases/hps04/)
-Either hammer position sensor (HPS) board at these links will work.
+Either hammer position sensor (HPS) board at these two links will work.
 Eighty-eight (or more) sensor boards are required, one for each hammer.
 When using a damper board, 88 HPS (or more) sensor boards are required, one for each damper.
 
@@ -66,11 +58,17 @@ The sensor boards must output an analog value in range [0, ..., 3.3] volts when 
 
 The maximum allowable current draw of each sensor board is 15 mA.
 
+#### [IPS2Analytics Library link](../../software/releases/ips2_analytics/)
+Optional Python software for acquiring and displaying data from the Ethernet connection.
+
+#### [Mechanical link](../../mechanical)
+Examples of mechanical configurations.
+
 ## Purchasing Parts and PCB Fabrication
 
 The bill of materials file in each *hardware/* subdirectory lists all parts required to build the boards.
 
-For PCB fabrication, use the gerber files in each *hardware/* subdirectory. Often a manufacturer will request putting all gerber files in a single .zip directory.
+For PCB fabrication, use the gerber files in each *hardware/* subdirectory. Often a manufacturer will request putting the gerber files in a single .zip directory.
 
 ## Hardware Build and Assembly
 
