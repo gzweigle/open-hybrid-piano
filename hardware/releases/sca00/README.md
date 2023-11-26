@@ -41,7 +41,7 @@ The SCA receives 6 analog inputs with range [0, Vmax]. The value Vmax is determi
 | REF6033 | 3.3V
 
 The digital inputs (a, b, c) determine which analog input is routed to the ADC.
-|a|b|c| pin number|
+|c|b|a| pin number|
 |-|-|-|-|
 |0|0|0|4|
 |0|0|1|5|
@@ -55,3 +55,6 @@ The digital inputs (a, b, c) determine which analog input is routed to the ADC.
 The ADC is a Texas Instruments ADS8860.
 
 Connects to Integrated Processing System (IPS) 2.0 board.
+
+## Schematic
+![sca00_schematic](sca00_schematic.png)
