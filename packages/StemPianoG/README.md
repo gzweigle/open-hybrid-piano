@@ -32,8 +32,12 @@ The settings file is located in this directory.
 #### [Six Channel Analog PCB link](../../hardware/releases/sca00/)
 The six channel analog (SCA) card with ADC that removably connects into the IPS mainboard. In this directory are the files needed for PCB fabrication and a list of all components for the board.
 
+One SCA board per IPS board. For example, one SCA supports 88 piano hammers.
+
 #### [Integrated Processing System PCB link](../../hardware/releases/ips20/)
 The Integrated Processing System (IPS) mainboard. In this directory are the files needed for PCB fabrication and a list of all components for the board.
+
+One IPS board for hammers and optionally a second IPS board for dampers.
 
 ## Optional Components
 
