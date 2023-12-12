@@ -35,11 +35,11 @@ High level documentation.
 
 #### packages/
 
-Building a complete piano requires firmware, hardware, mechanical, and sometimes software. The packages/ directory provides information on everything needed to build a specific version of a musical instrument.
+Building a complete piano requires firmware, hardware, mechanical, and sometimes software. The *packages/* directory provides information on everything needed to build a specific version of a musical instrument.
 
 #### firmware/
 
-Real-time code running on custom hardware from *hardware* directory.
+Real-time code running on custom hardware from *hardware/* directory.
 
 #### hardware/
 

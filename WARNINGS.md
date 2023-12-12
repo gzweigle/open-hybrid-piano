@@ -2,21 +2,19 @@
 
 Please read all warnings prior to starting any work.
 
-It is recommended to have experience with (or do research/learning on) areas listed below, and subjects related to software and electronics projects, before starting. Many resources are available on the internet.
-
-The following warnings are only related to the piano itself.
-
-Please read disclaimers in licenses.
+It is recommended to have some experience with software and electronics projects. Or learn using internet and other resources.
 
 Some of the warnings below may be repeated or described in more detail elsewhere in the repo. It cannot be guaranteed, but it is the intent that this *WARNINGS.md* file contains a high-level superset of all warnings. The information in this file may not be complete.
+
+Please read disclaimers in licenses.
 
 ## Teensy USB and External Power
 
 Internally the Teensy 4.1 shorts the its USB connection and the +5V power pin.
 
-Be careful to **NEVER** connect the Teensy 4.1 USB cable and the external +5V power input at the same time. This could damage the computer connected to the USB.
+Do not connect an external +5V supply to a circuit board at the same time as the Teensy 4.1 USB programming cable is connected and when that USB cable is also suppling power. This could short the computer connected to the USB with the +5V supply connected to the circuit board, and damage the computer. Please see the PJRC Teensy 4.1 website for more details on this issue: [PJRC](http://prjc.com). Some circuit boards have a dedicated jumper as an extra reminder.
 
-When all 88 sensors are connected, the total current draw of the system will likely exceed the capability of an external computer that is trying to power the system through a USB cable connected to the Teensy 4.1. Therefore, the external +5V power source on the circuit board is needed. The PJRC website has information on how to use a USB cable under this scenario.
+For boards connected to all 88 piano key sensors. The total current draw of a circuit board will likely exceed the capability of an external computer that is trying to power the board through a USB cable connected to the Teensy 4.1. Therefore, the external +5V power source on the circuit board is needed in these cases. The PJRC website has information on how to use a USB cable under this scenario.
 
 Please see the [PJRC website](https://www.pjrc.com) for more information.
 
@@ -26,7 +24,7 @@ Some boards include places to install fuses and some may not. Use fuses.
 
 Use an external power supply that includes short-circuit protection.
 
-Many of the boards include Low Dropout Regulators (LDO). When selecting the LDO to install onto the circuit board, select one that includes short-circuit protection. This means that if the LDO output is accidentally shorted to ground, the LDO will current limit to a specified value. This current limit can be used when calculating the worst-case total current of the board.
+Some boards include low dropout voltage regulators (LDO). The LDO should include short-circuit protection. This means that if the LDO output is accidentally shorted to ground, the LDO will current limit to a specified value. This current limit can be used when calculating the worst-case total current of the board. See the bill_of_materials files in hardware directories for recommended LDO devices.
 
 ## Power and Ground Pins
 
@@ -43,7 +41,3 @@ For a low level of ESD prevention, work in a very dry environment, with carpet, 
 ## Lead Free
 
 Recommend lead free for everything.
-
-## Touch Displays
-
-Use the 2.8" TFT unmodified. For example, the TFT IM1, IM2, and IM3 pins are connected to +3.3V on the IPS 2.X PCB. Therefore, these jumpers internal to the TFT should *not* be soldered together (the manufacturers website may describe soldering them together).

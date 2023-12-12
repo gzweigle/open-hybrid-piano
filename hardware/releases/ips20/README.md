@@ -11,7 +11,7 @@ To manufacture a board, send the files in [ips20_gerber/](ips20_gerber/) to a PC
 * 3 pedal inputs: 1/4 inch.
 * MIDI output.
 * Ethernet interface (optional).
-* 5 volt, 2.5 amp power input. *WARNING* - do not connect when a USB cable is connected to the Teensy 4.1, and the USB cable is supplying power from an external computer.
+* 5 volt, 2.5 amp power input.
 * CAN bus.
 
 ### Capabilities
@@ -46,13 +46,13 @@ For connecting pedals.
 0.1 inch spaced connectors J46. Connect to six of the sensor connectors. See instructions in the *packages/* directory for this board.
 
 ### +5V power
-External power connection. **WARNING** - Do not connect external +5V power while Teensy 4.1 is connected to a USB cable that is supplying power from an external source.
+External power connection. Do not connect external +5V power while Teensy 4.1 is connected to a USB cable that is supplying power from an external source.
 
 ### Fuse
 Location for fuses.
 
 ### Power jumper
-**IMPORTANT** - As an extra safety measure, disconnect this jumper J12 and the +5V power input when Teensy 4.1 is connected to a USB cable that is supplying power from an external source.
+As an extra safety measure, disconnect this jumper J12 and the +5V power input when Teensy 4.1 is connected to a USB cable and that USB cable is supplying power from an external source.
 
 ### MIDI Out
 Five-pin MIDI output connection. The board does not have a MIDI input.
@@ -96,9 +96,9 @@ The +5V power arrives simultaneously from two inputs:
 * An external power supply through the +5V power jack
 * An external computer through the USB at Teensy 4.1
 
-**IMPORANT** - It is recommended to use an external power supply that automatically protects from short circuits, overcurrent, and other failure conditions. Or, use an external fuse. Select protection or fuse level based on current and power values from analysis below.
+It is recommended to use an external power supply that automatically protects from short circuits, overcurrent, and other failure conditions. Or, use an external fuse. Select protection or fuse level based on current and power values from analysis below.
 
-**WARNING** - Do not connect both power inputs at the same time. See the PJRC website for more information, including how to cut a Teensy 4.1 pad to avoid shorting the two power inputs together.
+Do not connect both power inputs at the same time. See the PJRC website for more information, including how to cut a Teensy 4.1 pad to avoid shorting the two power inputs together.
 
 The external power supply must be able to deliver 2.5 A. This nominal current value is calculated by summing all current values in sections below.
 
@@ -129,7 +129,7 @@ The SCA also has a second +3.3V input (see later section below) which can be use
 In this case the worst case current for an LDO:
 240 + 50 = 290 mA.
 
-Select the LDO based on above math.
+Select the LDO based on above math. The LDO in [ips20_bill_of_materials.txt](ips20_bill_of_materials.txt) was selected based on the above math.
 
 ![ips20_33av_pcb](ips20_33av_power.png)
 
@@ -137,9 +137,7 @@ Select the LDO based on above math.
 
 Ground pins are labeled on the PCB.
 
-**WARNING** - Be careful not to accidentally short a +3.3V pin with a ground pin.
-
-**IMPORTANT** - For safety, select an LDO that tolerates a shorted output indefinitely.
+Be careful not to accidentally short a +3.3V pin with a ground pin.  For safety, select an LDO that tolerates a shorted output indefinitely. The LDO in [ips20_bill_of_materials.txt](ips20_bill_of_materials.txt) was selected based on this criteria.
 
 ### +3.3 Volt Digital
 

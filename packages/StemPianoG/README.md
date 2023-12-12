@@ -20,6 +20,8 @@ If you build a piano, please share about it in the Show & Tell Discussions of th
 
 ## Required Components
 
+Each of the following directories contains a README.md with information on how to use the component.
+
 #### [StemPianoIPS2 Firmware link](../../firmware/releases/StemPianoIPS2/)
 Arduino library firmware that runs on the Integrated Processing System (IPS) hardware. Copy this code to the Arduino library location or to the same directory as the hammer firmware.
 
@@ -40,6 +42,8 @@ The Integrated Processing System (IPS) mainboard. In this directory are the file
 One IPS board for hammers and optionally a second IPS board for dampers.
 
 ## Optional Components
+
+Each of the following directories contains a README.md with information on how to use the component.
 
 #### [Damper Firmware link](../../firmware/releases/ips2_damper/)
 Main code for the Teensy 4.1 processor on the IPS mainboard connected to damper sensors. When using a damper measurement system, a second IPS mainboard and second SCA card are required.
@@ -80,10 +84,6 @@ The analog-to-digital conversion (ADC) subsystem is on a separate, removable, ca
 
 The IPS board comes with an optional external +5V supply connection. The external supply must be able to deliver at least five amps.
 
-**WARNING** --- Do not connect an external +5V supply at the same time as the Teensy 4.1 USB programming cable is connected. This could short the computer connected to the USB, with the +5V supply connected to the IPS, and damage the computer. Please see the PJRC Teensy 4.1 website for more details on this issue [PJRC](http://prjc.com). The IPS circuit board has a dedicated jumper as an extra reminder. --- **WARNING**
-
-**WARNING** --- When all 88 sensors are connected, the total current draw of the IPS will likely exceed the capability of an external computer that is trying to power the IPS through a USB cable connected to the Teensy 4.1. Therefore, the external +5V power source on the IPS is needed. The PJRC website has information on how to use a USB cable under this scenario. -- **WARNING**
-
 ## Hardware Connections
 ### Hammer Connections
 Hammers are numbered starting at A0 (0), through C8 (87). Connect each set of three pins (power, ground, and signal) to the same three pins on each of the 88 sensors boards.
@@ -114,11 +114,9 @@ When mounting Stem Piano Model G inside a piano, for a silent piano system, it i
 ## Firmware Compiling and Running
 See Teensy 4.1 and Adafruit 2.8" TFT web pages for required Arduino software setup and required libraries.
 
-**TFT Display Known Issue**
+The Adafruit 2.8" TFT is using an AdaFruit library for SD card that conflicts with the library for SD card on Teensy.  As a temporary fix, delete the SdFat/ directory from Teensy library (instead of deleting it is probably better to move the directory to another location in case the directory is needed for another project in future). Deleting SdFat/ will cause warnings when building the project.
 
-    The Adafruit 2.8" TFT is using an AdaFruit library for SD card that conflicts with the library for SD card on Teensy.  As a temporary fix, delete the SdFat/ directory from Teensy library (instead of deleting it is probably better to move the directory to another location in case the directory is needed for another project in future). Deleting SdFat/ will cause warnings when building the project.
-
-    If comment out the TFT #define in stem_piano_ip2.h, then the Adafruit 2.8" TFT is not required and deleting the Teensy SD library is not required.
+If comment out the TFT #define in stem_piano_ip2.h, then the Adafruit 2.8" TFT is not required and deleting the Teensy SD library is not required.
 
 ## Firmware Settings
 See hammer_settings.cpp in [Hammer Firmware link](../../firmware/releases/ips2_hammer/). This file contains detailed comments around each setting value.
@@ -136,6 +134,8 @@ See [Analytics link](../../software/releases/ips2_analytics/) for example softwa
 Change DIP switch SW2 #1 to the ON position to enable the Touch Screen TFT mode. Change the DIP switch to the not-ON position to disable the Touch Screen TFT mode. When in Touch Screen TFT mode, MIDI output from the piano is disabled.
 
 During Touch Screen TFT mode the Analog to Digital Converter (ADC) sampling rate slows to approximately 100 samples per second. The display shows the maximum value of all hammer and damper signals, in range [0.0, ..., 1.0]. Use this capability to raise one key at a time and verify good sensor height, position, and/or calibration.
+
+Use the 2.8" TFT unmodified. For example, the TFT IM1, IM2, and IM3 pins are connected to +3.3V on the IPS 2.X PCB. Therefore, these jumpers internal to the TFT should *not* be soldered together (the manufacturers website may describe soldering them together).
 
 ## Video Documentation
 

@@ -7,7 +7,7 @@ Data conversion board for IPS 2.0.
 
 Small size, low cost PCB.
 
-Designers can experiment with different ADC front-ends without having to make a new IPS 2.0 board.
+By modifying this small SCA board, designers can experiment with different ADC front-ends without having to make a new (expensive) IPS 2.0 board.
 
 Compared to IPS 2.0, the more difficult to solder parts are on the SCA PCB. Mistakes are localized to a small, low-cost board.
 
@@ -56,7 +56,7 @@ The digital inputs (a, b, c) determine which analog input is routed to the ADC.
 
 The ADC is a Texas Instruments ADS8860.
 
-Connects to Integrated Processing System (IPS) 2.0 board.
+Connects to Integrated Processing System (IPS) 2.X board.
 
 ## Schematic
 ![sca00_schematic](sca00_schematic.png)
