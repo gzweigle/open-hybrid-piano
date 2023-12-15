@@ -1,14 +1,17 @@
 # Integrated Processing System 2 (IPS2) specification
 
-To manufacture a board, send the files in [ips20_gerber/](ips20_gerber/) to a PCB manufacturer. The file [ips20_bill_of_materials.txt](ips20_bill_of_materials.txt) lists the parts required.
+The mainboard for hammer or damper sensor connections and Teensy 4.1 processing.
 
 ## Features
 
 ### I/O
-* Either:
-  * Analog interfaces to 88 hammer sensor boards, or
-  * Analog interfaces to 88 damper sensor boards.
-* 3 pedal inputs: 1/4 inch.
+* The board supports 96 sensor inputs.
+  * Either:
+    * Analog interfaces to 88 hammer sensor boards, or
+    * Analog interfaces to 88 damper sensor boards.
+  * 3 pedal inputs: 1/4 inch.
+  * With less pedal inputs, it is also possible to use extra inputs for more than 88 piano keys.
+  * With less piano key inputs, it is also possible to have more pedal inputs.
 * MIDI output.
 * Ethernet interface (optional).
 * 5 volt, 2.5 amp power input.
@@ -102,7 +105,7 @@ Do not connect both power inputs at the same time. See the PJRC website for more
 
 The external power supply must be able to deliver 2.5 A. This nominal current value is calculated by summing all current values in sections below.
 
-A typical USB port on a computer may not be able to supply a full 2.5 A. Therefore, it is possible that the board will not be able to run all 88 keys sensors unless the board is powered by an external +5V power supply, through the +5V power jack. In this case (and in all cases when using the +5V external power), see instructions on [PJRC](http://prjc.com) website.
+A typical USB port on a computer may not be able to supply a full 2.5 A. Therefore, it is possible that the board will not be able to run all 88 keys sensors unless the board is powered by an external +5V power supply, through the +5V power jack. In this case (and in all cases when using the +5V external power), see instructions on https://www.pjrc.com website.
 
 ![ips20_5v_pcb](ips20_5v_power.png)
 
@@ -158,3 +161,9 @@ When designing an SCA board that uses the +3.3V Digital input, the current draw 
 According to a Teensy 4.1 schematic on the PJRC website, there is an LDO on the Teensy 4.1 that drives the 3.3V digital power supply, from the +5V power input. Reading information from PJRC website, the LDO appears maybe can tolerate a shorted output indefinitely. However, for safety, do not accidentally short the +3.3 Volt Digital line to ground.
 
 ![ips20_33dv_pcb](ips20_33dv_power.png)
+
+## Manufacturing
+
+To manufacture a board, send the files in [ips20_gerber/](ips20_gerber/) to a PCB manufacturer.
+
+The file [ips20_bill_of_materials.txt](ips20_bill_of_materials.txt) lists the parts required.

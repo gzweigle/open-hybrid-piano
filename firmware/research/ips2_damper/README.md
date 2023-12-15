@@ -1,3 +1,3 @@
-# IPS 2.0 Damper
+# IPS 2.X Damper
 
-Code specific to the damper processing code running on IPS 2.0.
+Damper processing code running on a Teensy 4.1 processor and the IPS 2.X mainboard.

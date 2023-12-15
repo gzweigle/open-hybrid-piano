@@ -1,0 +1,6 @@
+Label   Description           Package       Part Number          Required?    Est Cost     Comment
+-       HPS 0.4 circuit board -             -                    Yes           2.00        -
+R1      50 ohm resistor       through hole  -                    Yes           0.50        -
+R2      5600 ohm resistor     through hole  -                    Yes           0.50        -
+U1      CNY70 optical sensor  -             CNY70                Yes           1.00        -
+J0      1x3 pin male 0.1in    -             -                    Yes           0.10        -

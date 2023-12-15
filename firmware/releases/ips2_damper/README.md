@@ -1,6 +1,6 @@
-# IPS 2.0 Damper
+# IPS 2.X Damper
 
-Damper processing code running on IPS 2.X.
+Damper processing code running on a Teensy 4.1 processor and the IPS 2.X mainboard.
 
 Place this code in the same directory location as the main Arduino project for the damper board.
 

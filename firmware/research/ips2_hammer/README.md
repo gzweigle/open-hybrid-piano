@@ -1,3 +1,3 @@
-# IPS 2.0 Hammer
+# IPS 2.X Hammer
 
-Code specific to the hammer processing code running on IPS 2.0.
+Hammer processing code running on a Teensy 4.1 processor and the IPS 2.X mainboard.

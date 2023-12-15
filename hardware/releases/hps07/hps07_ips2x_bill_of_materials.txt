@@ -1,0 +1,7 @@
+Label   Description           Package    Part Number          Required?    Est Cost     Comment
+-       HPS 0.7 circuit board -          -                    Yes           2.00        -
+RV0     Trimmer, 200 ohm      -          3224X-1-201E         Yes           5.00        -
+R1      50 ohm resistor       0805       -                    Yes           0.25        -
+R2      5600 ohm resistor     0805       -                    Yes           0.25        -
+U1      CNY70 optical sensor  -          CNY70                Yes           1.00        -
+J0      1x3 pin male 0.1in    -          -                    Yes           0.10        -

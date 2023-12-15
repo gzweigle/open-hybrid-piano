@@ -12,7 +12,7 @@ Designed for maximum performance, without constraining cost or practicality. Sam
 ![alt text](block_diagram_performance.png)
 
 ## Single Board Architecture 0.0
-First single board architecture. An attempt to simplify and lower the cost. Sampling is fully parallel and in range 1Ksps to 4Ksps. Results show this architecture gives up performance without much benefit to simplicity or cost.
+First single board architecture. An attempt to simplify and lower the cost. Sampling is fully parallel and in range 2Ksps to 8Ksps. Results show this architecture gives up performance without much benefit to simplicity or cost.
 
 ![alt text](block_diagram_single_board.png)
 

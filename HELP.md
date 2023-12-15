@@ -6,7 +6,7 @@ In addition to the list below, another source of help: since starting the projec
 
 Also, check if a problem is covered in the [Issues](https://github.com/gzweigle/DIY-Grand-Digital-Piano/issues). Open a new issue for problems that could be bugs or a circuit board schematic error.
 
-There are a couple of piano forums and also the [PJRC Teensy Forum](https://forum.pjrc.com/) that could be good sources for information and questions.
+There are a couple of piano forums and also the https://forum.pjrc.com/ that could be good sources for information and questions.
 
 If hand-soldering the boards, a great approach is to get things working in stages. Building an entire piano to completion and then powering up everything together for the first time can make finding small problems very difficult. The incremental approach is covered in some of the build instructions and videos.
 
@@ -20,15 +20,15 @@ The touch screen TFT display requires installing special libraries. See the manu
 
 The touch screen TFT display SD library conflicts with the Teensy SD library. Details are found in the build instructions elsewhere in this repo. If the project fails to compile, try to #define out the TFT code (details are found in the build instructions elsewhere in this repo).
 
-Check the [PJRC](https://pjrc.com) website for instructions on setting up to compile and download for the Teensy 4.1.
+Check the https://www.pjrc.com website for instructions on setting up to compile and download for the Teensy 4.1.
 
 Make sure to have the latest Arduino software installed and with updated libraries.
 
 ## Booting
 
-Check the [PJRC](https://pjrc.com) website for instructions on setting up to compile and download for the Teensy 4.1.
+Check the https://www.pjrc.com website for instructions on setting up to compile and download for the Teensy 4.1.
 
-If the project refuses to download to the Teensy, try pushing the download button on the Teensy  (see [PJRC](https://pjrc.com) website for details).
+If the project refuses to download to the Teensy, try pushing the download button on the Teensy  (see https://www.pjrc.com website for details).
 
 If there is a buffer overflow bug in the firmware, this can cause the Teensy to appear to be locked up, or, to continuously initialize.
 
@@ -93,6 +93,7 @@ One or more notes play repeatedly
 
 Some notes are quieter or louder than others -
 * Check the sensor spacing to the hammer shanks or dampers.
+* Check the alignment of sensors over hammer shanks or dampers.
 
 ## Pedals
 

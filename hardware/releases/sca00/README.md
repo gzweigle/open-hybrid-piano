@@ -1,8 +1,9 @@
 # Six Channel Analog (SCA) Version 0.0
 
-To manufacture a board, send the files in [sca00_gerber/](sca00_gerber/) to a PCB manufacturer. The file [sca00_bill_of_materials.txt](sca00_bill_of_materials.txt) lists the parts required.
+A small data acquisition card that connects to the mainboard.
 
 ## Introduction
+
 Data conversion board for IPS 2.0.
 
 Small size, low cost PCB.
@@ -60,3 +61,7 @@ Connects to Integrated Processing System (IPS) 2.X board.
 
 ## Schematic
 ![sca00_schematic](sca00_schematic.png)
+
+### Manufacturing
+
+To manufacture a board, send the files in [sca00_gerber/](sca00_gerber/) to a PCB manufacturer. The file [sca00_bill_of_materials.txt](sca00_bill_of_materials.txt) lists the parts required.

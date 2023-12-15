@@ -1,6 +1,7 @@
 # Ethernet Data Acquisition
 
 ## To get data from hammer board
+
 Edit get_ethernet_data_hammer.py to add IP address and port number.
 
 These must match the values in the board's settings .cpp file.
@@ -8,6 +9,7 @@ These must match the values in the board's settings .cpp file.
 From a command line type: python get_ethernet_data_hammer.py.
 
 ## To get data from damper board
+
 Edit get_ethernet_data_damper.py to add IP address and port number.
 
 These must match the values in the board's settings .cpp file.

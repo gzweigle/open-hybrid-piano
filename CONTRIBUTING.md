@@ -37,4 +37,4 @@ Until a security policy is setup, this directory is not going to change much.
 
 * If you want to contribute code or hardware, open a pull request.
 
-* There are a couple of piano forums and also the [PJRC Teensy Forum](https://forum.pjrc.com/) that could be good sources for information and questions.
+* There are a couple piano forums and https://forum.pjrc.com/ that could be good sources for information and questions.

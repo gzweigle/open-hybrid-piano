@@ -1,12 +1,8 @@
 # Hammer Position Sensor (HPS) Version 0.4
 
-To manufacture a board, send the files in [hps04_gerber/](hps04_gerber/) to a PCB manufacturer.
-
 ## Introduction
 
-Originally, the HPS PCB was for hammers.
-However, the board also works for dampers. 
-Not changing the name because many circuit boards have already been built.
+Originally, the HPS PCB was for hammers.  However, the board also works for dampers.  Not changing the name because many circuit boards have already been built.
 
 Version 0.4 uses fixed resistors which trades lower accuracy for lower cost.
 
@@ -25,3 +21,9 @@ Version 0.4 uses fixed resistors which trades lower accuracy for lower cost.
 * CNY70 sensor.
 * Fixed resistors.
 * All resistors are through hole.
+
+### Manufacturing
+
+To manufacture a board, send the files in [hps04_gerber/](hps04_gerber/) to a PCB manufacturer.
+
+Use the bill of materials file that matches the mainboard connected to the HPS.

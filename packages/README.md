@@ -1,3 +1,3 @@
-# DIY Piano Packages
+# The Pianos
 
-Each directory contains instructions to build a piano.
+Each directory contains instructions and links to build a piano.
