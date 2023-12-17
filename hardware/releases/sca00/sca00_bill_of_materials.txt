@@ -2,15 +2,15 @@ Label   Description           Package    Part Number          Required?    Est C
 
 -       SCA 0.0 circuit board -          -                    Yes          10.00        -
 
-C1      10uF Ceramic          0805       -                    Yes           0.02        -
-C2      1uF Ceramic           0805       -                    Yes           0.02        -
-C3      1uF Ceramic           0805       -                    Yes           0.02        -
-C4      47uF Ceramic          0805       -                    Yes           0.02        -
-C5      10uF Ceramic          0805       -                    Yes           0.02        -
-C6      1uF Ceramic           0805       -                    Yes           0.02        -
-C7      1uF Ceramic           0805       -                    Yes           0.02        -
-C8      500pF Ceramic         0805       -                    Yes           0.02        Anything in range 450pF to 550pF is ok.
-C9      1uF Ceramic           0805       -                    Yes           0.02        -
+C1      10uF Ceramic          0805       C0805C106J8RACAUTO   Yes           1.00        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
+C2      1uF Ceramic           0805       C0805C105J4RACTU     Yes           0.25        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
+C3      1uF Ceramic           0805       C0805C105J4RACTU     Yes           0.25        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
+C4      47uF Ceramic          0805       0805ZD476MAT2A       Yes           1.00        X5R or better, 20% or smaller, 10 VDC or higher rating, is ok.
+C5      10uF Ceramic          0805       C0805C106J8RACAUTO   Yes           1.00        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
+C6      1uF Ceramic           0805       C0805C105J4RACTU     Yes           0.25        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
+C7      1uF Ceramic           0805       C0805C105J4RACTU     Yes           0.25        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
+C8      500pF Ceramic         0805       C0805C471J3RACTU     Yes           0.40        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
+C9      1uF Ceramic           0805       C0805C105J4RACTU     Yes           0.25        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
 
 J1      1x13 pin male 0.1in   -          -                    Yes           0.10        Header for connection to IPS mainboard.
 J2      1x3 pin male 0.1in    -          -                    Yes           0.10        Header for connection to IPS mainboard.
@@ -19,10 +19,10 @@ J4      1x3 pin male 0.1in    -          -                    Yes           0.10
 J5      1x1 pin male 0.1in    -          -                    No            0.10        Header for connection to IPS mainboard.
 J6      1x1 pin male 0.1in    -          -                    No            0.10        Header for connection to IPS mainboard.
 
-R1      120K  ohms            0805       -                    Yes           0.20        High tolerance is ok.
-R2      0.01 ohms             0805       -                    Yes           0.20        Any resistance value less than 0.5 ohms is ok.
-R3      47 ohms               0805       -                    Yes           0.20        Anything in range 40 to 60 ohms is ok.
-R4      47 ohms               0805       -                    Yes           0.20        Anything in range 40 to 60 ohms is ok.
+R1      120K  ohms            0805       ERA-6AED124V         Yes           0.50        0.125W, 5% tolerance or better, is ok.
+R2      0.2 ohms              0805       ERJ-U6SFR20V         Yes           0.25        Resistance less than 0.5 ohms, and is 0.125W, with 5% or better tolerance is ok.
+R3      47 ohms               0805       ERA-6AED470V         Yes           0.50        0.125W, 5% tolerance or better, is ok.
+R4      47 ohms               0805       ERA-6AED470V         Yes           0.50        0.125W, 5% tolerance or better, is ok.
 
 SW1     2 position switch     -          DS04-254-01-02BK-SMT No            0.75        Install if would like switch for configuration functions.
 SW2     2 position switch     -          DS04-254-01-02BK-SMT No            0.75        Install if would like switch for configuration functions.
