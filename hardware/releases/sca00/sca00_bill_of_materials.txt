@@ -1,43 +1,35 @@
-Label   Description           Package    Part Number          Required?    Est Cost     Comment
-
--       SCA 0.0 circuit board -          -                    Yes           7.50        -
-
-C1      10uF Ceramic          0805       C0805C106J8RACAUTO   Yes           1.00        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
-C2      1uF Ceramic           0805       C0805C105J4RACTU     Yes           0.25        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
-C3      1uF Ceramic           0805       C0805C105J4RACTU     Yes           0.25        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
-C4      47uF Ceramic          0805       0805ZD476MAT2A       Yes           1.00        X5R or better, 20% or smaller, 10 VDC or higher rating, is ok.
-C5      10uF Ceramic          0805       C0805C106J8RACAUTO   Yes           1.00        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
-C6      1uF Ceramic           0805       C0805C105J4RACTU     Yes           0.25        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
-C7      1uF Ceramic           0805       C0805C105J4RACTU     Yes           0.25        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
-C8      470pF Ceramic         0805       C0805C471J3RACTU     Yes           0.40        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
-C9      1uF Ceramic           0805       C0805C105J4RACTU     Yes           0.25        X7R or better, 5% or smaller, 10 VDC or higher rating, is ok.
-
-J1      1x13 pin male 0.1in   -          -                    Yes           0.10        Header for connection to IPS mainboard.
-J2      1x3 pin male 0.1in    -          -                    Yes           0.10        Header for connection to IPS mainboard.
-J3      1x6 pin male 0.1in    -          -                    Yes           0.10        Header for connection to IPS mainboard.
-J4      1x3 pin male 0.1in    -          -                    Yes           0.10        Header for connection to IPS mainboard.
-J5      1x1 pin male 0.1in    -          -                    No            0.10        Header for connection to IPS mainboard.
-J6      1x1 pin male 0.1in    -          -                    No            0.10        Header for connection to IPS mainboard.
-
-R1      120K  ohms            0805       ERA-6AED124V         Yes           0.50        0.125W, 5% tolerance or better, is ok.
-R2      0.2 ohms              0805       ERJ-U6SFR20V         Yes           0.25        Resistance less than 0.5 ohms, and is 0.125W, with 5% or better tolerance is ok.
-R3      47 ohms               0805       ERA-6AED470V         Yes           0.50        0.125W, 5% tolerance or better, is ok.
-R4      47 ohms               0805       ERA-6AED470V         Yes           0.50        0.125W, 5% tolerance or better, is ok.
-
-SW1     2 position switch     -          DS04-254-1-02BK-SMT  No            0.75        Install if would like switch for configuration functions.
-SW2     2 position switch     -          DS04-254-1-02BK-SMT  No            0.75        Install if would like switch for configuration functions.
-
-TP1     analog                -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
-TP2     a                     -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
-TP3     sclk                  -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
-TP4     dout                  -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
-TP5     convst                -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
-TP6     b                     -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
-TP7     c                     -          Keystone 500X        No            0.20        Any breadboard header should work. This is a testpoint so optional.
-
-U1      3.3v reference        VSSOP-8     REF6033             Yes           7.50        Select reference voltage based on maximum expected value from external sensor.
-U2      ADC, 1Msps, 16-bit    VSSOP-10    ADS8860             Yes          20.00        Equivalent is ok.
-U3      8:1 multiplexer       SOIC-16     SN74LV4051          Yes           0.75        Equivalent is ok.
-U4      op amp                SOT-23-5    THS4281             Yes           3.50        Equivalent is ok.
-
-H1      Mounting hole 2.2mm   -           -                   -             -           Nothing to install, just noting the mounting hole diameter for bolt selection.
+Label,   Description,           Package,    Part Number,          Required?    Est Cost     Comment
+-,       SCA 0.0 circuit board, -,          -,                    Yes,           7.50,        -
+C1,      10uF Ceramic,          0805,       C0805C106J8RACAUTO,   Yes,           1.00,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C2,      1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C3,      1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C4,      47uF Ceramic,          0805,       0805ZD476MAT2A,       Yes,           1.00,        X5R or better. 20% or smaller. 10 VDC or higher rating.
+C5,      10uF Ceramic,          0805,       C0805C106J8RACAUTO,   Yes,           1.00,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C6,      1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C7,      1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C8,      470pF Ceramic,         0805,       C0805C471J3RACTU,     Yes,           0.40,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C9,      1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+J1,      1x13 pin male 0.1in,   -,          -,                    Yes,           0.26,        Header for connection to IPS mainboard.
+J2,      1x3 pin male 0.1in,    -,          -,                    Yes,           0.06,        Header for connection to IPS mainboard.
+J3,      1x6 pin male 0.1in,    -,          -,                    Yes,           0.12,        Header for connection to IPS mainboard.
+J4,      1x3 pin male 0.1in,    -,          -,                    Yes,           0.06,        Header for connection to IPS mainboard.
+J5,      1x1 pin male 0.1in,    -,          -,                    No,            0.02,        Header for connection to IPS mainboard.
+J6,      1x1 pin male 0.1in,    -,          -,                    No,            0.02,        Header for connection to IPS mainboard.
+R1,      120K ohms,             0805,       ERA-6AED124V,         Yes,           0.50,        0.125W. 5% tolerance or better.
+R2,      0.2 ohms,              0805,       ERJ-U6SFR20V,         Yes,           0.25,        Resistance less than 0.5 ohms. 0.125W. 5% or better tolerance.
+R3,      47 ohms,               0805,       ERA-6AED470V,         Yes,           0.50,        0.125W. 5% tolerance or better.
+R4,      47 ohms,               0805,       ERA-6AED470V,         Yes,           0.50,        0.125W. 5% tolerance or better.
+SW1,     2 position switch,     -,          DS04-254-1-02BK-SMT,  No,            0.75,        Install if would like switch for configuration functions.
+SW2,     2 position switch,     -,          DS04-254-1-02BK-SMT,  No,            0.75,        Install if would like switch for configuration functions.
+TP1,     analog,                -,          Keystone 500X,        No,            0.40,        Any breadboard header should work. This is a testpoint so optional.
+TP2,     a,                     -,          Keystone 500X,        No,            0.40,        Any breadboard header should work. This is a testpoint so optional.
+TP3,     sclk,                  -,          Keystone 500X,        No,            0.40,        Any breadboard header should work. This is a testpoint so optional.
+TP4,     dout,                  -,          Keystone 500X,        No,            0.40,        Any breadboard header should work. This is a testpoint so optional.
+TP5,     convst,                -,          Keystone 500X,        No,            0.40,        Any breadboard header should work. This is a testpoint so optional.
+TP6,     b,                     -,          Keystone 500X,        No,            0.40,        Any breadboard header should work. This is a testpoint so optional.
+TP7,     c,                     -,          Keystone 500X,        No,            0.40,        Any breadboard header should work. This is a testpoint so optional.
+U1,      3.3v reference,        VSSOP-8,    REF6033,              Yes,           7.50,        Select reference voltage based on maximum expected value from external sensor.
+U2,      ADC. 1Msps. 16-bit,    VSSOP-10,   ADS8860,              Yes,          20.00,        Equivalent is ok.
+U3,      8:1 multiplexer,       SOIC-16,    SN74LV4051,           Yes,           0.75,        Equivalent is ok.
+U4,      op amp,                SOT-23-5,   THS4281,              Yes,           3.50,        Equivalent is ok.
+H1,      Mounting hole 2.2mm,   -,          -,                    -,                0,        Nothing to install just noting the mounting hole diameter for bolt selection.
