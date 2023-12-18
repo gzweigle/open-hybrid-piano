@@ -29,27 +29,27 @@ Each *releases* subdirectory contains code and hardware ready for use. The mater
 
 More details on each directory:
 
-#### documentation/
+#### [documentation/](documentation/)
 
 High level documentation.
 
-#### packages/
+#### [packages/](packages/)
 
 Building a complete piano requires firmware, hardware, mechanical, and sometimes software. The *packages/* directory provides information on everything needed to build a specific version of a musical instrument.
 
-#### firmware/
+#### [firmware/](firmware/)
 
 Real-time code running on custom hardware from *hardware/* directory.
 
-#### hardware/
+#### [hardware/](hardware/)
 
 All printed circuit boards and related parts and design. A separate open-source license for the hardware is in this directory and applies only to the contents of this *hardware/* directory.
 
-#### mechanical/
+#### [mechanical/](mechanical/)
 
 Anything to physically build a piano. A separate open-source license for mechanical is in this directory and applies only to the contents of this *mechanical/* directory.
 
-#### software/
+#### [software/](software/)
 
 Code running on a standard computer or Raspberry Pi connected to the piano over Ethernet or MIDI.
 
@@ -65,7 +65,7 @@ Make inventing new pianos and other musical instruments more accessible for anyo
 
 Started December 2020.
 
-Please see [YouTube Posts](documentation/video_documentation.md) for historical, how-to, and other documentation in video form.
+Please see [documentation/video_documentation.md](documentation/video_documentation.md) for historical, how-to, and other documentation in video form.
 
 ## Related Projects:
 
