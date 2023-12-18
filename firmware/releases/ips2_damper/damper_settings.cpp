@@ -168,7 +168,10 @@ void DamperSettings::SetAllSettingValues() {
   }
   else {
     for (int channel = 0; channel < NUM_CHANNELS; channel++) {
-      connected_channel[channel] = true;
+      if (channel >= 88)
+        connected_channel[channel] = false;  // No pedals for damper board.
+      else
+        connected_channel[channel] = true;
     }
   }
 
