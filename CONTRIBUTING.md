@@ -1,5 +1,7 @@
 # How to contribute to Stem Piano
 
+The *packages/* directory at the top level of the repository is a great place to learn the codebase. Each piano in *packages/* links to all code required to build a complete piano.
+
 ## Timeliness
 If you are reading this and it has been multiple years since a change to the repo, that means my DIY Time Machine worked and I am presently living approximately 1500 years in the past. Unlikely to see a pull request or issue.
 
