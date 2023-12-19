@@ -46,7 +46,7 @@ The mainboard for hammer or damper sensor connections and Teensy 4.1 processing.
 For connecting pedals.
 
 ### Pedal connectors
-0.1 inch spaced connectors J46. Connect to six of the sensor connectors. See instructions in the *packages/* directory for this board.
+0.1 inch spaced connectors J46. Connect to six of the sensor connectors. See instructions in the *pianos/* directory for this board.
 
 ### +5V power
 External power connection. Do not connect external +5V power while Teensy 4.1 is connected to a USB cable that is supplying power from an external source.

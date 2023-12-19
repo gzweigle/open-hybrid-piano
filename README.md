@@ -5,7 +5,7 @@ Also known as **stem piano**
 ![alt text](documentation/ips00_stem_piano_small.jpg)
 
 ## How to Build Your Own Piano
-Go straight to the [packages/](packages/) directory!
+Go straight to the [pianos/](pianos/) directory!
 
 But first, please read the [WARNINGS](WARNINGS.md) and [HELP](HELP.md) files that are located in this root directory.
 
@@ -33,9 +33,9 @@ More details on each directory:
 
 High level documentation.
 
-#### [packages/](packages/)
+#### [pianos/](pianos/)
 
-Building a complete piano requires firmware, hardware, mechanical, and sometimes software. The *packages/* directory provides information on everything needed to build a specific version of a musical instrument.
+Building a complete piano requires firmware, hardware, mechanical, and sometimes software. The *pianos/* directory provides information on everything needed to build a specific version of a musical instrument.
 
 #### [firmware/](firmware/)
 
