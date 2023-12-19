@@ -15,19 +15,11 @@ If you build a piano, please share about it in the Show & Tell Discussions of th
 
 ## Policies
 
-The following contribution guidelines are ordered from least to most restrictive.
-
 ### *research/* subdirectories
-Except for within the *software/* directory (see below), few restrictions.
+Less restrictions. Contents may be in development.
 
 ### *releases/* subdirectories
-High bar for changes. For hardware, potentially only gerber files will be in the *releases/* subdirectories.
-
-### *pianos/* directory
-Rarely changes once a piano is done.
-
-### *software/* directory
-Until a security policy is setup, this directory is not going to change much.
+More restrictions. Contents should be fully tested.
 
 ## Process
 
