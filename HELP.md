@@ -16,13 +16,17 @@ Now for the help list...
 
 ## Compiling
 
-The touch screen TFT display requires installing special libraries. See the manufacturer's website for information (details are found in the build instructions elsewhere in this repo). If the project fails to compile, try to #define out the TFT code (details are found in the build instructions elsewhere in this repo).
-
-The touch screen TFT display SD library conflicts with the Teensy SD library. Details are found in the build instructions elsewhere in this repo. If the project fails to compile, try to #define out the TFT code (details are found in the build instructions elsewhere in this repo).
-
 Check the https://www.pjrc.com website for instructions on setting up to compile and download for the Teensy 4.1.
 
 Make sure to have the latest Arduino software installed and with updated libraries.
+
+## Touch Screen and Compiling
+
+For most pianos the touch screen TFT display is optional. It is added to the project with a #define in one of the source files.
+
+The touch screen TFT display requires installing special libraries. See the manufacturer's website for information. If the project fails to compile, try to #define out the TFT code
+
+Some touch screen TFT display SD libraries conflict with the Teensy SD library. Details are found in the build instructions elsewhere in this repo. If the project fails to compile, try to #define out the TFT code (details are found in the build instructions elsewhere in this repo).
 
 ## Booting
 
@@ -89,7 +93,7 @@ One or more notes play repeatedly
 * The threshold for note could be too low.  Look at the comments around settings in the settings file and consider making changes.
 * The analog circuitry is very noisy. This is probably due to one of the following:
     * bad electrical connections or solder joints.
-    * wrong component installed on board: for example a capacitor has the wrong value.
+    * wrong component installed on board: for example, a capacitor has the wrong value.
 
 Some notes are quieter or louder than others -
 * Check the sensor spacing to the hammer shanks or dampers.
