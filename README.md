@@ -1,4 +1,4 @@
-# DIY Hybrid Digital Grand Piano
+# Hybrid Digital Grand Piano
 
 Also known as **stem piano**
 
