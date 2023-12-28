@@ -1,4 +1,4 @@
-# Hybrid Digital Grand Piano
+# Hybrid MIDI Digital Grand Piano
 
 Also known as **stem piano**
 
@@ -12,6 +12,14 @@ But first, please read the [WARNINGS](WARNINGS.md) and [HELP](HELP.md) files tha
 If you would like to contribute hardware, software, mechanical, or firmware to the project, see the [CONTRIBUTING](CONTRIBUTING.md) file.
 
 **If you build a piano, please share about it in the Show & Tell Discussions of this repository.**
+
+## Overview
+
+A hybrid digital piano combines the physical action of an acoustic piano with MIDI, sound generation, and other features of a digital keyboard. Some piano manufacturers sell hybrid digital pianos.
+
+This project ("stem piano") is an open-source hybrid digital piano.
+
+The repository includes schematics, printed circuit board layouts, firmware source files for the real-time processing, optional software source files for Ethernet connected features, and lists of required hardware components. Mechanical suggestions are included but not detailed mechanical instructions. A physical piano action, or other instrument, is required for playing.
 
 ## Goals
 
@@ -58,8 +66,6 @@ Code running on a standard computer or Raspberry Pi connected to the piano over 
 Fun.
 
 Great way to learn new things.
-
-Make inventing new pianos and other musical instruments more accessible for anyone.
 
 ## History
 
