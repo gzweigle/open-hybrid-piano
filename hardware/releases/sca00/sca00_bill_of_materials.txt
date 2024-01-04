@@ -28,7 +28,7 @@ TP4,     dout,                  -,          Keystone 500X,        No,           
 TP5,     convst,                -,          Keystone 500X,        No,            0.40,        Any breadboard header should work. This is a testpoint so optional.
 TP6,     b,                     -,          Keystone 500X,        No,            0.40,        Any breadboard header should work. This is a testpoint so optional.
 TP7,     c,                     -,          Keystone 500X,        No,            0.40,        Any breadboard header should work. This is a testpoint so optional.
-U1,      3.3v reference,        VSSOP-8,    REF6033,              Yes,           7.50,        Select reference voltage based on maximum expected value from external sensor.
+U1,      2.5v reference,        VSSOP-8,    REF6025,              Yes,           7.50,        Select reference voltage based on maximum expected value from external sensor.
 U2,      ADC. 1Msps. 16-bit,    VSSOP-10,   ADS8860,              Yes,          20.00,        Equivalent is ok.
 U3,      8:1 multiplexer,       SOIC-16,    SN74LV4051,           Yes,           0.75,        Equivalent is ok.
 U4,      op amp,                SOT-23-5,   THS4281,              Yes,           3.50,        Equivalent is ok.

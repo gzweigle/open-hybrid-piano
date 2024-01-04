@@ -1,22 +1,25 @@
-# DIY Hybrid Digital Grand Piano - WARNINGS
+# DIY Hybrid Digital Grand Piano - Warnings
 
-Please read all warnings prior to starting work.
+The warnings below may be repeated or described in more detail elsewhere in the repo. It cannot be guaranteed, but it is the intent that this *WARNINGS.md* file contains a high-level superset of all warnings. The information in this file may not be complete.
+
+## Experience
 
 It is recommended to have some experience with software and electronics projects. Or learn using internet and other resources.
 
-Some of the warnings below may be repeated or described in more detail elsewhere in the repo. It cannot be guaranteed, but it is the intent that this *WARNINGS.md* file contains a high-level superset of all warnings. The information in this file may not be complete.
+## Hardware
 
-Please read disclaimers in licenses.
+Take a look at any pending hardware changes or known problems in [Issues](https://github.com/gzweigle/DIY-Grand-Digital-Piano/issues) before building boards.
 
 ## Teensy USB and External Power
 
-Internally the Teensy 4.1 shorts its USB connection and the +5V power pin.
+The Teensy 4.1 shorts its USB power connection and its +5V power pin. Some *stem piano* printed circuit boards route the Teensy +5V power to an external power input connection.
 
-Do not connect an external +5V supply to a circuit board at the same time as the Teensy 4.1 USB programming cable is connected and when that USB cable is also suppling power. This could short the computer connected to the USB with the +5V supply connected to the circuit board, and damage the computer. Please see the PJRC Teensy 4.1 website for more details on this issue: https://www.pjrc.com. Some circuit boards have a dedicated jumper as an extra reminder.
+Options:
+1. Never connect a +5V power source to the board at the same time as the Teensy 4.1 USB programming cable. This could short the computer connected to the USB with the +5V supply connected to the circuit board, and damage the computer. Some circuit boards have a dedicated jumper as an extra reminder. Disconnect the jumper when powering the board with USB.
 
-For boards connected to all 88 piano key sensors. The total current draw of a circuit board will likely exceed the capability of an external computer that is trying to power the board through a USB cable connected to the Teensy 4.1. Therefore, the external +5V power source on the circuit board is needed in these cases. The PJRC website has information on how to use a USB cable under this scenario.
+2.  For boards connected to all 88 piano key sensors. The total current draw of a circuit board will likely exceed the capability of an external computer that is trying to power the board through a USB cable connected to the Teensy 4.1. Therefore, the external +5V power source on the circuit board is needed in these cases. For using the USB to program the Teensy 4.1, the PJRC website has information on how to modify a USB cable under this scenario.
 
-Please see https://www.pjrc.com for more information.
+Please see the PJRC Teensy 4.1 website for more details: https://www.pjrc.com.
 
 ## Fuses and Short Circuit Protection
 
