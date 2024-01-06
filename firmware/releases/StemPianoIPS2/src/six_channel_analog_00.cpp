@@ -21,23 +21,16 @@
 // For ips pcb version 2.X
 // For sca pcb version 0.0
 //
-// See Texas Instruments ADS886X 16-bit, 1Msps, successive
-// approximation, with internal track-and-hold datasheet.
-//   X = 0 is single-ended ADC.
-//   X = 1 is differential ADC.
-//
-// If using ADS8861, then adc_is_differential must be true.
 
 #include "six_channel_analog_00.h"
 
 SixChannelAnalog00::SixChannelAnalog00() {}
 
 void SixChannelAnalog00::Setup(int sclk_frequency, bool adc_is_differential,
-int adc_extra_settling_time_nanoseconds, TestpointLed *Tpl) {
+TestpointLed *Tpl) {
 
   sclk_frequency_ = sclk_frequency;
   adc_is_differential_ = adc_is_differential;
-  adc_extra_settling_time_nanoseconds_ = adc_extra_settling_time_nanoseconds;
   Tpl_ = Tpl;
 
   // 16-bit ADC.
@@ -99,16 +92,16 @@ void SixChannelAnalog00::GetNewAdcValues(unsigned int *adc_array) {
   for (int mux8 = 0; mux8 < NUM_8_CHANNEL_INPUTS; mux8++) {
     for (int mux16 = 0; mux16 < NUM_16_CHANNEL_INPUTS; mux16++) {
 
-      delayNanoseconds(adc_extra_settling_time_nanoseconds_);
-      digitalWriteFast(convst_, HIGH);  // Sample the analog inputs at ADC.
-      delayNanoseconds(ADC_CONVERSION_NANOSECONDS);
-      digitalWriteFast(convst_, LOW);   // End a conversion.
+      // Sample the analog inputs at ADC.
+      // First ADC sampling is for [mux8,mux16] = [0,0].
+      // They were left at [0,0] the last time SixChannelAnalog00 was run.
+      digitalWriteFast(convst_, HIGH);
 
       // Pipelined, so calculate next mux channel.
-      mux16_next = mux16+1;
+      mux16_next = mux16 + 1;
       if (mux16_next == NUM_16_CHANNEL_INPUTS) {
         mux16_next = 0;
-        mux8_next = mux8+1;
+        mux8_next = mux8 + 1;
         if (mux8_next == NUM_8_CHANNEL_INPUTS) {
           mux8_next = 0;
         }
@@ -119,14 +112,21 @@ void SixChannelAnalog00::GetNewAdcValues(unsigned int *adc_array) {
 
       // Test point so can trigger oscilloscope exactly when muxes switch.
       // The specific mux value it triggers on is arbitrary.
-      if ( (mux16_next == 8 && mux8_next == 1) ||
-      (mux16_next == 9 && mux8_next == 1)) {
+      // Use this test point to help validate signal settling time.
+      if ( (mux16_next == 15 && mux8_next == 1)) {
         Tpl_->SetTp9(true);
+      }
+      else {
+        Tpl_->SetTp9(false);
       }
 
       // Switch all muxes to next analog input channel.
       // Switch 16:1 first to give juuuust a little extra
       // settling time, as ADC has to wait for 8:1 in any case.
+      // From the time of these mux changes until convst_ goes high
+      // must be long enough to allow the signal to settle under
+      // worst case conditions. Oscilloscope testing was used to
+      // verify that it is ok.
       digitalWriteFast(mux16_1_pin_s0_, mux16_0_[mux16_next]);
       digitalWriteFast(mux16_1_pin_s1_, mux16_1_[mux16_next]);
       digitalWriteFast(mux16_1_pin_s2_, mux16_2_[mux16_next]);
@@ -134,14 +134,21 @@ void SixChannelAnalog00::GetNewAdcValues(unsigned int *adc_array) {
       digitalWriteFast(mux8_1_pin_a_, mux8_a_[mux8_next]);
       digitalWriteFast(mux8_1_pin_b_, mux8_b_[mux8_next]);
       digitalWriteFast(mux8_1_pin_c_, mux8_c_[mux8_next]);
-      Tpl_->SetTp9(false);
+
+      // Total time from convst_ HIGH to LOW must be at least
+      // ADC_CONVERSION_NANOSECONDS. The switching above takes some
+      // time so waiting the full ADC_CONVERSION_NANOSECONDS here
+      // is very conservative, which is good.
+      delayNanoseconds(ADC_CONVERSION_NANOSECONDS);
+      digitalWriteFast(convst_, LOW);   // End a conversion.
 
       // Now, get the data from the conversion initiated above.
-      // Conversion is for the analog channel prior to the one just switched to.
+      // Conversion is for [mux16,mux8] values not
+      // [mux16_next, mux8_next].
       // Write 0xFF so that DIN stays high.
       adc_array[adc_ind++] = SPI.transfer16(0xFF);
 
-      // Make sure DIN stays high. Probably this is not necessary.
+      // Make sure DIN stays high. Probably not necessary.
       digitalWrite(din_, HIGH);
     }
   }
@@ -159,7 +166,7 @@ float *normalized_float, const unsigned int *adc_values) {
 
     normalized_raw[ind] = adc_values[ind];
 
-    // Multiply by 2 because the hardware is single-ended and so if a
+    // Multiply by 2 because the SCA version 0.0 is single-ended and so if a
     // differential ADC is on the board, half of the dynamic range is lost.
     if (adc_is_differential_ == true) {
       normalized_float[ind] *= 2.0;
