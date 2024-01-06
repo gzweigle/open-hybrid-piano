@@ -40,18 +40,17 @@
 #endif
 
 // Hardware dependent. Do not change.
+// Set per ADC t_conv value in datasheet.
 // This is a #define to to make clear
 // the meaning of magic numbers in code.
 // Per ADC datasheet this must be at least 710ns.
-// Set slightly larger than 710 because the delay
-// is by software and may not be exact.
-#define ADC_CONVERSION_NANOSECONDS 750
+#define ADC_CONVERSION_NANOSECONDS 710
 
 class SixChannelAnalog00
 {
   public:
     SixChannelAnalog00();
-    void Setup(int, bool, int, TestpointLed *);
+    void Setup(int, bool, TestpointLed *);
     void GetNewAdcValues(unsigned int *);
     void NormalizeAdcValues(int *, float *, const unsigned int *);
  
@@ -59,7 +58,6 @@ class SixChannelAnalog00
     TestpointLed *Tpl_;
     int sclk_frequency_;
     bool adc_is_differential_;
-    int adc_extra_settling_time_nanoseconds_;
     int adc_max_value_;
     // These arrays were an attempt to speed up the
     // code and make the overall analog-to-digital conversion
