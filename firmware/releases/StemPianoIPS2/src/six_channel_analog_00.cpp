@@ -21,6 +21,15 @@
 // For ips pcb version 2.X
 // For sca pcb version 0.0
 //
+// Converters:
+// ADS8860 (16-bit, 1Msps, single-ended input), Datasheet February 2019
+// ADS8861 (16-bit, 1Msps, differential input), Datasheet December 2013
+//
+// Will also work with:
+// ADS8881 (18-bit, 1Msps, differential input), Datasheet August 2015
+// Must change adc_max_value_ in code below to 262144.
+//
+// If using ADS8861 or ADS8881, then adc_is_differential must be true.
 
 #include "six_channel_analog_00.h"
 
