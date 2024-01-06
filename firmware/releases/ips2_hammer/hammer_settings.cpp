@@ -78,8 +78,8 @@ void HammerSettings::SetAllSettingValues() {
   // Must be longer than the time to sample and collect all NUM_CHANNELS
   // data from the ADC plus the time for processing all of the data.
   // WARNING - This value must match the value on damper board.
-  adc_sample_period_microseconds = 400;
-
+  adc_sample_period_microseconds = 300;
+  
   if (debug_level >= 1) {
     Serial.print("The sample period is set to ");
     Serial.print(adc_sample_period_microseconds);
@@ -89,13 +89,6 @@ void HammerSettings::SetAllSettingValues() {
 
   // When the TFT is running, slow things down alot!
   adc_sample_period_microseconds_during_tft = 100000;
-
-  // Must be larger than the settling time of the 16:1 mux, 8:1 mux plus
-  // the ADC SAR input settling time.
-  // The value is based on analysis plus experimentally checked.
-  // Make shorter will decrease accuracy as the ADC input has less time to settle.
-  // However, making shorter allows for a faster sample rate.
-  adc_extra_settling_time_nanoseconds = 700;
 
   // The analog circuitry in front of ADC is not differential.
   // Therefore, if using a differential ADC, lose a bit.
