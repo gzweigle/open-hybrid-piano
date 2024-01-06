@@ -84,8 +84,7 @@ void setup(void) {
   }
 
   // Common to hammer and pedal board.
-  Adc.Setup(Set.adc_spi_clock_frequency, Set.adc_is_differential,
-  Set.adc_extra_settling_time_nanoseconds, &Tpl);
+  Adc.Setup(Set.adc_spi_clock_frequency, Set.adc_is_differential, &Tpl);
   B2B.Setup(Set.canbus_enable);
 
   // Optional to dynamically adjust gain of values from ADC.
@@ -197,6 +196,7 @@ void loop() {
 
     Adc.NormalizeAdcValues(hammer_position_adc_counts, hammer_position, raw_samples);
     Gain.AutomaticGainControl(hammer_scaled, hammer_position);
+
     for (int k = 0; k < NUM_CHANNELS; k++) {
       if (Set.connected_channel[k] == false) {
         hammer_position_adc_counts[k] = 0;
@@ -312,14 +312,9 @@ void loop() {
           }
           else
           {
-            Serial.print(" d32="); Serial.print(damper_position[32]);
-            Serial.print(" d33="); Serial.print(damper_position[33]);
-            Serial.print(" d34="); Serial.print(damper_position[34]);
-            Serial.print(" d35="); Serial.print(damper_position[35]);
-            Serial.print(" d36="); Serial.print(damper_position[36]);
-            Serial.print(" d37="); Serial.print(damper_position[37]);
-            Serial.print(" d38="); Serial.print(damper_position[38]);
-            Serial.print(" d39="); Serial.print(damper_position[39]);
+            Serial.print(" d31="); Serial.print(damper_position[31]);
+            Serial.print(" h31="); Serial.print(hammer_position[31]);
+            Serial.print(" hs31="); Serial.print(hammer_scaled[31]);
           }
           Serial.println("");
         }
