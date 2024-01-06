@@ -72,8 +72,7 @@ void setup(void) {
   }
 
   // Setup everything.
-  Adc.Setup(Set.adc_spi_clock_frequency, Set.adc_is_differential,
-  Set.adc_extra_settling_time_nanoseconds, &Tpl);
+  Adc.Setup(Set.adc_spi_clock_frequency, Set.adc_is_differential, &Tpl);
   B2B.Setup(Set.canbus_enable);
   Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port, Set.debug_level);
   Tpl.Setup();
