@@ -42,7 +42,6 @@ class HammerSettings
     int adc_spi_clock_frequency;
     int adc_sample_period_microseconds;
     int adc_sample_period_microseconds_during_tft;
-    int adc_extra_settling_time_nanoseconds;
     bool adc_is_differential;
     bool adjust_gain;
     float adc_scale_threshold;
