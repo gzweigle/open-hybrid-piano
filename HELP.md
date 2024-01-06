@@ -2,9 +2,11 @@
 
 I put quite a bit of effort into making the design as foolproof as possible. However, when things do not work, it can be frustrating. The list below covers possible issues and how to resolve.
 
-In addition to the list below, another source of help: since starting the project, I have been documenting progress in YouTube videos. A file with links to all videos is in the [documentation/](documentation/) directory. These videos are a historical source of information that could be helpful when trying to debug problems.
+Before building boards take a look at any pending hardware changes or known problems in [Issues](https://github.com/gzweigle/DIY-Grand-Digital-Piano/issues). If there is a known hardware problem, it is better to understand it before spending money on making a piano.
 
-Also, check if a problem is covered in the [Issues](https://github.com/gzweigle/DIY-Grand-Digital-Piano/issues). Open a new issue for problems that could be bugs or a circuit board schematic error.
+Similarly, if the piano is not working properly, check if the symptoms are covered in the [Issues](https://github.com/gzweigle/DIY-Grand-Digital-Piano/issues) list. This could provide help in fixing.
+
+In addition to the list below, another source of help: since starting the project, I have been documenting progress in YouTube videos. A file with links to all videos is in the [documentation/](documentation/) directory. These videos are a historical source of information that could be helpful when trying to debug problems.
 
 There are a couple of piano forums and also the https://forum.pjrc.com/ that could be good sources for information and questions.
 
@@ -18,7 +20,7 @@ Now for the help list...
 
 Check the https://www.pjrc.com website for instructions on setting up to compile and download for the Teensy 4.1.
 
-Make sure to have the latest Arduino software installed and with updated libraries.
+Make sure the latest Arduino software is installed and with updated libraries.
 
 ## Touch Screen and Compiling
 
@@ -44,6 +46,8 @@ Use a multimeter or oscilloscope to verify +5V and +3.3V locations on the circui
 
 Check that all integrated circuits are installed with pin 1 matching the * printed on schematic.
 
+If the Teensy is socketed, check if it was accidentally installed rotated 180 degrees.
+
 Some header files include code that #define out functionality. Check the #defines in header files (for example stem_piano_ips2.h) to see if this happening.
 
 A buffer overflow in the firmware can lock-up the board. Check any changes to firmware that memory access is staying in proper ranges.
@@ -51,6 +55,10 @@ A buffer overflow in the firmware can lock-up the board. Check any changes to fi
 If the Ethernet is not physically connected, the firmware may hang while trying to initialize the Ethernet. Try commenting out the Ethernet initialization code or try connecting an Ethernet cable to the board.
 
 If a circuit component was Electrostatic Discharge (ESD) damaged during handling or soldering then a wide range of unusual or intermittent failures are possible. If all other debugging avenues are exhausted, ESD could be the problem.
+
+Some circuit boards use the Teensy internal pullup or pulldown resistors instead of an external resistor. Search the firmware for which pins are set in these modes. Then, check that the Teensy pullup or pulldown is working correctly by debug options such as:
+* Try a different Teensy processor.
+* Put a volt meter on the pin and see if the value matches the value expected in the firmware.
 
 Never let the smoke out of any integrated circuit.
 
@@ -60,33 +68,37 @@ No sound:
 
 * The firmware includes code that disables unused hammer / damper inputs. Check that these inputs are not disabled in the firmware.
 * Set the debug level (for example see stem_piano_ips2.h) to its maximum value. Open a serial port in Arduino software while the piano is running. Compare messages to what is expected.
-* If the distance from the hammer or damper to the sensor is too large, the signal will not cross detection thresholds.
-* Try connecting the MIDI cable to another keyboard, see if that works.
+* If the distance from the hammer shank or damper to the sensor is too large, the signal will not cross detection thresholds in the firmware.
+* Try disconnecting the MIDI cable from *stem piano* and then connecting the MIDI cable to another keyboard, see if that works.
 * Put an oscilloscope on the circuit board test point that is at the Analog to Digital Converter (ADC) input. Verify getting a signal when move a piano key.
 * Check soldering of signals in sensor data path.
 * Check that integrated circuits are installed with pin 1 matching the * printed on schematic.
 * Turn on speakers.
 
 Very quiet sound:
-* Check the physical distance from the hammer or damper to the sensor.
+* Check the physical distance from the hammer shank or damper to its sensor.
 * Set the debug level (for example see stem_piano_ips2.h) to its maximum value. Open a serial port in Arduino software while the piano is running. Look at the volume level printed for MIDI when press a key. If it is small then the problem is with the piano. If it is large then the problem is with equipment connected to the piano.
 
 Very loud sounds:
+* If the firmware includes an automated gain control function, check if a bug is causing too much gain.
 * Turn volume on speakers down.
 
 ## Playability
 
-Random dropped notes
+Random dropped or sounding notes
 * Look at the comments around settings in the settings file and consider making changes.
+* External light sources on the sensors can cause the sensors to get false signals. Try shading the sensors from any external light sources.
 
 Note repetition is erratic
 * Look at the comments around settings in the settings file and consider making changes.
+* Check the spacing between the sensors and the hammer shanks or dampers.
 
 Some notes work, some do not
+* Check connections at the sensor at piano key not working.
 * The firmware includes code that disables unused hammer / damper inputs. Check that these inputs are not disabled in the firmware.
 * Look at the comments around settings in the settings file and consider making changes.
 * Check that the sensors are getting power.
-* Check the sensor output with a multimeter or oscilloscope. When a hammer shank or damper is very close to the sensor the output voltage should be close to 3.3 V. The piano should still work ok if the value in the 3 V range or even (possibly) 2 V range. But, in general, the smaller this output voltage value is, the more difficult it will be to get a playable piano.
+* Check the sensor output with a multimeter or oscilloscope. When a hammer shank or damper is close to the sensor the output voltage should be close to the ADC voltage reference value. The voltage reference value is found either in a hardware bill of materials file (in this repository) or, if the reference is internal then the analog-to-digital converter datasheet.
 * Check for proper soldering of signals in the sensor data path.
 
 One or more notes play repeatedly
@@ -103,6 +115,7 @@ Some notes are quieter or louder than others -
 
 Pedals do not work
 * Check that the pedal wiring matches the pin numbers in the settings file.
+* Some pedal firmware could include functionality to check if the pedal is connected. Check for an incorrect pedal wire connection or a problem with the firmware.
 * Look at the comments around settings in the settings file and consider making changes.
 * Check soldering of pedal connections and resistors.
 
@@ -131,13 +144,13 @@ Ethernet does not work
 
 MIDI command overload
 * Restart everything with MIDI disconnected, then connect.
-* Try disconnecting MIDI and connecting to another device with MIDI output.
+* Try disconnecting MIDI from *stem piano* and connecting it to another device with MIDI output to the MIDI receiver.
 * Check circuit board for signs of a bad solder of MIDI resistors.
 
 No MIDI messages received by MIDI receiver
 * Check connections.
 * Restart everything with MIDI disconnected, then connect.
-* Try disconnecting MIDI and connecting to another device with MIDI output.
+* Try disconnecting MIDI from *stem piano* and connecting it to another device with MIDI output to the MIDI receiver.
 * Are the MIDI resistors soldered into place?
 
 ## TFT Touch Screen
@@ -157,6 +170,8 @@ TFT SD card does not work
 ## Board 2 Board Communication
 
 If the Can bus is not working, check the soldering.
+
+Check Can bus wire connection match between hammer and damper boards.
 
 Make sure both circuit boards are powered up and operating correctly.
 

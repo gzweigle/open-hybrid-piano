@@ -15,7 +15,7 @@ Take a look at any pending hardware changes or known problems in [Issues](https:
 The Teensy 4.1 shorts its USB power connection and its +5V power pin. Some *stem piano* printed circuit boards route the Teensy +5V power to an external power input connection.
 
 Options:
-1. Never connect a +5V power source to the board at the same time as the Teensy 4.1 USB programming cable. This could short the computer connected to the USB with the +5V supply connected to the circuit board, and damage the computer. Some circuit boards have a dedicated jumper as an extra reminder. Disconnect the jumper when powering the board with USB.
+1. Never connect a +5V power source to a board at the same time as the Teensy 4.1 USB programming cable is providing power. This could short the computer connected to the USB with the +5V supply connected to the circuit board, and damage the computer. Some circuit boards have a dedicated jumper as an extra reminder. Disconnect the jumper when powering the board with USB.
 
 2.  For boards connected to all 88 piano key sensors. The total current draw of a circuit board will likely exceed the capability of an external computer that is trying to power the board through a USB cable connected to the Teensy 4.1. Therefore, the external +5V power source on the circuit board is needed in these cases. For using the USB to program the Teensy 4.1, the PJRC website has information on how to modify a USB cable under this scenario.
 
