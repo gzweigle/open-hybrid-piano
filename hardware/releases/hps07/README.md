@@ -6,12 +6,14 @@ Originally, the HPS PCB was for hammers.  However, the sensor also works for dam
 
 Version 0.7 changes the header pin order. This provides a better physical match to some mainboards.
 
+Version 0.7 is the recommended sensor, if using the trimmer resistor.
+
 ## Features
 
 ### I/O
 * Power input.
-* Analog output signal, with range set by resistors.
 * Ground.
+* Analog output signal, with range set by resistors.
 
 ### Size
 * 1.5 inches long.
@@ -24,7 +26,7 @@ Version 0.7 changes the header pin order. This provides a better physical match 
 
 ### Manufacturing
 
-To manufacture a board, send the files in (NOT POSTED YET).
+To manufacture a board, send the files in [hps07_gerber/](hps07_gerber/) to a PCB manufacturer.
 
 Use the bill of materials file that matches the mainboard connected to the HPS.
 
