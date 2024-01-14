@@ -21,21 +21,21 @@ This project ("stem piano") is an open-source hybrid digital piano.
 
 The repository includes schematics, printed circuit board layouts, firmware source files for the real-time processing, optional software source files for Ethernet connected features, and lists of required hardware components. Mechanical suggestions are included but not detailed mechanical instructions. A physical piano action, or other instrument, is required for playing.
 
-## Goals
-
-Full-custom hybrid digital piano using a complete grand piano action. 
-
-Platform and code that easily adapts to building a range of other unique and innovative musical instruments.
+The platform and code could also adapt to building a range of other unique and innovative musical instruments.
 
 ## Directory Organization
 
-The components required to build a piano are located in the [firmware/](firmware/), [hardware/](hardware/), [mechanical/](mechanical/) and [software/](software/) directories. Within each of these directories is a *research* subdirectory and a *releases* subdirectory.
+The components required to build a piano are located in the [design/](design/), [firmware/](firmware/), [hardware/](hardware/), [mechanical/](mechanical/) and [software/](software/) directories. In some directories is a *research* subdirectory and a *releases* subdirectory.
 
 Each *research* subdirectory contains code and hardware for work in progress. It could have major bugs. It could be incomplete.
 
 Each *releases* subdirectory contains code and hardware ready for use. The material in *releases* could partially duplicate material in one or more *research* subdirectories. However, the requirement is that anything in *releases* is well-tested, complete, and ready-to-use.
 
 More details on each directory:
+
+#### [design/](design/)
+
+Designs and engineering analysis. To keep the repository small, associated data may be located in the separate Piano-Data repository.
 
 #### [documentation/](documentation/)
 
@@ -61,12 +61,6 @@ Anything to physically build a piano. A separate open-source license for mechani
 
 Code running on a standard computer or Raspberry Pi connected to the piano over Ethernet or MIDI.
 
-## Why?
-
-Fun.
-
-Great way to learn new things.
-
 ## History
 
 Started December 2020.
@@ -89,5 +83,6 @@ See also:
 * like a plant stem, everything here is one component of the overall instrument
 * like a note stem, everything here is one component of...
 * 12 leaves on the logo, matches 12 piano notes
+* logo looks like a sine wave
 * sounds cool
 * does not sound cool
