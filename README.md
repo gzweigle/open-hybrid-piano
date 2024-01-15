@@ -76,6 +76,7 @@ See also:
 * https://github.com/jkominek/piano-conversion/
 * https://github.com/davidedelvento/Mybrid
 * https://www.youtube.com/watch?v=nRBsudMpwwc
+* https://www.youtube.com/watch?v=-kpf0OSJxkE
 
 ## "stem piano" because?
 
