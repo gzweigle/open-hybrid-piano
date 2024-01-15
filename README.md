@@ -77,6 +77,7 @@ See also:
 * https://github.com/davidedelvento/Mybrid
 * https://www.youtube.com/watch?v=nRBsudMpwwc
 * https://www.youtube.com/watch?v=-kpf0OSJxkE
+* https://www.youtube.com/watch?v=b-PRGymqECM
 
 ## "stem piano" because?
 
