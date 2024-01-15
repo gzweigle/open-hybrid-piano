@@ -9,7 +9,7 @@ Get the Ethernet data from *stem piano* and store in a file.
 The format of data streamed from *stem piano* must match the format expected in *get_hammer_cal_data.py*.
 
 Before running, edit code to set:
-* Local computer Ethernet address
+* Local computer Ethernet address.
 * Teensy 4.1 port number.
 
 The checked-in code will error until these are set.
