@@ -25,7 +25,7 @@ The platform and code could also adapt to building a range of other unique and i
 
 ## Directory Organization
 
-The components required to build a piano are located in the [design/](design/), [firmware/](firmware/), [hardware/](hardware/), [mechanical/](mechanical/) and [software/](software/) directories. In some directories is a *research* subdirectory and a *releases* subdirectory.
+The components required to build a piano are located in the [firmware/](firmware/), [hardware/](hardware/), [mechanical/](mechanical/) and [software/](software/) directories. In each directory is a *research* subdirectory and a *releases* subdirectory.
 
 Each *research* subdirectory contains code and hardware for work in progress. It could have major bugs. It could be incomplete.
 

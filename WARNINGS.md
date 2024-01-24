@@ -2,11 +2,23 @@
 
 The warnings below may be repeated or described in more detail elsewhere in the repo. It cannot be guaranteed, but it is the intent that this *WARNINGS.md* file contains a high-level superset of all warnings. The information in this file may not be complete.
 
+## Project Is Not Done (January 2024)
+
+This is an active project.
+
+Please expect changes.
+
+The hardware could change. The hardware could require changes for the piano to be useful. The piano may not always operate reliably and may require changes.
+
+The design could change. The firmware and software could have bugs.
+
+New pianos, features, capabilities, and enhancements could be added in the future - to the mechanical, hardware, firmware, and/or software.
+
 ## Experience
 
 It is recommended to have some experience with software and electronics projects. Or learn using internet and other resources.
 
-## Hardware
+## Known Issues
 
 Take a look at any pending hardware changes or known problems in [Issues](https://github.com/gzweigle/DIY-Grand-Digital-Piano/issues) before building boards.
 
@@ -25,7 +37,7 @@ Please see the PJRC Teensy 4.1 website for more details: https://www.pjrc.com.
 
 Some boards include places to install fuses and some may not. Use fuses.
 
-Use an external power supply that includes short-circuit protection.
+Use an external power supply that includes short-circuit (overcurrent) protection.
 
 Some boards include low dropout voltage regulators (LDO). The LDO should include short-circuit protection. This means that if the LDO output is accidentally shorted to ground, the LDO will current limit to a specified value. This current limit can be used when calculating the worst-case total current of the board. See the *bill_of_materials* files in hardware directories for recommended LDO devices.
 
