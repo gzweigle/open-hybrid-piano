@@ -2,7 +2,7 @@
 
 The warnings below may be repeated or described in more detail elsewhere in the repo. It cannot be guaranteed, but it is the intent that this *WARNINGS.md* file contains a high-level superset of all warnings. The information in this file may not be complete.
 
-## Project Is Not Done (January 2024)
+## Project Is Not Done
 
 This is an active project.
 

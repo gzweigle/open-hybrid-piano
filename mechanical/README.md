@@ -32,6 +32,8 @@ An aluminum L-shaped bar is placed across the top-front of the action. The hamme
 
 Connect the hammer sensors to the circuit board that is processing the hammer sensor output signals.
 
+When two or more keys are pressed with identical force, the volume should be identical.  This note-to-note volume consistency is directly related to consistency of the sensor-to-shank physical distance between keys.
+
 ## Grand Piano - Silent System Examples
 
 ## Upright Piano - Separate Action Examples
