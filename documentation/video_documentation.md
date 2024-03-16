@@ -251,3 +251,7 @@ Step 27 - Hammer and Damper Processing https://www.youtube.com/watch?v=NmziaIYKS
 5. For the dampers, some use direct sensors and some are estimated based on hammer position.
 6. Testing boards and code.
 7. This is the hardware and firmware of the initial Stem Piano Model G release - [Stem Piano Model G](../pianos/StemPianoG/)
+
+Step 28 - Precision and Accuracy https://www.youtube.com/watch?v=TemXGmkoc-g
+1. Analyze position and velocity for (attempting to) strike 10 notes simultaneously.
+2. Build system that could be used for a future CNY-70 sensor calibration system.

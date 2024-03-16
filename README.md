@@ -9,6 +9,8 @@ Go straight to the [pianos/](pianos/) directory!
 
 But first, please read the [WARNINGS](WARNINGS.md) and [HELP](HELP.md) files that are located in this root directory.
 
+See the [STATUS](STATUS.md) file for status of the project and repository.
+
 If you would like to contribute hardware, software, mechanical, or firmware to the project, see the [CONTRIBUTING](CONTRIBUTING.md) file.
 
 **If you build a piano, please share about it in the Show & Tell Discussions of this repository.**
