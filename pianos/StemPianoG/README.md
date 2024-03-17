@@ -200,7 +200,7 @@ Total cost for the least expensive system.
 Total cost for the most expensive system.
 * All features - boards are fully populated.
 * Separate processing for dampers.
-* Trimmer resistors on sensors for fine tuning calibration. The piano firmware autocalibrates sensor variations. Experiments show that trimming resistors do not add much benefit. But they are a very expensive option since 88 (or 176) are required.
+* Trimmer resistors on sensors for fine tuning calibration. The piano firmware autocalibrates sensor variations. Experiments show that trimming resistors may not add much benefit (see status file in root directory for updates). But they are a very expensive option since 88 (or 176) are required.
 * Total = 2 * ($175 + $50 + 88 * $7.50) = $1770.
 
 The above estimates do not include the mechanical equipment cost (sensor bars and hammer stop bar) or the cost of a piano action.

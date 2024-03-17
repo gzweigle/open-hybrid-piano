@@ -1,4 +1,4 @@
-# DIY-Grand-Digital-Piano Video Documentation
+# Hybrid MIDI Digital Grand Piano - Video Documentation
 
 Some videos may no longer be posted or the URL may have changed.
 

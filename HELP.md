@@ -1,4 +1,4 @@
-# DIY Hybrid Digital Grand Piano - HELP!
+# Hybrid MIDI Digital Grand Piano - HELP! :)
 
 I put quite a bit of effort into making the design as foolproof as possible. However, when things do not work, it can be frustrating. The list below covers possible issues and how to resolve.
 
