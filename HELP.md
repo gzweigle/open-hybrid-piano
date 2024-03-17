@@ -6,7 +6,7 @@ Before building boards take a look at any pending hardware changes or known prob
 
 Similarly, if the piano is not working properly, check if the symptoms are covered in the [Issues](https://github.com/gzweigle/DIY-Grand-Digital-Piano/issues) list. This could provide help in fixing.
 
-In addition to the list below, another source of help: since starting the project, I have been documenting progress in YouTube videos. A file with links to all videos is in the [documentation/](documentation/) directory. These videos are a historical source of information that could be helpful when trying to debug problems.
+In addition to the information below, since starting the project I have been documenting progress in YouTube videos. Please see [documentation/video_documentation.md](documentation/video_documentation.md) for links to the videos. These videos are a historical source of information that could be helpful when trying to debug problems.
 
 There are a couple of piano forums and also the https://forum.pjrc.com/ that could be good sources for information and questions.
 
@@ -34,7 +34,7 @@ Some touch screen TFT display SD libraries conflict with the Teensy SD library. 
 
 Check the https://www.pjrc.com website for instructions on setting up to compile and download for the Teensy 4.1.
 
-If the project refuses to download to the Teensy, try pushing the download button on the Teensy  (see https://www.pjrc.com website for details).
+If the project fails to download to the Teensy, try pushing the download button on the Teensy  (see https://www.pjrc.com website for details).
 
 If there is a buffer overflow bug in the firmware, this can cause the Teensy to appear to be locked up, or, to continuously initialize.
 
@@ -84,6 +84,11 @@ Very loud sounds:
 * Turn volume on speakers down.
 
 ## Playability
+ 
+Uneven piano dynamics
+* Any variation between the distance from the sensor to the hammer, from key-to-key, may cause a variation in the volume between the keys. It is important to get the sensor to hammer distance as consistent as possible between the keys.
+* Variation in the piano action can cause volume variation between keys. For example, if one hammer shank is slightly higher than another, this can reflect into the piano dynamics.
+* For best dynamics, the piano action regulation should be to the hammer stop bar and sensors.
 
 Random dropped or sounding notes
 * Look at the comments around settings in the settings file and consider making changes.

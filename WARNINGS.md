@@ -8,11 +8,7 @@ This is an active project.
 
 Please expect changes.
 
-The hardware could change. The hardware could require changes for the piano to be useful. The piano may not always operate reliably and may require changes.
-
-The design could change. The firmware and software could have bugs.
-
-New pianos, features, capabilities, and enhancements could be added in the future - to the mechanical, hardware, firmware, and/or software.
+The hardware could require changes for the piano to be useful. The design could change. The firmware and software could have bugs. New pianos, features, capabilities, and enhancements could be added in the future.
 
 ## Experience
 

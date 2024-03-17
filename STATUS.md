@@ -4,21 +4,23 @@
 
 The Stem Piano G hardware and firmware in the repository works and is a very playable piano.
 
-However, the action frame and sensor mount mechanical system causes note accuracy and precision issues. Nonlinearity of the CNY-70 sensor is not compensated.
+The action frame and sensor mechanical system, as presently implemented, causes some note-to-note dynamics variation. This is unrelated to the firmware, software, or circuit boards.
+
+Nonlinearity of the CNY-70 sensor is not yet compensated.
 
 ## Major Historical Milestones
 
-### November 26, 2023 - Stem Piano G Open Source
+### November 26, 2023 - First Open Source Hybrid Piano, Digital Architecture
 
-Finished pushing all files to repository.
+Finished pushing all files to the repository.
 
-### November 10, 2023 - Stem Piano G
+### November 10, 2023 - Finish Stem Piano G
 
-First time play the 88 key piano and the simpler architecture.
+First time a full 88 key piano with the simpler architecture is functional.
 
 ### March 16, 2023 - First 88 Key Piano
 
-First time a full 88 key piano is functional, including pedals. Built from a mix of two architectures.
+First time my full 88 key piano is functional, including pedals. Built from a mix of two architectures.
 
 ### March 7, 2023 - Single Board Architecture
 
@@ -32,13 +34,13 @@ First working piano subset with three pedals.
 
 First piano subset with high performance architecture.
 
-### January 2, 2022 - Created Repository
+### January 2, 2022 - Started Open Source
 
-Created repo.
+Created repository.
 
 ### July 24, 2021 - Eight Piano Keys
 
-First piano with more than one note.
+First working piano with more than one note.
 
 ### June 11, 2021 - First Datapath
 

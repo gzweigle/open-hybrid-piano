@@ -50,15 +50,14 @@ Step 5 - Printed Circuit Boards https://www.youtube.com/watch?v=6EG-CYtTOFs
 6. Fabrication at OSH Park.
 7. Software modifications to support new system.
 
-Step 6 - Learning to Solder https://www.youtube.com/watch?v=wlrAXrDVhN0
+Step 6 - Learning to Solder https://www.youtube.com/watch?v=wlrAXrDVhN0  (removed)
 
 (audio was accidentally recorded mono channel)
 
 1. After receiving the circuit boards, I had difficulty hand soldering small surface mount parts.
 2. So, I took time to learn the science of soldering.
-3. Practicing soldering.
 
-Step 7 - HPS PCB (CNY70) https://www.youtube.com/watch?v=usbgk9fsZ5I
+Step 7 - HPS PCB (CNY70) https://www.youtube.com/watch?v=usbgk9fsZ5I (removed)
 
 (audio was accidentally recorded mono channel)
 
@@ -148,7 +147,7 @@ Step 16 - Thin Film Transistor LCD https://www.youtube.com/watch?v=y42pQxGMDy0
 4. Research processor options - select the Teensy 4.1 for graphics processing.
 5. Write software for graphics display with Teensy 4.1.
 
-Step 17 - TPS Mechanical https://www.youtube.com/watch?v=PopMsf95C8o
+Step 17 - TPS Mechanical https://www.youtube.com/watch?v=PopMsf95C8o (removed)
 
 1. Design a physical case set that meets these requirements:
    1. Fits an ECA board, two Teensy 4.1 processing systems, ethernet/power connectors, and the TFT LCD.
