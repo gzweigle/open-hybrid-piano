@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -38,15 +38,16 @@ class HammerSettings
     HammerSettings();
     void SetAllSettingValues();
     int debug_level;
-    bool board_bringup;
+    int startup_counter_value;
     int adc_spi_clock_frequency;
     int adc_sample_period_microseconds;
     int adc_sample_period_microseconds_during_tft;
     bool adc_is_differential;
-    bool adjust_gain;
-    float adc_scale_threshold;
-    int serial_baud_rate;
-    unsigned long serial_display_interval;
+    bool using18bitadc;
+    float sensor_v_max;
+    float adc_reference;
+    float velocity_scale;
+    unsigned long serial_display_interval_micro;
     int switch_debounce_micro;
     int switch11_ips_pin;
     int switch12_ips_pin;
@@ -65,7 +66,6 @@ class HammerSettings
     float min_repetition_seconds;
     float min_strike_velocity;
     float hammer_travel_meters;
-    int initialize_hammer_wait_count;
     int pedal_sample_interval_microseconds;
     float pedal_threshold;
     int sustain_pin;
@@ -78,10 +78,13 @@ class HammerSettings
     char teensy_ip[IP_STRING_LENGTH];
     char computer_ip[IP_STRING_LENGTH];
     int upd_port;
+    int ethernet_start_ind;
+    int ethernet_end_ind;
     bool connected_to_remote_damper_board;
     bool canbus_enable;
     bool using_display;
     bool connected_channel[NUM_CHANNELS];
+    bool use_board_to_generate_calibration_values_;
 };
 
 #endif
