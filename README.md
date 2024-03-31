@@ -19,11 +19,13 @@ If you would like to contribute hardware, software, mechanical, or firmware to t
 
 A hybrid piano combines the physical action of an acoustic piano with MIDI, sound generation, and other features of a digital keyboard. Some piano manufacturers sell hybrid pianos.
 
-This project ("stem piano") is an open-source hybrid digital piano.
+This project ("*stem piano*") is an open-source hybrid digital piano.
 
-The qualifier digital is important. It means that signals are sampled with an analog-to-digital converter (ADC) and then all processing is with a microprocessor. Therefore, once the hardware is installed, all algorithms, improvements, and new features are with software or firmware.
+The qualifier digital is important. It means that signals are sampled with an analog-to-digital converter (ADC) and then all processing is with a microprocessor. Therefore, once the hardware is installed all algorithms, improvements, and new features are with software or firmware.
 
-The repository includes schematics, printed circuit board layouts, firmware source files for the real-time processing, optional software source files for Ethernet connected features, and lists of required hardware components. Mechanical suggestions are included but not detailed mechanical instructions. A physical piano action, or other instrument, is required for playing.
+The repository includes schematics, printed circuit board layouts, firmware source files for the real-time processing, optional software source files for Ethernet connected features, and lists of required hardware components.
+
+A physical piano action, or other instrument, is required. The electronics and code (*stem piano*) will work with a grand or upright piano action. Mechanical suggestions are included but not detailed mechanical instructions.
 
 The platform and code could also adapt to building a range of other unique and innovative musical instruments.
 
