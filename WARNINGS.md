@@ -1,4 +1,4 @@
-# Hybrid MIDI Digital Grand Piano
+# Hybrid MIDI Digital Piano
 
 The warnings below may be repeated or described in more detail elsewhere in the repo. It cannot be guaranteed, but it is the intent that this *WARNINGS.md* file contains a high-level superset of all warnings.
 

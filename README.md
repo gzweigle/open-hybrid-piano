@@ -1,4 +1,4 @@
-# Hybrid MIDI Digital Grand Piano
+# Hybrid MIDI Digital Piano
 
 Also known as **stem piano**
 

@@ -1,4 +1,4 @@
-# Hybrid MIDI Digital Grand Piano - Status and Milestones
+# Hybrid MIDI Digital Piano - Status and Milestones
 
 ## Status
 
