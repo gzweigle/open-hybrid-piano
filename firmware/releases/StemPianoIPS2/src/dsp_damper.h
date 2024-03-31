@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -42,23 +42,10 @@ class DspDamper
 
   private:
 
-    void UpdateDamperRange(const float *);
-    void UpdateDamperThresholds();
-    void DetectFirstDamper(const bool *);
-
-    bool using_hammer_to_estimate_damper_[NUM_CHANNELS];
-
     bool enable_;
     int debug_level_;
 
-    float min_damper_position_[NUM_CHANNELS];
-    float max_damper_position_[NUM_CHANNELS];
-    bool min_max_damper_position_valid_[NUM_CHANNELS];
-    float max_damper_estimate_;
-
     float damper_threshold_[NUM_CHANNELS];
-    float threshold0_;
-    float threshold1_;
 
     int event_block_counter_[NUM_CHANNELS];
 
