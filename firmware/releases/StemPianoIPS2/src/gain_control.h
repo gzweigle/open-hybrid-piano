@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 // Location of documentation, code, and design:
 // https://github.com/gzweigle/DIY-Grand-Digital-Piano
 //
-// six_channel_analog_00.h
+// gain_control.h
 //
 // For ips pcb version 2.X
 // For sca pcb version 0.0
@@ -30,14 +30,12 @@ class GainControl
 {
   public:
     GainControl();
-    void Setup(bool, float);
-    void AutomaticGainControl(float *, const float *);
+    void Setup(float, int);
+    void AutomaticGainControl(float *, const bool *);
  
   private:
-    bool adjust_gain_;
-    float adc_scale_threshold_;
-    float max_value_[NUM_CHANNELS];
-    bool latched_max_value_[NUM_CHANNELS];
+    float velocity_scale_;
+    int debug_level_;
 
 };
 

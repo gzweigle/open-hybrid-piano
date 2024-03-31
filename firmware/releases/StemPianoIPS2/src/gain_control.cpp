@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,51 +21,33 @@
 // For ips pcb version 2.X
 // For sca pcb version 0.0
 //
+// TODO - Is this needed?
 
 #include "gain_control.h"
 
 GainControl::GainControl() {}
 
-void GainControl::Setup(bool adjust_gain, float adc_scale_threshold) {
-
-  adjust_gain_ = adjust_gain;
-  adc_scale_threshold_ = adc_scale_threshold;
-
-  for (int ind = 0; ind < NUM_CHANNELS; ind++) {
-    max_value_[ind] = 0.0;
-    latched_max_value_[ind] = false;
-  }
-
+void GainControl::Setup(float velocity_scale, int debug_level) {
+  velocity_scale_ = velocity_scale;
+  debug_level_ = debug_level;
 }
 
 // Automatic gain control.
-void GainControl::AutomaticGainControl(float *out_array, const float *in_array) {
+void GainControl::AutomaticGainControl(float *velocity_data,
+const bool *velocity_event) {
 
-  for (int ind = 0; ind < NUM_CHANNELS; ind++) {
-
-    // Once input exceeds a threshold, assume a key is being pressed and the
-    // hammer is traveling upwards. The max_value will continue to increase as
-    // it tracks the upward motion of the hammer. Once the max value no longer
-    // is increasing, assume we have the high point of the travel and that
-    // becomes the maximum value. This prevents transient large scaling on
-    // first note press. Also, prevents a divide-by-zero.
-    if (in_array[ind] > adc_scale_threshold_) {
-      if (in_array[ind] > max_value_[ind]) {
-        max_value_[ind] = in_array[ind];
-      }
-      if (in_array[ind] < max_value_[ind]) {
-        latched_max_value_[ind] = true;
+  for (int key = 0; key < NUM_NOTES; key++) {
+    if (velocity_event[key] == true) {
+      velocity_data[key] *= velocity_scale_;
+      if (velocity_data[key] > 1.0) {
+        if (debug_level_ >= 2) {
+          Serial.print("velocity of ");
+          Serial.print(key);
+          Serial.print(" hit limit, orig velocity was ");
+          Serial.println(velocity_data[key] / velocity_scale_);
+        }
+        velocity_data[key] = 1.0;
       }
     }
-    if (latched_max_value_[ind] == true && adjust_gain_ == true) {
-      out_array[ind] = in_array[ind] / max_value_[ind];
-      if (out_array[ind] > 1.0) {
-        out_array[ind] = 1.0;
-      }
-    }
-    else {
-      out_array[ind] = in_array[ind];
-    }
-
   }
 }

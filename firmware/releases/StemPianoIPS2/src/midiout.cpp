@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -100,6 +100,8 @@ void MidiOut::SendNote(const bool *event, const float *velocity, bool send_on) {
       if (debug_level_ >= 1) {
         Serial.print("MIDI note (");
         Serial.print(midi_note);
+        Serial.print(") index (");
+        Serial.print(key);
         Serial.print(") velocity (");
         Serial.print(velocity_int);
         Serial.print(")");
