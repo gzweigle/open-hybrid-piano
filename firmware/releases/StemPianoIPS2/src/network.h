@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 //
 // This class is not hardware dependent.
 //
-// Super simple send four measurements over UDP Ethernet. 
+// Super simple send measurements over UDP Ethernet. 
 
 #ifndef NETWORK_H_
 #define NETWORK_H_
@@ -32,13 +32,14 @@
 #include <NativeEthernet.h>
 #include <NativeEthernetUdp.h>
 
+#define MAX_ETHERNET_BYTES (2*(NUM_CHANNELS))
+
 class Network
 {
   public:
     Network();
-    void Setup(const char *, const char *, int, int);
-    void SendPianoPacket(float, float, float, float,
-                         float, float, float, float);
+    void Setup(const char *, const char *, int, int, int, int);
+    void SendPianoPacket(const float *);
 
   private:
     int debug_level_;
@@ -47,13 +48,16 @@ class Network
     int computer_ip_[4];
     int udp_port_;
     bool network_ok_;
+    bool disable_network_;
+    int start_ind_;
+    int end_ind_;
+    uint8_t ethernet_values_[3*(MAX_ETHERNET_BYTES)];
 
     EthernetUDP Udp;
 
     void GetMacAddress();
     void SetIpAddresses(const char *, const char *, int);
     void SetupNetwork();
-    void UdpSend(const uint8_t *, int);
 };
 
 #else

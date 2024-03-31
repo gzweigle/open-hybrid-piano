@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,10 +20,9 @@
 //
 // This class is not hardware dependent.
 //
-// Super simple send four measurements over UDP Ethernet. 
+// Super simple send measurements over UDP Ethernet. 
 //
-// TODO - Data to SendPianoPacket() is hardcoded int, int, float, float.
-//        Make this more generic and configurable.
+// TODO - Needs rethinking.
 // TODO - If Ethernet is not plugged in, it hangs in Ethernet.begin().
 
 #include "network.h"
@@ -40,44 +39,53 @@
 Network::Network() {}
 
 void Network::Setup(const char *computer_ip, const char *teensy_ip, int udp_port,
-int debug_level) {
+int start_ind, int end_ind, int debug_level) {
   debug_level_ = debug_level;
   network_ok_ = false;
+  start_ind_ = start_ind;
+  end_ind_ = end_ind;
+  if (end_ind_ - start_ind_ + 1 > MAX_ETHERNET_BYTES) {
+    Serial.println("Error - too many values to send over Ethernet");
+    disable_network_ = true;
+  }
+  else {
+    disable_network_ = false;
+  }
   GetMacAddress();
   SetIpAddresses(computer_ip, teensy_ip, udp_port);
   SetupNetwork();
 }
 
-// Intended to be used to send two local hammer values as direct ADC counts
-// and two remote (or local) damper values that arrive as float in range [0,1].
-void Network::SendPianoPacket(float fl0, float fl1, float fl2, float fl3,
-float fl4, float fl5, float fl6, float fl7) {
+// Send floats as 3 bytes for a total of 24-bits.
+void Network::SendPianoPacket(const float *data) {
 
-  if (network_ok_ == true) {
+  int data_int;
 
-    // Four 16-bit values, each sent as two 8-bit values.
-    uint8_t sv[16];
-    sv[0] = static_cast<int>(65535*fl0)&255;
-    sv[1] = (static_cast<int>(65535*fl0)>>8)&255;
-    sv[2] = static_cast<int>(65535*fl1)&255;
-    sv[3] = (static_cast<int>(65535*fl1)>>8)&255;
-    sv[4] = static_cast<int>(65535*fl2)&255;
-    sv[5] = (static_cast<int>(65535*fl2)>>8)&255;
-    sv[6] = static_cast<int>(65535*fl3)&255;
-    sv[7] = (static_cast<int>(65535*fl3)>>8)&255;
-    sv[8] = static_cast<int>(65535*fl4)&255;
-    sv[9] = (static_cast<int>(65535*fl4)>>8)&255;
-    sv[10] = static_cast<int>(65535*fl5)&255;
-    sv[11] = (static_cast<int>(65535*fl5)>>8)&255;
-    sv[12] = static_cast<int>(65535*fl6)&255;
-    sv[13] = (static_cast<int>(65535*fl6)>>8)&255;
-    sv[14] = static_cast<int>(65535*fl7)&255;
-    sv[15] = (static_cast<int>(65535*fl7)>>8)&255;
+  if (network_ok_ == true && disable_network_ == false) {
+
+    int num_send_values = end_ind_ - start_ind_ + 1;
+
+    for (int i = 0; i < num_send_values; i++) {
+
+      // Multiply by 2^23 and limit to signed 24-bit value.
+      data_int = static_cast<int>(data[start_ind_ + i]*8388608.0);
+      if (data_int > 8388607) {
+        data_int = 8388607;
+      }
+      else if (data_int < -8388608) {
+        data_int = -8388608;
+      }
+
+      // Send a value in range [-2^23, ..., 2^23-1] as three bytes.
+      ethernet_values_[3*i+0] = data_int&255;
+      ethernet_values_[3*i+1] = (data_int>>8)&255;
+      ethernet_values_[3*i+2] = (data_int>>16)&255;
+    }
 
     // Send the data via UDP.
     IPAddress ip(computer_ip_[0], computer_ip_[1], computer_ip_[2], computer_ip_[3]);
     Udp.beginPacket(ip, udp_port_);
-    Udp.write(sv, 16);
+    Udp.write(ethernet_values_, 3*num_send_values);
     Udp.endPacket();
     Udp.flush();
   }
