@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -50,15 +50,19 @@ class SixChannelAnalog00
 {
   public:
     SixChannelAnalog00();
-    void Setup(int, bool, TestpointLed *);
+    void Setup(int, bool, bool, float, float, TestpointLed *);
     void GetNewAdcValues(unsigned int *);
     void NormalizeAdcValues(int *, float *, const unsigned int *);
+    void ReorderAdcValues(unsigned int *);
  
   private:
     TestpointLed *Tpl_;
     int sclk_frequency_;
     bool adc_is_differential_;
     int adc_max_value_;
+    int using18bitadc_;
+    float sensor_v_max_;
+    float adc_reference_;
     // These arrays were an attempt to speed up the
     // code and make the overall analog-to-digital conversion
     // of all channels faster.  It didn't help the speed much.

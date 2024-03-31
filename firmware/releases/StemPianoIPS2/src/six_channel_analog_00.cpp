@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@
 //
 // Will also work with:
 // ADS8881 (18-bit, 1Msps, differential input), Datasheet August 2015
-// Must change adc_max_value_ in code below to 262144.
 //
 // If using ADS8861 or ADS8881, then adc_is_differential must be true.
 
@@ -36,14 +35,21 @@
 SixChannelAnalog00::SixChannelAnalog00() {}
 
 void SixChannelAnalog00::Setup(int sclk_frequency, bool adc_is_differential,
-TestpointLed *Tpl) {
+bool using18bitadc, float sensor_v_max, float adc_reference, TestpointLed *Tpl) {
 
   sclk_frequency_ = sclk_frequency;
   adc_is_differential_ = adc_is_differential;
+  sensor_v_max_ = sensor_v_max;
+  adc_reference_ = adc_reference;
   Tpl_ = Tpl;
+  using18bitadc_ = using18bitadc;
 
-  // 16-bit ADC.
-  adc_max_value_ = 65535;
+  if (using18bitadc_ == true) {
+    adc_max_value_ = 262143;
+  }
+  else {
+    adc_max_value_ = 65535;
+  }
 
   // Pin numbers are set by board layout.
   convst_ = 14;
@@ -122,12 +128,12 @@ void SixChannelAnalog00::GetNewAdcValues(unsigned int *adc_array) {
       // Test point so can trigger oscilloscope exactly when muxes switch.
       // The specific mux value it triggers on is arbitrary.
       // Use this test point to help validate signal settling time.
-      if ( (mux16_next == 15 && mux8_next == 1)) {
-        Tpl_->SetTp9(true);
-      }
-      else {
-        Tpl_->SetTp9(false);
-      }
+      //if ( (mux16_next == 15 && mux8_next == 1)) {
+        //Tpl_->SetTp9(true);
+      //}
+      //else {
+        //Tpl_->SetTp9(false);
+      //}
 
       // Switch all muxes to next analog input channel.
       // Switch 16:1 first to give juuuust a little extra
@@ -155,7 +161,13 @@ void SixChannelAnalog00::GetNewAdcValues(unsigned int *adc_array) {
       // Conversion is for [mux16,mux8] values not
       // [mux16_next, mux8_next].
       // Write 0xFF so that DIN stays high.
-      adc_array[adc_ind++] = SPI.transfer16(0xFF);
+      if (using18bitadc_ == true) {
+        // Not getting two lower bits. Force them to zero.
+        adc_array[adc_ind++] = (SPI.transfer16(0xFF) << 2);
+      }
+      else {
+        adc_array[adc_ind++] = SPI.transfer16(0xFF);
+      }
 
       // Make sure DIN stays high. Probably not necessary.
       digitalWrite(din_, HIGH);
@@ -164,8 +176,9 @@ void SixChannelAnalog00::GetNewAdcValues(unsigned int *adc_array) {
   SPI.endTransaction();
 }
 
-// Normalize to [0.0,1.0], where 1.0 is the max ADC value.
-void SixChannelAnalog00::NormalizeAdcValues(int *normalized_raw,
+// diff_scale_raw: adjust if differential but otherwise no changes.
+// normalized_float: scale to [0.0,1.0], where 1.0 is the max ADC value.
+void SixChannelAnalog00::NormalizeAdcValues(int *diff_scale_raw,
 float *normalized_float, const unsigned int *adc_values) {
 
   for (int ind = 0; ind < NUM_CHANNELS; ind++) {
@@ -173,13 +186,31 @@ float *normalized_float, const unsigned int *adc_values) {
     normalized_float[ind] = static_cast<float>(adc_values[ind]) /
     static_cast<float>(adc_max_value_);
 
-    normalized_raw[ind] = adc_values[ind];
+    // Normally adc_reference_ == sensor_v_max_.
+    // Allow other values in case mixing and matching front ends.
+    normalized_float[ind] *= adc_reference_ / sensor_v_max_;
+
+    diff_scale_raw[ind] = adc_values[ind];
 
     // Multiply by 2 because the SCA version 0.0 is single-ended and so if a
     // differential ADC is on the board, half of the dynamic range is lost.
     if (adc_is_differential_ == true) {
       normalized_float[ind] *= 2.0;
-      normalized_raw[ind] *= 2;
+      diff_scale_raw[ind] *= 2;
+    }
+
+  }
+}
+
+// Connections to back row of 16:1 multiplexers is reversed
+// on PCB compared to the piano key order. Fix that here.
+void SixChannelAnalog00::ReorderAdcValues(unsigned int *data) {
+  unsigned int tmp;
+  for (int ind = 0; ind < 4; ind++) {
+    for (int grp = 0; grp < NUM_CHANNELS; grp += 16) {
+      tmp = data[ind + grp];
+      data[ind + grp] = data[7-ind + grp];
+      data[7-ind + grp] = tmp;
     }
   }
 }
