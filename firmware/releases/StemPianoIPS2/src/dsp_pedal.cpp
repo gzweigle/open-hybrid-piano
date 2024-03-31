@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by

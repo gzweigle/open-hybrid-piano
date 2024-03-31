@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -34,18 +34,17 @@ class DspHammer
 {
   public:
     DspHammer();
-    void Setup(int, float, float, float, float, float, int, int);
+    void Setup(int, float, float, float, float, float, int);
     void GetHammerEventData(bool *, float *, const float *);
     void Enable(bool);
 
   private:
 
+    float debug_pos_[NUM_CHANNELS];
+
     void ComputeDerivative(const float *);
-    void UpdateHammerRange(const float *);
     void UpdateMaxHammerVelocity();
-    void UpdateHammerThresholds();
     void DetectHammerStrike(bool *, float *, const float *);
-    void DetectFirstHammer(const bool *);
     void DetectReleased(const float *);
 
     bool enable_;
@@ -59,20 +58,9 @@ class DspHammer
     int repetition_counter_[NUM_CHANNELS];
     bool released_[NUM_CHANNELS];
 
-    // Let everything settle out before running and assigning internal state.
-    // Without this, for example, the min value can get stuck at a false value
-    // of zero and then hammer never release.
-    int initialize_counter_;
-    int initialize_wait_count_;
-
     // This will become the velocity reported via MIDI.
     float max_velocity_[NUM_CHANNELS];
     float min_strike_velocity_;
-
-    // For dynamically learning the position where hammer hits strings.
-    float max_position_[NUM_CHANNELS];
-    bool min_max_position_valid_[NUM_CHANNELS];
-    float hammer_threshold_[NUM_CHANNELS];
 
     // Derivative of hammer position, x.
     float velocity_[NUM_CHANNELS];
