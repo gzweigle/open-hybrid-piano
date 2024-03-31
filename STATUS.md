@@ -10,7 +10,7 @@ Nonlinearity of the CNY-70 sensor is not yet compensated.
 
 ## Major Historical Milestones
 
-### November 26, 2023 - First Open Source Hybrid Piano, Digital Architecture
+### November 26, 2023 - Open Source Hybrid Piano, Digital Architecture
 
 Finished pushing all files to the repository.
 
@@ -24,15 +24,15 @@ First time my full 88 key piano is functional, including pedals. Built from a mi
 
 ### March 7, 2023 - Single Board Architecture
 
-First piano subset for single board architecture.
+First piano subset for the single board architecture.
 
 ### January 15, 2023 - Pedals
 
-First working piano subset with three pedals.
+First working with three pedals.
 
 ### July 8, 2022 - High Performance Architecture
 
-First piano subset with high performance architecture.
+First piano subset with the high performance architecture.
 
 ### January 2, 2022 - Started Open Source
 
@@ -40,7 +40,7 @@ Created repository.
 
 ### July 24, 2021 - Eight Piano Keys
 
-First working piano with more than one note.
+My first working piano with more than one note.
 
 ### June 11, 2021 - First Datapath
 
