@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -26,9 +26,6 @@
 // WARNING - Board consistency.
 // The following values must be identical on hammer and damper boards:
 //    - adc_sample_period_microseconds.
-//
-// TODO - Make selecting damper_velocity_scaling value based on analysis.
-// TODO - Change initialize_hammer_wait_count to based on seconds, not counts.
 
 #include "hammer_settings.h"
 
@@ -40,7 +37,6 @@ void HammerSettings::SetAllSettingValues() {
   // Debug
   // Set this to zero during normal operation.
   // debug_level 0 = No debug information on serial port.
-  //                 Will print whether a hammer or damper board.
   // debug_level 1 = Small amount of debug information.
   //                 Errors and warnings.
   //                 MIDI send notification.
@@ -49,30 +45,27 @@ void HammerSettings::SetAllSettingValues() {
   //                 Details internal to the algorithms.
   debug_level = 1;
 
-  // Set to true following documentation for bringing up the board.
-  board_bringup = false;
-
   if (debug_level >= 2) {
     Serial.print("Warning - debug_level is ");
     Serial.print(debug_level);
     Serial.println(" in hammer_settings.cpp");
-    Serial.println("Extra debug information will be printed to the serial port");
+    Serial.println("Extra debug information will be printed to the serial port.");
   }
   else if (debug_level == 1) {
     Serial.println("Warning - debug_level is set at 1 in hammer_settings.cpp");
-    Serial.println("Some debug information will be printed to the serial port");
+    Serial.println("Some debug information will be printed to the serial port.");
   }
 
-  if (board_bringup == true) {
-    Serial.println("Warning - board_bringup in hammer_settings.cpp is defined.");
-    Serial.println("Using settings for testing minimal board functionality.");
-    Serial.println("See online documentation for more details.");
-  }
+  // Avoid risk of anything bad happening on startup. Probably not needed.
+  // Wait this number of ADC samples before allow piano sounds.
+  startup_counter_value = 100;
 
   ////////
   // ADC settings.
 
-  // Max 70e6 per ADC datasheet.
+  // Max is 70e6 per the ADC datasheet.
+  // Set at the lowest value needed to get all data clocked
+  // out in time to meet the adc_sample_period_microseconds value.
   adc_spi_clock_frequency = 60000000;
   
   // Must be longer than the time to sample and collect all NUM_CHANNELS
@@ -87,24 +80,46 @@ void HammerSettings::SetAllSettingValues() {
     Serial.println("The sample period value must match on hammer and damper boards.");
   }
 
-  // When the TFT is running, slow things down alot!
+  // When the TFT is running, slow everything down because the TFT
+  // processing takes a long time.
   adc_sample_period_microseconds_during_tft = 100000;
 
   // The analog circuitry in front of ADC is not differential.
   // Therefore, if using a differential ADC, lose a bit.
   adc_is_differential = true;
 
-  // If a hammer value exceeds this threshold, then the value is used to track the
-  // maximum hammer position for scaling. Use this threshold to simplify the scaling
-  // algorithm so that it does not scale the values when hammer is at rest
-  // Must be larger than 0.0.
-  adjust_gain = true;
-  adc_scale_threshold = 0.2;
+  // Presently support a 16-bit or 18-bit ADC.
+  using18bitadc = true;
+
+  // Normally adc_reference and sensor_v_max are the same value.
+  // For example, when using a 3.3V ADC, design the boards so that
+  // the maximum sensor output (and associated sensor_v_max) is 3.3V
+  // and design the ADC support circuitry so that the ADC reference
+  // voltage (and associated adc_reference) is 3.3V.
+  //
+  // Historically, ADC changes during development resulted in
+  // 1.2V, 2.5V, 3.0V, and 3.3V for adc_reference. 
+  // Also, ADC changes during development resulted in using
+  // 1.2V and 3.3V for sensor_v_max. Therefore, the sensor_v_max
+  // and adc_reference setttings are useful during development to
+  // support connecting older and newer ADC systems together.
+
+  // The maximum voltage output by the sensor when hammer is at highest position.
+  sensor_v_max = 1.2;
+
+  // Reference value on ADC. When the output of the sensor is at this voltage,
+  // the ADC outputs its maximum value.
+  adc_reference = 2.5;
+
+  ////////
+  // Gain control.
+  // This is needed since all hardware and algorithms are not completely
+  // finished. Eventually, the goal is not to need a gain control.
+  velocity_scale = 2.0;
 
   ////////
   // Noncritical values for display and LED.
-  serial_baud_rate = 9600;
-  serial_display_interval = 1000000;  // Number of microseconds.
+  serial_display_interval_micro = 1000000;
 
   ////////
   // DIP switch settings.
@@ -124,7 +139,7 @@ void HammerSettings::SetAllSettingValues() {
   // When the damper position crosses this percentage of max-min
   // damper position, declare a damper event.
   damper_threshold_using_damper = 0.35;
-  damper_threshold_using_hammer = 0.6;
+  damper_threshold_using_hammer = 0.48;
 
   // Magic value to get velocity in range [0,1].
   damper_velocity_scaling = 0.025;
@@ -133,11 +148,7 @@ void HammerSettings::SetAllSettingValues() {
   // For keys with this set as true, using the damper_threshold_using_hammer.
   // For keys with this set as false, using the damper_threshold_using_damper.
   for (int channel = 0; channel < NUM_CHANNELS; channel++) {
-    // For the present setup, only keys in the middle use the damper sensors.
-    if (channel >= 32 && channel < 54)
-      using_hammer_to_estimate_damper[channel] = false;
-    else
-      using_hammer_to_estimate_damper[channel] = true;
+    using_hammer_to_estimate_damper[channel] = true;
   }
 
   ////////
@@ -150,14 +161,12 @@ void HammerSettings::SetAllSettingValues() {
   strike_threshold = 0.7;
 
   // After a strike, do not allow another until the hammer has dropped
-  // below this threshold.
-  // Set higher if signal is less noisy.
-  // Set lower if signal is very noisy.
-  // Practically - set as high as possible until get false piano sounds
-  // when holding the piano key down.
+  // below this threshold. Set higher if signal is less noisy.
+  // Set lower if signal is very noisy. Practically - set as high as
+  // possible until get false piano sounds when holding the piano key down.
   // If set too low, lose repetition capability with hammer near string.
   // Disable functionality by setting >= 1.0.
-  release_threshold = 0.65;
+  release_threshold = 0.90;
 
   // Not allowing a strike sooner than this many seconds since the last.
   // Needed because when the hammer shank hits the stop bar, the stop bar
@@ -177,10 +186,6 @@ void HammerSettings::SetAllSettingValues() {
   // a conversion to meters (0.0254 meters / inch)
   hammer_travel_meters = .0254 * 0.3125; 
 
-  // Avoid risk of anything bad happening on startup.
-  // Probably not needed.
-  initialize_hammer_wait_count = 1000;
-
   ////////
   // Pedal Settings.
 
@@ -199,7 +204,7 @@ void HammerSettings::SetAllSettingValues() {
   ////////
   // MIDI
   midi_channel = 2;
-
+  
   ////////
   // Ethernet data.
   //
@@ -209,21 +214,17 @@ void HammerSettings::SetAllSettingValues() {
   upd_port = X;  // Must match UDP port in receiver code
   //
 
+  ethernet_start_ind = 0;
+  ethernet_end_ind = 9;
+
   ////////
   // Canbus.
 
   // Set to true if using separate remote board for measuring the
   // damper position. If this is set to false, then the damper
   // position will be estimated based on the hammer position.
-  if (board_bringup == true) {
-    // Bringing up the board mode is for a single hammer board. No damper.
-    connected_to_remote_damper_board = false;
-    canbus_enable = false;
-  }
-  else {
-    connected_to_remote_damper_board = true;
-    canbus_enable = true;
-  }
+  connected_to_remote_damper_board = false;
+  canbus_enable = false;
 
   if (debug_level >= 1) {
     if (canbus_enable == false && connected_to_remote_damper_board == true) {
@@ -236,25 +237,20 @@ void HammerSettings::SetAllSettingValues() {
   using_display = true;
 
   ////////
-  // Set used and unused channels
+  // Set used inputs to true and unused inputs to false.
   // This is to avoid any loud notes due to noise on
   // unconnected inputs.
-  if (board_bringup == true) {
-    for (int channel = 0; channel < NUM_CHANNELS; channel++) {
-      connected_channel[channel] = false;
-    }
-    connected_channel[24] = true;
-    connected_channel[25] = true;
-  }
-  else {
-    for (int channel = 0; channel < NUM_CHANNELS; channel++) {
-      connected_channel[channel] = true;
-    }
+  for (int channel = 0; channel < NUM_CHANNELS; channel++) {
+    connected_channel[channel] = true;
   }
 
   // Turn off unused pedal inputs.
   for (int channel = 88; channel < 90; channel++) {
     connected_channel[channel] = false;
   }
+
+  ////////
+  // Calibration settings.
+  use_board_to_generate_calibration_values_ = false;
 
 }
