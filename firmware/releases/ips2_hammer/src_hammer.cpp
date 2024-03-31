@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,16 +21,31 @@
 // For ips pcb version 2.X
 // For sca pcb version 0.0
 //
-// Main code for hammer board of Stem Piano.
+// Main code for hammer board of stem piano.
+//
+//
+//
+//
+// stem piano is an open source hybrid digital piano.
+//
+//
+//
 //
 // TODO - For more than 88 keys, could use local hammer for extra
 //        dampers, and remote for the normal 88.
+//      - Max velocity should be 127. Need to automate vscale.
+// TODO - Include calibration once testing and documentation is finished.
+
+#define INCLUDE_CALIBRATION 0
 
 #include "stem_piano_ips2.h"
 
 #include "hammer_settings.h"
 #include "six_channel_analog_00.h"
 #include "board2board.h"
+#if INCLUDE_CALIBRATION
+#include "calibration_build.h"
+#endif
 #include "dsp_damper.h"
 #include "dsp_hammer.h"
 #include "dsp_pedal.h"
@@ -41,11 +56,15 @@
 #include "testpoint_led.h"
 #include "timing.h"
 #include "tft_display.h"
+#include "utilities.h"
 
 HammerSettings Set;
-
 SixChannelAnalog00 Adc;
 Board2Board B2B;
+#if 0
+CalibrationBuild CalB;
+CalibrationRuntime CalR;
+#endif
 DspDamper DspD;
 DspHammer DspH;
 DspPedal DspP;
@@ -59,14 +78,36 @@ Switches SwSCA2;
 TestpointLed Tpl;
 Timing Tmg;
 TftDisplay Tft;
+Utilities Utl0;
+Utilities Utl1;
+Utilities Utl2;
+Utilities Utl3;
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, mi);
 
 void setup(void) {
 
-  // This must be placed first and in the setup() function.
+  // Serial port setup.
+  Serial.begin(9600);
+  Serial.println(".");
+  Serial.println(".");
+  Serial.println("welcome to stem piano by gcz");
+  Serial.println(".");
+  Serial.println(".");
+
+  // Important information.
+  Serial.println("Hardware required:");
+  Serial.println("  IPS2.X hammer board.");
+  Serial.println("  SCA0.0 analog board.");
+  Serial.println("  HPS0.7 or HPS0.4 sensor board (any board meeting spec is also ok).");
+  Serial.println("License: GNU GPLv3 - for documentation, code, and design see:");
+  Serial.println("  https://github.com/gzweigle/DIY-Grand-Digital-Piano");
+  Serial.println(".");
+  Serial.println(".");
+
+  // Load the settings. Must be first in the setup() function.
   Set.SetAllSettingValues();
 
-  // These must be called second and in the setup() function.
+  // Setup reading the switches.
   SwIPS1.Setup(Set.switch_debounce_micro,
   Set.switch11_ips_pin, Set.switch12_ips_pin, Set.debug_level);
   SwIPS2.Setup(Set.switch_debounce_micro,
@@ -76,87 +117,112 @@ void setup(void) {
   SwSCA2.Setup(Set.switch_debounce_micro,
   Set.switch21_sca_pin, Set.switch22_sca_pin, Set.debug_level);
 
-  // Serial port setup.
-  Serial.begin(Set.serial_baud_rate);
-
   if (Set.debug_level >= 1) {
     Serial.println("Beginning hammer board initialization.");
   }
 
-  // Common to hammer and pedal board.
-  Adc.Setup(Set.adc_spi_clock_frequency, Set.adc_is_differential, &Tpl);
+  // Setup the analog front-end and the board-to-board communication.
+  // Physically connecting the board-to-board link is optional and
+  // only required if using a separate set of sensors for the dampers.
+  // These two classes are common to hammer and pedal boards.
+  Adc.Setup(Set.adc_spi_clock_frequency, Set.adc_is_differential,
+  Set.using18bitadc, Set.sensor_v_max, Set.adc_reference, &Tpl);
   B2B.Setup(Set.canbus_enable);
 
-  // Optional to dynamically adjust gain of values from ADC.
-  Gain.Setup(Set.adjust_gain, Set.adc_scale_threshold);
+  // Build the calibration values.
+  #if INCLUDE_CALIBRATION
+  CalB.Setup(&Tpl);
+  CalR.Setup();
+  #endif
 
-  // Processing dampers, hammers, and pedals on hammer board.
+  // Setup the dampers, hammers, and pedals on hammer board.
   DspD.Setup(Set.using_hammer_to_estimate_damper,
   Set.damper_threshold_using_damper, Set.damper_threshold_using_hammer,
   Set.damper_velocity_scaling, Set.adc_sample_period_microseconds, Set.debug_level);
   DspH.Setup(Set.adc_sample_period_microseconds, Set.strike_threshold,
   Set.release_threshold, Set.min_repetition_seconds, Set.min_strike_velocity,
-  Set.hammer_travel_meters, Set.initialize_hammer_wait_count, Set.debug_level);
+  Set.hammer_travel_meters, Set.debug_level);
   DspP.Setup(Set.pedal_sample_interval_microseconds, Set.pedal_threshold,
   Set.sustain_pin, Set.sustain_connected_pin, Set.sostenuto_pin,
   Set.sostenuto_connected_pin, Set.una_corda_pin, Set.una_corda_connected_pin,
   Set.debug_level);
 
-  // Sending damper, hammer, and pedal data over MIDI.
+  // Dynamically adjust signal levels. Maybe removed in future.
+  Gain.Setup(Set.velocity_scale, Set.debug_level);
+
+  // Setup sending damper, hammer, and pedal data over MIDI.
   Midi.Setup(Set.midi_channel, &mi, Set.debug_level);
 
-  // Common on hammer and pedal board.
-  Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port, Set.debug_level);
+  // Common on hammer and pedal board: Ethernet, test points, TFT display, etc.
+  Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port,
+  Set.ethernet_start_ind, Set.ethernet_end_ind, Set.debug_level);
   Tpl.Setup();
   Tmg.Setup(Set.adc_sample_period_microseconds);
   Tft.Setup(Set.using_display, Set.debug_level);
   Tft.HelloWorld();
 
+  // Utility functionality.
+  Utl0.Setup();
+  Utl1.Setup();
+  Utl2.Setup();
+  Utl3.Setup();
+
+  // Getting ready to run!....
   if (Set.debug_level >= 1) {
     Serial.println("Finished hammer board initialization.");
   }
 
-  Serial.println("GNU GPLv3 - for documentation, code, and design see:");
-  Serial.println("https://github.com/gzweigle/DIY-Grand-Digital-Piano");
-
-  Serial.println(".");
-  Serial.println("Welcome to Stem Piano, IPS2.X/SCA0.0 Hammer Board, by GCZ.");
-  Serial.println(".");
-
 }
 
 // Temporary debug and diagnostic stuff.
-unsigned long last_micros_ = micros();
+unsigned long display_last_micros_ = micros();
 bool serial_display_toggle = false;
+
+// After startup, wait before sending anything to MIDI
+// in order to avoid any potential startup transients.
+int startup_counter = 0;
 
 // Place declaration of all variables for DIP switches here.
 bool switch_tft;
+#if INCLUDE_CALIBRATION
+bool switch_cal_motor_enable;
+bool switch_cal_motor_direction;
+bool switch_cal_build_cal_values;
+#endif
 
 // Data from ADC.
 unsigned int raw_samples[NUM_CHANNELS];
-int hammer_position_adc_counts[NUM_CHANNELS];
+int position_adc_counts[NUM_CHANNELS];
 
 // Damper, hammer, and pedal data.
 bool damper_event[NUM_CHANNELS], hammer_event[NUM_CHANNELS];
-float damper_position[NUM_CHANNELS], hammer_position[NUM_CHANNELS], hammer_scaled[NUM_CHANNELS];
+float damper_position[NUM_CHANNELS], hammer_or_pedal_position[NUM_CHANNELS];
 float damper_velocity[NUM_CHANNELS], hammer_velocity[NUM_CHANNELS];
 
-// Velocity scaling.
-float vscale = 1.0;
+// Data for display and also used to build the calibration tables.
+unsigned int rs0, rs1, rs2, rs3;
+
+// Data to send over Ethernet.
+// TODO - This needs some work.
+float raw_to_send[10];
 
 void loop() {
 
   // Measure every processing interval so the pickup and
-  // dropout timers update. In other places, when a switch
-  // is read, what is actually read is the internal state
-  // of timers.
+  // dropout timers update. Later, when a switch is read,
+  // what is actually read is the internal state of timers.
   SwIPS1.updatePuDoState("IPS11", "IPS12");
   SwIPS2.updatePuDoState("IPS21", "IPS22");
   SwSCA1.updatePuDoState("SCA11", "SCA12");
   SwSCA2.updatePuDoState("SCA21", "SCA22");
 
-  // Read all switch values in one place so can keep track of them.
-  switch_tft = SwIPS2.read_switch_1();  // TFT mode.
+  // Read all switch inputs.
+  switch_tft = SwIPS2.read_switch_1();
+  #if INCLUDE_CALIBRATION
+  switch_cal_motor_enable = SwIPS1.read_switch_1();
+  switch_cal_motor_direction = SwIPS1.read_switch_2(); 
+  switch_cal_build_cal_values = SwIPS2.read_switch_2();
+  #endif
 
   // When the TFT is operational, turn off the alorithms that
   // could generate MIDI output and slow down the sampling.
@@ -176,125 +242,167 @@ void loop() {
     Tmg.ResetInterval(Set.adc_sample_period_microseconds);
   }
 
+  // For now, using the same board for creating the calibration values,
+  // as use for runtime. The advantage is being able to include the full
+  // front end analog processing, all the way to the Teensy for each
+  // channel. However, his probably is not necessary and so may create
+  // a separate software program for the creation of calibration values.
+  if (Set.use_board_to_generate_calibration_values_ == true) {
+    #if INCLUDE_CALIBRATION
+    CalB.BuildCalibrationTables(switch_cal_motor_enable, switch_cal_motor_direction,
+    switch_cal_build_cal_values, rs0, rs1);
+    #endif
+  }
+
   // This if statement determines the sample rate.
+  // Everything below in this file runs at the sample rate.
   if (Tmg.AllowProcessing() == true) {
-    Tpl.SetTp8(true);
+
+    Tpl.SetTp8(true); // Front left test point asserts during processing.
     
     // Get all data: local hammer (ADC), remote damper (board-to-board) data,
-    // and local pedals (also from ADC data).
+    // and local pedals (also from ADC data). Place in raw_samples[NUM_CHANNELS].
     Adc.GetNewAdcValues(raw_samples);
 
     // Reorder the back row.
-    int tmp;
-    for (int ind = 0; ind < 4; ind++) {
-      for (int grp = 0; grp < NUM_CHANNELS; grp += 16) {
-        tmp = raw_samples[ind + grp];
-        raw_samples[ind + grp] = raw_samples[7-ind + grp];
-        raw_samples[7-ind + grp] = tmp;
-      }
-    }
+    Adc.ReorderAdcValues(raw_samples);
 
-    Adc.NormalizeAdcValues(hammer_position_adc_counts, hammer_position, raw_samples);
-    Gain.AutomaticGainControl(hammer_scaled, hammer_position);
+    // Undo sensor nonlinearity and, optionally, mechanical tolerances.
+    #if INCLUDE_CALIBRATION
+    CalR.Calibrate(raw_samples);
+    #endif
 
+    // Normalize the ADC values.
+    Adc.NormalizeAdcValues(position_adc_counts, hammer_or_pedal_position, raw_samples);
+
+    // Zero out the signal from any unconnected pins to avoid noise
+    // or anything else causing an unwanted piano note to play.
     for (int k = 0; k < NUM_CHANNELS; k++) {
       if (Set.connected_channel[k] == false) {
-        hammer_position_adc_counts[k] = 0;
-        hammer_scaled[k] = 0.0;
+        position_adc_counts[k] = 0;
+        hammer_or_pedal_position[k] = 0.0;
       }
     }
 
+    // Select source for damper signals.
     if (Set.connected_to_remote_damper_board == true) {
       // There exists a damper board so use remote data from the damper board.
       B2B.GetDamperData(damper_position);
       for (int k = 0; k < NUM_CHANNELS; k++) {
         if (Set.using_hammer_to_estimate_damper[k] == true) {
-          damper_position[k] = hammer_scaled[k];
+          damper_position[k] = hammer_or_pedal_position[k];
         }
       }
     }
     else {
       // No external damper board.
       // Use the hammer position as an estimate of the damper position.
-      for (int i = 0; i < NUM_CHANNELS; i++)
-        damper_position[i] = hammer_scaled[i];
+      for (int k = 0; k < NUM_CHANNELS; k++)
+        damper_position[k] = hammer_or_pedal_position[k];
     }
 
-    // From data, process hammer, damper, and pedal data.
+    // Process hammer, damper, and pedal data.
     // For hammer and damper get an event boolean flag and velocity.
     // For pedal get the state of the pedal.
     DspD.GetDamperEventData(damper_event, damper_velocity, damper_position);
-    DspH.GetHammerEventData(hammer_event, hammer_velocity, hammer_scaled);
-    DspP.UpdatePedalState(hammer_scaled);
+    DspH.GetHammerEventData(hammer_event, hammer_velocity, hammer_or_pedal_position);
+    DspP.UpdatePedalState(hammer_or_pedal_position);
 
-    if (SwSCA1.read_switch_1() == true) {
-      vscale = 0.01;
-    }
-    else if (SwSCA1.read_switch_2() == true) {
-      vscale = 3.0;
-    }
-    else if (SwSCA2.read_switch_1() == true) {
-      vscale = 4.0;
-    }
-    else if (SwSCA2.read_switch_2() == true) {
-      vscale = 5.0;
+    // Adjust velocity. Probably not needed in the future.
+    Gain.AutomaticGainControl(damper_velocity, damper_event);
+    Gain.AutomaticGainControl(hammer_velocity, hammer_event);
+
+    // Sending data over MIDI.
+    if (startup_counter < Set.startup_counter_value) {
+      startup_counter++;
     }
     else {
-      vscale = 1.0;
-    }
-    for (int key = 0; key < 88; key++) {
-      if (damper_event[key] == true) {
-        damper_velocity[key] *= vscale;
-        if (damper_velocity[key] > 1.0) {
-          if (Set.debug_level >= 1) {
-            Serial.print("damper ");
-            Serial.print(key);
-            Serial.print(" hit limit, orig velocity was ");
-            Serial.println(damper_velocity[key] / vscale);
-          }
-          damper_velocity[key] = 1.0;
-        }
-      }
-      if (hammer_event[key] == true) {
-        hammer_velocity[key] *= vscale;
-        if (hammer_velocity[key] > 1.0) {
-          if (Set.debug_level >= 1) {
-            Serial.print("hammer ");
-            Serial.print(key);
-            Serial.print(" hit limit, orig velocity was ");
-            Serial.println(hammer_velocity[key] / vscale);
-          }
-          hammer_velocity[key] = 1.0;
-        }
-      }
+      Midi.SendNoteOn(hammer_event, hammer_velocity);
+      Midi.SendNoteOff(damper_event, damper_velocity);
+      Midi.SendPedal(&DspP);
+
     }
 
-    // Sending data over MIDI and Ethernet.
-    Midi.SendNoteOn(hammer_event, hammer_velocity);
-    Midi.SendNoteOff(damper_event, damper_velocity);
-    Midi.SendPedal(&DspP);
-    Eth.SendPianoPacket(hammer_scaled[32],
-                        hammer_scaled[33],
-                        hammer_scaled[34],
-                        hammer_scaled[35],
-                        hammer_scaled[36],
-                        hammer_scaled[37],
-                        hammer_scaled[38],
-                        hammer_scaled[39]);
+    // Send data over Ethernet. This needs work.
+    raw_to_send[0] = hammer_or_pedal_position[22];
+    raw_to_send[1] = hammer_or_pedal_position[24];
+    raw_to_send[2] = hammer_or_pedal_position[26];
+    raw_to_send[3] = hammer_or_pedal_position[27];
+    raw_to_send[4] = hammer_or_pedal_position[29];
+    raw_to_send[5] = hammer_or_pedal_position[31];
+    raw_to_send[6] = hammer_or_pedal_position[32];
+    raw_to_send[7] = hammer_or_pedal_position[34];
+    raw_to_send[8] = hammer_or_pedal_position[36];
+    raw_to_send[9] = hammer_or_pedal_position[38];
+    Eth.SendPianoPacket(raw_to_send);
 
     // Run the TFT display.
-    Tft.Display(switch_tft, hammer_scaled, damper_position);
+    Tft.Display(switch_tft, hammer_or_pedal_position, damper_position);
 
-    /////////////////
-    // Temporary debug and diagnostic stuff.
-    // Flash all the LED to make sure they are working.
-    // Except tp8 and tp9 as they are used elsewhere.
-    if (micros() - last_micros_ > Set.serial_display_interval) {
-      last_micros_ = micros();
+    // Filter data to be displayed and also that is used for
+    // generating the calibration tables. Note that rs* is
+    // not used until next processing interval (above) and
+    // that is ok since latency does not matter for
+    // generating the calibration tables.
+    rs0 = Utl0.boxcarFilterUInts(position_adc_counts[0]);
+    rs1 = Utl1.boxcarFilterUInts(position_adc_counts[1]);
+    rs2 = Utl2.boxcarFilterUInts(position_adc_counts[2]);
+    rs3 = Utl3.boxcarFilterUInts(position_adc_counts[3]);
+
+
+
+    /////////////////////////////////////////////////
+    // Debug and display information.
+    // Not critical for the piano.
+    /////////////////////////////////////////////////
+
+    // Only set Tp* if not calibrating because these pins
+    // are used by the calibration to control the motors.
+    if (Set.use_board_to_generate_calibration_values_ == false) {
+
+      bool found;
+
+      // Turn on LED if any key is above strike thresold threshold.
+      found = false;
+      for (int k = 0; k < NUM_NOTES; k++) {
+        if (hammer_or_pedal_position[k] > Set.damper_threshold_using_hammer) {
+          Tpl.SetTp9(true);
+          found = true;
+          break;
+        }
+      }
+      if (found == false)
+        Tpl.SetTp9(false);
+
+      // Turn on LED if any key is above damper threshold.
+      found = false;
+      for (int k = 0; k < NUM_NOTES; k++) {
+        if (hammer_or_pedal_position[k] > Set.strike_threshold) {
+          Tpl.SetTp10(true);
+          found = true;
+          break;
+        }
+      }
+      if (found == false)
+        Tpl.SetTp10(false);
+
+      // Turn on LED is a pedal is pressed.
+      if (DspP.GetSustainCrossedUpThreshold() || 
+      DspP.GetSostenutoCrossedUpThreshold() ||
+      DspP.GetUnaCordaCrossedUpThreshold()) {
+        Tpl.SetTp11(false);
+      }
+      else if (DspP.GetSustainCrossedDownThreshold() || 
+      DspP.GetSostenutoCrossedDownThreshold() ||
+      DspP.GetUnaCordaCrossedDownThreshold()) {
+        Tpl.SetTp11(true);
+      }
+    }
+
+    if (micros() - display_last_micros_ > Set.serial_display_interval_micro) {
+      display_last_micros_ = micros();
       if (serial_display_toggle == true) {
         serial_display_toggle = false;
-        Tpl.SetTp10(false);
-        Tpl.SetTp11(true);
         Tpl.SetLowerRightLED(false);
         Tpl.SetScaLedL(false);
         Tpl.SetScaLedR(false);
@@ -304,22 +412,12 @@ void loop() {
         serial_display_toggle = true;
         if (Set.debug_level >= 1) {
           Serial.print("Hammer Board ");
-          if (Set.board_bringup == true) {
-            Serial.print(" h24="); Serial.print(hammer_scaled[24]);
-            Serial.print(" h25="); Serial.print(hammer_scaled[25]);
-            Serial.print(" d24="); Serial.print(damper_position[24]);
-            Serial.print(" d25="); Serial.print(damper_position[25]);
-          }
-          else
-          {
-            Serial.print(" d31="); Serial.print(damper_position[31]);
-            Serial.print(" h31="); Serial.print(hammer_position[31]);
-            Serial.print(" hs31="); Serial.print(hammer_scaled[31]);
-          }
+          Serial.print(" r0="); Serial.print(rs0);
+          Serial.print(" r1="); Serial.print(rs1);
+          Serial.print(" r2="); Serial.print(rs2);
+          Serial.print(" r3="); Serial.print(rs3);
           Serial.println("");
         }
-        Tpl.SetTp10(true);
-        Tpl.SetTp11(false);
         Tpl.SetLowerRightLED(true);
         Tpl.SetScaLedL(true);
         Tpl.SetScaLedR(true);
