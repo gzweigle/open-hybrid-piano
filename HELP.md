@@ -50,6 +50,8 @@ If the Teensy is socketed, check if it was accidentally installed rotated 180 de
 
 Some header files include code that #define out functionality. Check the #defines in header files (for example stem_piano_ips2.h) to see if this happening.
 
+Some boards can be put into a special modes for TFT display. In these modes, notes may not play. Check the DIP switch positions.
+
 A buffer overflow in the firmware can lock-up the board. Check any changes to firmware that memory access is staying in proper ranges.
 
 If the Ethernet is not physically connected, the firmware may hang while trying to initialize the Ethernet. Try commenting out the Ethernet initialization code or try connecting an Ethernet cable to the board.
@@ -77,6 +79,7 @@ No sound:
 
 Very quiet sound:
 * Check the physical distance from the hammer shank or damper to its sensor.
+* If the shank wood is not very reflective place white stickers on each shank, under the sensor location.
 * Set the debug level (for example see stem_piano_ips2.h) to its maximum value. Open a serial port in Arduino software while the piano is running. Look at the volume level printed for MIDI when press a key. If it is small then the problem is with the piano. If it is large then the problem is with equipment connected to the piano.
 
 Very loud sounds:
@@ -91,8 +94,9 @@ Uneven piano dynamics
 * For best dynamics, the piano action regulation should be to the hammer stop bar and sensors.
 
 Random dropped or sounding notes
-* Look at the comments around settings in the settings file and consider making changes.
 * External light sources on the sensors can cause the sensors to get false signals. Try shading the sensors from any external light sources.
+* Check that the wires are correctly connected to the sensor boards.
+* Look at the comments around settings in the settings file and consider making changes.
 
 Note repetition is erratic
 * Look at the comments around settings in the settings file and consider making changes.
@@ -132,6 +136,10 @@ Pressing a piano key causes a pedal function to activate
 
 Sustain, sostenuto, or una corda do not release
 * Look at the comments around settings in the settings file and consider making changes.
+* If some notes sustain after release and some notes do not sustain at all, this means the sensor physical placement has too much variation from note-to-note.
+
+## Debugging
+* When a large amount of data is streamed to the serial monitor, it can buffer and result in large latencies. If the debug information in serial monitor does not match what is expected, this could be the cause. Try rebooting.
 
 ## Ethernet
 
@@ -174,10 +182,7 @@ TFT SD card does not work
 
 ## Board 2 Board Communication
 
-If the Can bus is not working, check the soldering.
-
-Check Can bus wire connection match between hammer and damper boards.
-
-Make sure both circuit boards are powered up and operating correctly.
-
-Check that the Can bus integrated circuit is installed with pin 1 matching the * printed on schematic.
+* If the Can bus is not working, check the soldering.
+* Check Can bus wire connection match between hammer and damper boards.
+* Make sure both circuit boards are powered up and operating correctly.
+* Check that the Can bus integrated circuit is installed with pin 1 matching the * printed on schematic.

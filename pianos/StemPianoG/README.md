@@ -4,6 +4,8 @@ The first release of Stem Piano is the Model G.
 
 If you build a piano, please share about it in the Show & Tell Discussions of this repository.
 
+Detailed step-by-step build instructions: [build_instructions_0_stem_piano_g.md](build_instructions_0_stem_piano_g.md)
+
 ## Features
 
 * Works on grand and upright pianos.
@@ -78,7 +80,7 @@ Eighty-eight (or optionally more) HPS sensor boards are required, one for each h
 
 It is also possible to use other sensors, which is why these HPS boards are listed as optional. However, some form of sensor is required.
 
-The sensor boards must output an analog value in range [0, ..., 3.3] volts when the hammer or damper is at minimum and maximum position respectively. It is ok to send a value less than 3.3 V, such as 3.0 V or even lower. Lower voltages could require adjusting the settings in settings file.
+The sensor boards must output an analog value in range [0, ..., 3.3] volts when the hammer or damper is furthest-from and closest-to the sensor respectively. It is ok to send a value less than 3.3 V, such as 3.0 V or even lower. Lower voltages could require adjusting the settings in settings file.
 
 The maximum allowable current draw of each sensor board is 15 mA.
 
@@ -108,7 +110,7 @@ The IPS board includes an optional external +5V supply connection. The external 
 ### Hammer Connections
 The following figures show the top of the IPS mainboard. This is where the sensor connectors are located.
 
-Hammers are numbered starting at A0 (0), through C8 (87) in the first figure. Connect each set of three pins (power, ground, and signal) to the same three pins on each of the 88 sensors boards.
+Hammers are numbered starting at piano note A0 (key number 0), through piano note C8 (key number 87) in the first figure. Connect each set of three pins (power, ground, and signal) to the same three pins on each of the 88 sensors boards.
 ![spg_hammer_connections](hammer_connections.png)
 ### Damper Connections
 Damper keys are numbered starting at A0 (0), through C8 (87).
