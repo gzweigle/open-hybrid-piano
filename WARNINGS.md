@@ -2,13 +2,11 @@
 
 The warnings below may be repeated or described in more detail elsewhere in the repo. It cannot be guaranteed, but it is the intent that this *WARNINGS.md* file contains a high-level superset of all warnings.
 
-## Project Is Not Done
+## Project is Active
 
-This is an active project.
+New pianos, features, capabilities, and enhancements could be added in the future. These changes could impact the hardware, firmware, software, or the mechanical structure.
 
-Please expect changes.
-
-The hardware could require changes for the piano to be useful. The design could change. The firmware and software could have bugs. New pianos, features, capabilities, and enhancements could be added in the future.
+See [STATUS.md](./STATUS.md) for the project state.
 
 ## Experience
 
