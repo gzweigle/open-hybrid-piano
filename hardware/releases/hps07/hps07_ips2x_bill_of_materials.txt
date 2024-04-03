@@ -2,6 +2,6 @@ Label,   Description,           Package,    Part Number,          Required?,    
 -,       HPS 0.7 circuit board, -,          -,                    Yes,           1.00,        -
 RV0,     Trimmer, 200 ohm,      -,          3224X-1-201E,         Yes,           5.00,        -
 R1,      50 ohm resistor,       0805,       CRCW080550R0FKTA,     Yes,           0.25,        0.125W. 5% tolerance or better.
-R2,      5600 ohm resistor,     0805,       ERA-6AEB4121V,        Yes,           0.25,        0.125W. 5% tolerance or better.
+R2,      4220 ohm resistor,     0805,       ERA-6AEB4221V,        Yes,           0.25,        0.125W. 1% tolerance or better.
 U1,      CNY70 optical sensor,  -,          CNY70,                Yes,           1.00,        -
 J0,      1x3 pin male 0.1in,    -,          -,                    Yes,           0.06,        -
