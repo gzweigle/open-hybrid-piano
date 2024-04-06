@@ -6,9 +6,13 @@ The Stem Piano G hardware and firmware in the repository works and is a very pla
 
 The action frame and sensor mechanical system, as presently implemented, causes some note-to-note dynamics variation. This is unrelated to the firmware, software, or circuit boards.
 
-Nonlinearity of the CNY-70 sensor is not yet compensated.
+Documentation, code, and hardware for calibrating the CNY-70 sensor nonlinearity and note-to-note dyanamics variation is not yet posted.
 
 ## Major Historical Milestones
+
+### April 6, 2024 - Build Instructions
+
+Detailed step-by-step design and build instructions for *stem piano g*.
 
 ### November 26, 2023 - Open Source Hybrid Piano, Digital Architecture
 
