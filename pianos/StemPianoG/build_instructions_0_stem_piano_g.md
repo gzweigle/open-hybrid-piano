@@ -10,7 +10,7 @@ For option with no separate damper board.
 * Get familiar with components such as the Teensy, TFT display, MIDI, Ethernet, etc.
 * Have some knowledge of Arduino project concepts.
 * Have some knowledge of electronics projects.
-* Could be helpful to watch relevant historical YouTube videos [https://www.youtube.com/@gzpiano88](https://www.youtube.com/@gzpiano88)
+* Could be helpful to watch relevant historical YouTube videos https://www.youtube.com/@gzpiano88. Use for general guidance, as some videos may be for older designs.
 * Attend Juilliard, Curtis Institute of Music, or Berklee College of Music for eight years and get a PhD in piano.
 
 ## (1) Manufacture The Circuit Boards
@@ -148,7 +148,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 * Use the Arduino software.
 * Select Teensy 4.1 as the board in the board manager.
 * Compile the project without selecting the download step.
-* If it does not compile, see [../../../HELP.md](.././../HELP.md) file and the repository Issues list. Also, check Arduino and Teensy web pages.
+* If it does not compile, see [../../../HELP.md](.././../HELP.md) file and the repository *Issues* list. Also, check Arduino and Teensy web pages.
 * If it does compile, the boards are now ready to install firmware.
 
 ## (4) Test The Firmware and Hardware Together
@@ -164,7 +164,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 * For simple initial test, connect a single HPS board to the IPS board.
 * Each HPS board is marked with a plus (+) symbol, a minus (-) symbol, and an exclamation point (!) symbol.
 * The pins on the IPS board are market with a "3.3V" symbol, a "gnd" symbol, and a "in" symbol.
-* Select the triplet of pins on the IPS board that are closest to the +5V power input and connect (+) to "3.3V", connect (-) to "gnd", and connect (!) to "in". These pins are for the lowest note on a piano, which is A0. It is data for index 0 in the firmware.
+* Select the triplet of pins on the IPS board that are closest to the +5V power input and connect (+) to "3.3V", connect (-) to "gnd", and connect (!) to "in". The connection in this initial test is for the lowest note on a piano, A0. It is data index 0 in the firmware.
 
 ### (4.C) Connect USB to Teensy and power up
 
@@ -173,7 +173,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 * The IPS, SCA, and a single HPS board are now powered!
 * If LED are installed, they should begin blinking.
 * Optionally measure the voltage at the 3.3V pin on lower right of board with a multimeter to check that it reads 3.3 volts.
-* If LE are not blinking or no voltage is measured, disconnect USB cable from computer and see [../../../HELP.md](.././../HELP.md) file and the repository *Issues* list for help.
+* If no LED are not blinking or no voltage is measured, disconnect USB cable from computer and see the [../../../HELP.md](.././../HELP.md) file and also the repository *Issues* list for help.
 
 ### (4.D) Download
 
@@ -183,7 +183,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 
 ### (4.E) Test it works?
 
-* Open a serial monitor in Arduino. A set of startup messages should display from the firmware running on the Teensy. If not, the problem could be with the Arduino serial connection. Or, the problem could be with the board. See [../../../HELP.md](.././../HELP.md) file and the repository Issues list.
+* Open a serial monitor in Arduino. A set of startup messages should display from the firmware running on the Teensy. If not, the problem could be with the Arduino serial connection. Or, the problem could be with the board. See the [../../../HELP.md](.././../HELP.md) file and the repository *Issues* list.
 
 * Use a rectangle of white cardboard and try to "play a note" by quickly moving the cardboard toward the CNY-70 sensor. See video on my YouTube channel at approximately the 2:00 time: [https://www.youtube.com/watch?v=NmziaIYKS1g](https://www.youtube.com/watch?v=NmziaIYKS1g).
 
@@ -199,7 +199,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 
 * Power down.
 * Connect a MIDI cable from IPS to a computer.
-* Run software on an external computer that converts MIDI to sound. Probably should first check that this is working with an existing MIDI keyboard.
+* Run software on an external computer that converts MIDI to sound. Before using with *stem piano*, check that the external software is working by using an existing MIDI keyboard or source.
 * Power up.
 * "Play the note" again. Using the cardboard. Should hear a sound.
 * Try it with a sustain pedal. Should sustain.
@@ -230,14 +230,16 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 * Use a strip of firm material to absorb the force of shank against the bar. For example, weatherstripping works ok.
 * Position the hammer stop bar horizontally as close to each hammer as possible.
 * Adjust the hammer stop bar vertically until it is approximately 1/16" above the shank drop point. So, when pressing a piano key, move the key down slowly and adjust the bar so the hammer shank does not quite hit the stop bar. Try to get an even distance for all 88 hammer shanks.
-* See video on my YouTube channel at approximately the 1:30 time: [https://www.youtube.com/watch?v=ANJI4KAolEw](https://www.youtube.com/watch?v=ANJI4KAolEw)
+* See video on my YouTube channel at approximately the 1:30 time: https://www.youtube.com/watch?v=ANJI4KAolEw
+* This one (also listed above) at the 0:50 time for shank stop bar: https://www.youtube.com/watch?v=xohaQG593e4.
 
 ### (5.D) Install a bar for the HPS sensors
 
+* See video on my YouTube channel (also listed above) at approximately the 1:00 time for sensor bar: https://www.youtube.com/watch?v=xohaQG593e4.
 * Drill 88 holes in the sensor rail. Each hole is located vertically above a hammer shank.
 * Horizontally, the hole is such that the CNY-70 on the HPS is close to the place where the shank rotates on the pin adjacent to the drop screw. The shank may get wider at this location.
 * Install all 88 HPS sensors.
-* Adjust the sensor rail up and down until the hammer shank is approximately 1 millimeter away from the sensor when at closest. If the distance is smaller than 1 millimeter, the CNY-70 response loses sensitivity.
+* Adjust the sensor rail up and down until the hammer shank is approximately the thickness of a few sheets of printer paper from the sensor when at closest. If the distance is smaller than this, the CNY-70 response loses sensitivity.
 * Good note-to-note consistency depends on the consistency of shank-to-sensor distances for each sensor. It is a good idea to spend extra time making these distances as consistent as possible. One approach is using thin paper shims when connecting the sensors to the sensor rail.
 * If the shank wood is not very reflective, place white stickers on each shank under the CNY-70 location.
 
@@ -276,7 +278,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 
 * Press a piano key. If it works, stop, eat pizza, celebrate.
 * Press all 88 piano keys. If they all work, stop, eat even more pizza, celebrate.
-* If it does not work. See the [../../../HELP.md](.././../HELP.md) file and the repository Issues list. Order lots of pizza, it's going to be a long weekend.
+* If it does not work. See the [../../../HELP.md](.././../HELP.md) file and the repository *Issues* list. Order lots of pizza, it's going to be a long weekend.
 * Because every action is a little different, here are the most likely settings in *hammer_settings.cpp* that could require adjustment:
     * *velocity_scale* - Make larger if volume is very quiet. Make smaller if volume is too loud.
     * *damper_threshold_using_hammer* - Make larger if notes sustain after key release. Make smaller if notes do not sustain while a piano key is pushed. If some notes sustain after release and some notes do not sustain at all, this means the sensor physical placement has too much variation from note-to-note.

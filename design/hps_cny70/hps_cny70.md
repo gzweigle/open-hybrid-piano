@@ -108,7 +108,6 @@ Unfortunately, each CNY-70 exhibits a slightly different response for the same v
 #### VO Too Large
 
 *IMPORTANT* - In general, it is better to select R2 too small than too large (similarly it is better for too large R1 than too small). A value of R2 too small makes VO too small and that could cause problems described above. However, these problems are fixable with firmware. However, if R2 is too large (similarly R1 too small), the output voltage VO clips. The firmware cannot fix clipping because the signal is distorted. If the signal clips, fix it in hardware either by:
-* Correct by using a version of HPS with VR, and adjust VR larger to decrease VO until VO = VR when the *distance* is at its smallest value.
 * Correct by using a version of HPS with VR, and adjust VR later to decrease VO until VO = VR when the *distance* is at its smallest value. See [../../hardware/releases/hps07/README.md](../../hardware/releases/hps07/README.md) for directions on adjusting VR.
 * Test many CNY-70 and throw away the ones with VO > VR when in the HPS circuit configuration.
 * Using a less reflective surface, such as adding a sticker or paint with less reflectivity.
@@ -121,7 +120,7 @@ Before assembling a *stem piano*, it is recommended to test each HPS board to ch
 
 See these videos for examples of process:
 * https://www.youtube.com/watch?v=uJTaKLZaluc at approximately the 2:20 time mark.
-* https://www.youtube.com/watch?v=w0TpXvcRCsM at approximately the 1:15 time mark.
+* https://www.youtube.com/watch?v=w0TpXvcRCsM at approximately the 1:15 time mark. The target output voltage in the video is for a first generation architecture. Other architectures use other maximum voltage values. Check instructions for each piano to find the correct maximum output voltage for that piano.
 
 Options:
 
@@ -133,7 +132,7 @@ Options:
 
 ## Other Considerations
 
-According to [2], a smaller value of R2 results in a larger bandwidth. R2 = 2000 ohms is approximately 10KHz bandwidth. Tests show R2 < 5000 work ok.
+According to [2], a smaller value of R2 results in a larger bandwidth. R2 = 2000 ohms is approximately 10KHz bandwidth. Tests show R2 < 5000 ohms work ok.
 
 The CNY-70 output voltage degrades with time [2]. Expect 10% loss at 1,000 hours and 20% loss at 10,000 hours. However, at normal room temperature the lifetime is longer [2]. If after many years the piano does not play as well, check the voltage VO of each CNY-70 with a multimeter or oscilloscope.
 

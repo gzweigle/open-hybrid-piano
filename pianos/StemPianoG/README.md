@@ -137,7 +137,7 @@ Examples of mechanical configurations. Also, wiring suggestions are in this dire
 
 The bill of materials file in each *hardware/* subdirectory lists all parts required to build the boards.
 
-For PCB fabrication, use the gerber files in each *hardware/* subdirectory. Often a manufacturer will request putting the gerber files in a single .zip directory.
+Send the gerber files in each *hardware/* subdirectory to the manufacturer. Often a manufacturer will request putting the gerber files in a single .zip directory.
 
 ## Hardware Build and Assembly
 
