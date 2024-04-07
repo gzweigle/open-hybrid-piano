@@ -219,11 +219,12 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 ### (5.A) Acquire a piano action.
 
 ### (5.B) Build a frame that holds two bars
+* One is for the hammer stop and one is for the sensors.
+* Both must adjust vertically and horizontally.
 * See the following videos on my YouTube channel for examples:
     * https://www.youtube.com/watch?v=xohaQG593e4
     * https://www.youtube.com/watch?v=NmziaIYKS1g
     * https://www.youtube.com/watch?v=5U7LvOMth28 (audio accidentally recorded single-channel).
-* Both bars must be adjustable vertically and horizontally.
 
 ### (5.C) Install a heavy bar for the hammer stop
 
@@ -235,8 +236,9 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 
 ### (5.D) Install a bar for the HPS sensors
 
-* See video on my YouTube channel (also listed above) at approximately the 1:00 time for sensor bar: https://www.youtube.com/watch?v=xohaQG593e4.
+* See video on my YouTube channel (also listed above) at approximately the 1:00 time for sensor rail: https://www.youtube.com/watch?v=xohaQG593e4.
 * Drill 88 holes in the sensor rail. Each hole is located vertically above a hammer shank.
+* If holes are precise, they can match the machine screw diameter. Otherwise, make holes larger to give room for HPS horizontal adjustment.
 * Horizontally, the hole is such that the CNY-70 on the HPS is close to the place where the shank rotates on the pin adjacent to the drop screw. The shank may get wider at this location.
 * Install all 88 HPS sensors. The nut is on top. If put nut on bottom, it could hit the piano hammer shank.
 * Adjust the sensor rail up and down until the hammer shank is at least 0.5 millimeters from the CNY-70 sensor when hammer hits the stop bar. If the distance is smaller than this, the CNY-70 response loses sensitivity.

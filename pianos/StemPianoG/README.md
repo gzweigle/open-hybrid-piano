@@ -89,9 +89,17 @@ For an explanation of the pedals and pedal requirements, see video on my YouTube
 
 A strong table is required. For proper playing height, select a table that positions *stem piano* at the same height as an acoustic piano.
 
+### Sensor Rail
+
+L-shaped aluminum solid angle. 1 inch each for the two sides and 1/8 inch thick. Thickness prevents sag in middle. Length is at least piano action width.
+
+### Hammer Stop Bar
+
+Steel square tube. 3/4 inch sides and 1/16 inch thick. Length is at least piano action width.
+
 ### HPS to IPS Connecting Wires
 
-Each connection needs 3 wires. Hammer sensors require 3*88 = 264 wires and damper sensors require another 264 wires. As an example of connection approach, see video on my YouTube chanenl https://www.youtube.com/watch?v=gNeLMGaxmG0 at approximately the 1:40 time mark.
+Each connection needs 3 wires. Hammer sensors require 3 wires * 88 keys = 264 wires and damper sensors require another 264 wires. As an example of connection approach, see video on my YouTube chanenl https://www.youtube.com/watch?v=gNeLMGaxmG0 at approximately the 1:40 time mark.
 
 ### HPS Fasteners
 
