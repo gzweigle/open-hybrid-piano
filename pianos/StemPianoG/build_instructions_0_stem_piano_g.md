@@ -10,6 +10,7 @@ For option with no separate damper board.
 * Get familiar with components such as the Teensy, TFT display, MIDI, Ethernet, etc.
 * Have some knowledge of Arduino project concepts.
 * Have some knowledge of electronics projects.
+* Review the *stem piano* firmware, hardware and software. Review the mechanical design. Make sure it will do what you want it to do. Check license files. This is all 'as is'.
 * Could be helpful to watch relevant historical YouTube videos https://www.youtube.com/@gzpiano88. Use for general guidance, as some videos may be for older designs.
 * Attend Juilliard, Curtis Institute of Music, or Berklee College of Music for eight years and get a PhD in piano.
 
