@@ -77,7 +77,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 * Parts File: [../../hardware/releases/ips20/ips20_bill_of_materials.txt/](../../hardware/releases/ips20/ips20_bill_of_materials.txt/)
 
 * Ethernet is optional. If using Ethernet:
-  * The 2x3 pin 2mm header is hand soldered onto the Teensy. See video on my YouTube channel for an example at approximately the 3:00 time: https://www.youtube.com/watch?v=M1_228-ClXM.
+  * The 2x3 pin 2mm header is hand soldered onto the Teensy. See *stem piano* video for an example at approximately the 3:00 time: https://www.youtube.com/watch?v=M1_228-ClXM.
   * One of the two 2x3 pin 2mm socket headers is not soldered in place. It is stacked on the other. See same video for example.
   * If unsure about these steps, it is ok to skip Ethernet. *Stem piano* works without Ethernet. Can add later anytime.
 
@@ -85,13 +85,13 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 
 * Parts File: [../../hardware/releases/sca00/sca00_bill_of_materials.txt/](../../hardware/releases/sca00/sca00_bill_of_materials.txt/)
 
-* The pin headers are on the bottom of the board. The headers are for connecting to the IPS. See video on my YouTube channel at approximately the 1:40 time https://www.youtube.com/watch?v=NmziaIYKS1g
+* The pin headers are on the bottom of the board. The headers are for connecting to the IPS. See *stem piano* video at approximately the 1:40 time https://www.youtube.com/watch?v=NmziaIYKS1g
 
 ### (2.D) Solder parts on the 88 HPS boards
 
 * 88 boards are required.
 
-* Make sure the CNY-70 and pin headers are oriented properly with respect to top and bottom of the boards. See video on my YouTube channel at approximately the 2:45 time https://www.youtube.com/watch?v=C9174TC4kLs.
+* Make sure the CNY-70 and pin headers are oriented properly with respect to top and bottom of the boards. See *stem piano* video at approximately the 2:45 time https://www.youtube.com/watch?v=C9174TC4kLs.
 
 * Parts File without an adjustable resistor and using through-hole components: [../../hardware/releases/hps04/hps04_ips2x_bill_of_materials.txt/](../../hardware/releases/hps04/hps04_ips2x_bill_of_materials.txt/)
 
@@ -101,7 +101,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 
 * After boards arrive from assembly.
 * Connect the SCA board to the IPS board. It should snap into place.
-* See video on my YouTube channel at approximately the 1:45 time for an example: [https://www.youtube.com/watch?v=NmziaIYKS1g](https://www.youtube.com/watch?v=NmziaIYKS1g).
+* See *stem piano* video at approximately the 1:45 time for an example: [https://www.youtube.com/watch?v=NmziaIYKS1g](https://www.youtube.com/watch?v=NmziaIYKS1g).
 
 ### (2.F) Install the Teensy 4.1
 
@@ -186,7 +186,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 
 * Open a serial monitor in Arduino. A set of startup messages should display from the firmware running on the Teensy. If not, the problem could be with the Arduino serial connection. Or, the problem could be with the board. See the [../../../HELP.md](.././../HELP.md) file and the repository *Issues* list.
 
-* Use a rectangle of white cardboard and try to "play a note" by quickly moving the cardboard toward the CNY-70 sensor. See video on my YouTube channel at approximately the 2:00 time: [https://www.youtube.com/watch?v=NmziaIYKS1g](https://www.youtube.com/watch?v=NmziaIYKS1g).
+* Use a rectangle of white cardboard and try to "play a note" by quickly moving the cardboard toward the CNY-70 sensor. See *stem piano* video at approximately the 2:00 time: [https://www.youtube.com/watch?v=NmziaIYKS1g](https://www.youtube.com/watch?v=NmziaIYKS1g).
 
 * A message should appear in the Arduino serial monitor that a note was sent to MIDI.
 
@@ -207,7 +207,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 
 ### (4.G) Celebrate, just a little
 
-* If at this step, congratulations, most of the project risk is eliminated. See video on my YouTube channel at approximately the 5:20 time https://www.youtube.com/watch?v=M1_228-ClXM.
+* If at this step, congratulations, most of the project risk is eliminated. See *stem piano* video at approximately the 5:20 time https://www.youtube.com/watch?v=M1_228-ClXM.
 * To eliminate even more risk, test other HPS boards and other IPS input pins. Test several simultaneously.
 * As more HPS sensor boards are connected to the IPS board, the total current draw of the system increases. The computer probably cannot deliver sufficient current through the USB cable when the number of connected HPS boards passes a certain threshold. That threshold is computer-dependent. See below for adding the +5V cable.
 
@@ -222,7 +222,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 ### (5.B) Build a frame that holds two bars
 * One is for the hammer stop and one is for the sensors.
 * Both must adjust vertically and horizontally.
-* See the following videos on my YouTube channel for examples:
+* See the following *stem piano* videos for examples:
     * https://www.youtube.com/watch?v=xohaQG593e4
     * https://www.youtube.com/watch?v=NmziaIYKS1g
     * https://www.youtube.com/watch?v=5U7LvOMth28 (audio accidentally recorded single-channel).
@@ -232,12 +232,12 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 * Use a strip of firm material to absorb the force of shank against the bar. For example, weatherstripping works ok.
 * Position the hammer stop bar horizontally as close to each hammer as possible.
 * Adjust the hammer stop bar vertically until it is approximately 1/16" above the shank drop point. So, when pressing a piano key, move the key down slowly and adjust the bar so the hammer shank does not quite hit the stop bar. Try to get an even distance for all 88 hammer shanks.
-* See video on my YouTube channel at approximately the 1:30 time: https://www.youtube.com/watch?v=ANJI4KAolEw
+* See *stem piano* video at approximately the 1:30 time: https://www.youtube.com/watch?v=ANJI4KAolEw
 * This one (also listed above) at the 0:50 time for shank stop bar: https://www.youtube.com/watch?v=xohaQG593e4.
 
 ### (5.D) Install a bar for the HPS sensors
 
-* See video on my YouTube channel (also listed above) at approximately the 1:00 time for sensor rail: https://www.youtube.com/watch?v=xohaQG593e4.
+* See *stem piano* video (also listed above) at approximately the 1:00 time for sensor rail: https://www.youtube.com/watch?v=xohaQG593e4.
 * Drill 88 holes in the sensor rail. Each hole is located vertically above a hammer shank.
 * If holes are precise, they can match the machine screw diameter. Otherwise, make holes larger to give room for HPS horizontal adjustment.
 * Horizontally, the hole is such that the CNY-70 on the HPS is close to the place where the shank rotates on the pin adjacent to the drop screw. The shank may get wider at this location.
@@ -257,7 +257,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 
 * Wire all 88 sensors to the pin headers on the IPS mainboard.
 * See the [README.md](README.md) file in this directory for connection instructions.
-* Connecting all the sensors is very time consuming. A total of 3*88 = 264 wires are required. Gluing into sets makes the connection process much easier. See video on my YouTube channel at approximately the 1:40 time https://www.youtube.com/watch?v=gNeLMGaxmG0.
+* Connecting all the sensors is very time consuming. A total of 3*88 = 264 wires are required. Gluing into sets makes the connection process much easier. See *stem piano* video at approximately the 1:40 time https://www.youtube.com/watch?v=gNeLMGaxmG0.
 
 ### (6.B) Connect a sustain pedal
 

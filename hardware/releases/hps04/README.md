@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Originally, the HPS PCB was for hammers.  However, the board also works for dampers.  Not changing the name because many circuit boards have already been built.
+Originally, the HPS PCB was for hammers. However, the board also works for dampers. Not changing the name.
 
-Version 0.4 uses fixed resistors which trades lower accuracy for lower cost.
+Version 0.4 uses fixed resistors which trades lower flexibility for lower cost.
 
 ## Features
 
@@ -17,7 +17,7 @@ Version 0.4 uses fixed resistors which trades lower accuracy for lower cost.
 * 1.5 inches long.
 * 0.4 inches wide.
 
-### Capabilties
+### Capabilities
 * CNY70 sensor.
 * Fixed resistors.
 * All resistors are through hole.
@@ -28,4 +28,10 @@ To manufacture a board, send the files in [hps04_gerber/](hps04_gerber/) to a PC
 
 Use the bill of materials file that matches the mainboard connected to the HPS.
 
-R2 sets the maximum output voltage. If the output voltage is too large, the analog-to-digital converter will clip. If the output voltage is smaller, it decreases the dynamic range. The piano will work with a lower dynamic range but may not work if the signal is clipping. Therefore, if the R2 value in bill of materials is unavailable, choose a smaller value.
+R2 sets the maximum output voltage. If the output voltage is too large, the analog-to-digital converter will clip. If the output voltage is smaller, it decreases the dynamic range. The piano works with a lower dynamic range but may not work if the signal is clipping. Therefore, if the R2 value in bill of materials is unavailable, choose a smaller value.
+
+### KiCad vs Gerbers
+
+Boards for Gerber files were fabricated and tested.
+
+KiCad files should be identical, but there is a small probability they do not match what was fabricated and tested.

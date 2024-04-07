@@ -8,12 +8,6 @@ New pianos, features, capabilities, and enhancements could be added in the futur
 
 See [STATUS.md](./STATUS.md) for the project state.
 
-## Headphone and Audio System Safety
-
-Problems with the piano (due to problems with any of mechanical, hardware, software, firmware, or anything else) could cause multiple (even all 88) notes to play at the maximum MIDI volume level unexpectedly. This could happen even if the piano is not in use.
-
-Before playing, powering up, or using the piano in any way, please verify with another MIDI program as source that volume and all other parameters are acceptable in the event of any piano problem, including as described above.
-
 ## Experience
 
 It is recommended to have some experience with software and electronics projects. Or learn using internet and other resources.
@@ -21,6 +15,12 @@ It is recommended to have some experience with software and electronics projects
 ## Known Issues
 
 Take a look at any pending hardware changes or known problems in [Issues](https://github.com/gzweigle/DIY-Grand-Digital-Piano/issues) before building boards or playing the piano.
+
+## Headphone and Audio System Safety
+
+Although unlikely, problems or bugs with the piano could cause multiple (even all 88) notes to play at the maximum MIDI volume level unexpectedly. This could happen even if the piano is not in use. See example from a *stem piano* video at approximately the 3:00 minute mark: https://www.youtube.com/watch?v=gNeLMGaxmG0.
+
+Before playing, powering up, or using the piano in any way, please verify with another MIDI program as source that volume and all other parameters are acceptable in the event of any piano problem, including as described above.
 
 ## Teensy USB and External Power
 

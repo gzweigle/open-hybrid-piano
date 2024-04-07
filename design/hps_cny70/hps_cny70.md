@@ -103,12 +103,15 @@ Unfortunately, each CNY-70 exhibits a slightly different response for the same v
 * Correct by firmware calibration in the Teensy. Measure the output and multiply by a constant to increase the floating-point value.
 * Correct by using a version of HPS with VR, and adjust VR smaller to increase VO until VO = VR when the *distance* is at its smallest value. See [../../hardware/releases/hps07/README.md](../../hardware/releases/hps07/README.md) for directions on adjusting VR.
 * Test many CNY-70 and throw away the ones with small output voltages when in the HPS circuit configuration.
-* Use a more reflective surface. When selecting R1, RV, R2 in the bill of materials, the system was tested with a white sheet of printer paper. White printer paper has one of the highest reflective surfaces according to [2]. When the circuit boards are installed on the piano, if the *SURFACE* is the piano shank wood, it will have a lower reflectivity. Then VO is lower. If VO is too low (for example, the piano does not play at all or plays poorly), put white stickers on each piano shank or damper.  See https://www.youtube.com/watch?v=ZMxMio3L9dk at approximately 0:45 time mark for an example. Another option is white paint.
+* Use a more reflective surface. When selecting R1, RV, R2 in the bill of materials, the system was tested with a white sheet of printer paper. White printer paper has one of the highest reflective surfaces according to [2]. When the circuit boards are installed on the piano, if the *SURFACE* is the piano shank wood, it will have a lower reflectivity. Then VO is lower. If VO is too low (for example, the piano does not play at all or plays poorly), put white stickers on each piano shank or damper.  See *stem piano* video https://www.youtube.com/watch?v=ZMxMio3L9dk at approximately 0:45 time mark for an example. Another option is white paint.
 * Position the sensor rail closer vertically to the hammer or damper.
 
 #### VO Too Large
 
-*IMPORTANT* - In general, it is better to select R2 too small than too large (similarly it is better for too large R1 than too small). A value of R2 too small makes VO too small and that could cause problems described above. However, these problems are fixable with firmware. However, if R2 is too large (similarly R1 too small), the output voltage VO clips. The firmware cannot fix clipping because the signal is distorted. If the signal clips, fix it in hardware either by:
+*IMPORTANT* - In general, it is better to select R2 too small than too large (similarly it is better for too large R1 than too small). While a value of R2 too small makes VO too small and that could cause problems described above, these problems are fixable with firmware.
+
+However, if R2 is too large (similarly R1 too small), the output voltage VO clips. The firmware cannot fix clipping because the signal is distorted. If the signal clips, fix it in hardware either by:
+
 * Correct by using a version of HPS with VR, and adjust VR later to decrease VO until VO = VR when the *distance* is at its smallest value. See [../../hardware/releases/hps07/README.md](../../hardware/releases/hps07/README.md) for directions on adjusting VR.
 * Test many CNY-70 and throw away the ones with VO > VR when in the HPS circuit configuration.
 * Using a less reflective surface, such as adding a sticker or paint with less reflectivity.
@@ -120,7 +123,7 @@ To avoid clipping, the goal of resistor values in the HPS bill of materials is t
 
 Before assembling a *stem piano*, it is recommended to test each HPS board to check that VO < VR when the CNY-70 is very close to *SURFACE* and in the *stem piano* HPS circuit configuration.
 
-See these videos for examples of process:
+See these *stem piano* videos for examples of process:
 * https://www.youtube.com/watch?v=uJTaKLZaluc at approximately the 2:20 time mark.
 * https://www.youtube.com/watch?v=w0TpXvcRCsM at approximately the 1:15 time mark. The target output voltage in the video is for a first generation architecture. Other architectures use other maximum voltage values. Check instructions for each piano to find the correct maximum output voltage for that piano.
 

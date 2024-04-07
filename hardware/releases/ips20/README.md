@@ -99,13 +99,13 @@ The +5V power arrives simultaneously from two inputs:
 * An external power supply through the +5V power jack
 * An external computer through the USB at Teensy 4.1
 
-It is recommended to use an external power supply that automatically protects from short circuits, overcurrent, and other failure conditions. Or, use an external fuse. Select protection or fuse level based on current and power values from analysis below.
+Do not connect both external +5V power and USB power inputs at the same time. See the PJRC website for more information, including how to cut a Teensy 4.1 pad to avoid shorting the two power inputs together.
 
-Do not connect both power inputs at the same time. See the PJRC website for more information, including how to cut a Teensy 4.1 pad to avoid shorting the two power inputs together.
+The external power supply must automatically protect from short circuits, overcurrent, and other failure conditions. Or, use an external fuse. Select protection or fuse level based on current and power values from analysis below.
 
-The external power supply must be able to deliver 2.5 A. This nominal current value is calculated by summing all current values in sections below.
+The external power supply must be able to deliver 1.75 amps if not using a separate damper board and 3.5 amps if using a separate damper board. This value is calculated by summing all current values in sections below and by testing. See *stem piano* video at the approximate 2:20 time https://www.youtube.com/watch?v=TemXGmkoc-g
 
-A typical USB port on a computer may not be able to supply a full 2.5 A. Therefore, it is possible that the board will not be able to run all 88 keys sensors unless the board is powered by an external +5V power supply, through the +5V power jack. In this case (and in all cases when using the +5V external power), see instructions on https://www.pjrc.com website.
+A typical USB port on a computer may not be able to supply a full 3.5 A. Therefore, it is possible that the board will not be able to run all 88 keys sensors unless the board is powered by an external +5V power supply, through the +5V power jack. In this case (and in all cases when using the +5V external power), see instructions on https://www.pjrc.com website.
 
 ![ips20_5v_pcb](ips20_5v_power.png)
 
@@ -167,3 +167,9 @@ According to a Teensy 4.1 schematic on the PJRC website, there is an LDO on the 
 To manufacture a board, send the files in [ips20_gerber/](ips20_gerber/) to a PCB manufacturer.
 
 The file [ips20_bill_of_materials.txt](ips20_bill_of_materials.txt) lists the parts required.
+
+### KiCad vs Gerbers
+
+Boards for Gerber files were fabricated and tested.
+
+KiCad files should be identical, but there is a small probability they do not match what was fabricated and tested.

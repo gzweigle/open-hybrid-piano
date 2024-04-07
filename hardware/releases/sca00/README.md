@@ -65,3 +65,9 @@ Connects to Integrated Processing System (IPS) 2.X board.
 ### Manufacturing
 
 To manufacture a board, send the files in [sca00_gerber/](sca00_gerber/) to a PCB manufacturer. The file [sca00_bill_of_materials.txt](sca00_bill_of_materials.txt) lists the parts required.
+
+### KiCad vs Gerbers
+
+Boards for Gerber files were fabricated and tested.
+
+KiCad files should be identical, but there is a small probability they do not match what was fabricated and tested.

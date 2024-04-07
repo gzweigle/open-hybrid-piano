@@ -83,7 +83,7 @@ See the IPS readme file for specifications on the external power supply.
 
 ### External Damper Pedal
 
-For an explanation of the pedals and pedal requirements, see video on my YouTube channel https://www.youtube.com/watch?v=9sqkgVXceJU at approximately the 15 second time mark.
+For an explanation of the pedals and pedal requirements, see *stem piano* video https://www.youtube.com/watch?v=9sqkgVXceJU at approximately the 15 second time mark.
 
 ### Table for Action
 
@@ -99,7 +99,7 @@ Steel square tube. 3/4 inch sides and 1/16 inch thick. Length is at least piano 
 
 ### HPS to IPS Connecting Wires
 
-Each connection needs 3 wires. Hammer sensors require 3 wires * 88 keys = 264 wires and damper sensors require another 264 wires. As an example of connection approach, see video on my YouTube chanenl https://www.youtube.com/watch?v=gNeLMGaxmG0 at approximately the 1:40 time mark.
+Each connection needs 3 wires. Hammer sensors require 3 wires * 88 keys = 264 wires and damper sensors require another 264 wires. As an example of connection approach, see *stem piano* video https://www.youtube.com/watch?v=gNeLMGaxmG0 at approximately the 1:40 time mark.
 
 ### HPS Fasteners
 
