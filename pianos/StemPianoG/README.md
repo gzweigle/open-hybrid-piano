@@ -93,6 +93,12 @@ A strong table is required. For proper playing height, select a table that posit
 
 Each connection needs 3 wires. Hammer sensors require 3*88 = 264 wires and damper sensors require another 264 wires. As an example of connection approach, see video on my YouTube chanenl https://www.youtube.com/watch?v=gNeLMGaxmG0 at approximately the 1:40 time mark.
 
+### HPS Fasteners
+
+* 88 of the 6-32 x 3/8 inch machine screws if use a single washer. If use a washer on top and bottom of HPS then 6-32 x 1/2 inch machine screws.
+* 88 of the No. 6 flat washers. If use a washer on top and bottom then double this number.
+* 88 of the 6-32 hex nuts.
+
 ## Optional Components - Details
 
 Each of the following directories contains a README.md with information on how to use the component.

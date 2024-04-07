@@ -238,8 +238,8 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 * See video on my YouTube channel (also listed above) at approximately the 1:00 time for sensor bar: https://www.youtube.com/watch?v=xohaQG593e4.
 * Drill 88 holes in the sensor rail. Each hole is located vertically above a hammer shank.
 * Horizontally, the hole is such that the CNY-70 on the HPS is close to the place where the shank rotates on the pin adjacent to the drop screw. The shank may get wider at this location.
-* Install all 88 HPS sensors.
-* Adjust the sensor rail up and down until the hammer shank is approximately the thickness of a few sheets of printer paper from the sensor when at closest. If the distance is smaller than this, the CNY-70 response loses sensitivity.
+* Install all 88 HPS sensors. The nut is on top. If put nut on bottom, it could hit the piano hammer shank.
+* Adjust the sensor rail up and down until the hammer shank is at least 0.5 millimeters from the CNY-70 sensor when hammer hits the stop bar. If the distance is smaller than this, the CNY-70 response loses sensitivity.
 * Good note-to-note consistency depends on the consistency of shank-to-sensor distances for each sensor. It is a good idea to spend extra time making these distances as consistent as possible. One approach is using thin paper shims when connecting the sensors to the sensor rail.
 * If the shank wood is not very reflective, place white stickers on each shank under the CNY-70 location.
 

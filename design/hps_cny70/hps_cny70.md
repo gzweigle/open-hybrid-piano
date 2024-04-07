@@ -104,6 +104,7 @@ Unfortunately, each CNY-70 exhibits a slightly different response for the same v
 * Correct by using a version of HPS with VR, and adjust VR smaller to increase VO until VO = VR when the *distance* is at its smallest value. See [../../hardware/releases/hps07/README.md](../../hardware/releases/hps07/README.md) for directions on adjusting VR.
 * Test many CNY-70 and throw away the ones with small output voltages when in the HPS circuit configuration.
 * Use a more reflective surface. When selecting R1, RV, R2 in the bill of materials, the system was tested with a white sheet of printer paper. White printer paper has one of the highest reflective surfaces according to [2]. When the circuit boards are installed on the piano, if the *SURFACE* is the piano shank wood, it will have a lower reflectivity. Then VO is lower. If VO is too low (for example, the piano does not play at all or plays poorly), put white stickers on each piano shank or damper.  See https://www.youtube.com/watch?v=ZMxMio3L9dk at approximately 0:45 time mark for an example. Another option is white paint.
+* Position the sensor rail closer vertically to the hammer or damper.
 
 #### VO Too Large
 
@@ -111,6 +112,7 @@ Unfortunately, each CNY-70 exhibits a slightly different response for the same v
 * Correct by using a version of HPS with VR, and adjust VR later to decrease VO until VO = VR when the *distance* is at its smallest value. See [../../hardware/releases/hps07/README.md](../../hardware/releases/hps07/README.md) for directions on adjusting VR.
 * Test many CNY-70 and throw away the ones with VO > VR when in the HPS circuit configuration.
 * Using a less reflective surface, such as adding a sticker or paint with less reflectivity.
+* Position the sensor rail further away vertically from the hammer or damper.
 
 To avoid clipping, the goal of resistor values in the HPS bill of materials is that when the hammer is hitting the hammer stop bar, the output voltage VO is slightly less than VR.
 
@@ -138,7 +140,7 @@ The CNY-70 output voltage degrades with time [2]. Expect 10% loss at 1,000 hours
 
 Room lighting and ambient lighting could interfere with the CNY-70 operation [2].
 
-The output voltage VO could drop suddenly if the *distance* between CNY-70 and *SURFACE* gets very close to zero. When building the sensor bar and piano frame, position each CNY-70 so that when the hammer shank or damper is at the closest value to the CNY-70, there is at least a gap thickness of a few sheets of paper. However, as this gap gets larger, the maximum VO will decrease. So, the *distance* gap cannot be too large.
+The output voltage VO could drop suddenly if the *distance* between CNY-70 and *SURFACE* gets very close to zero. When building the sensor rail and piano frame, position each CNY-70 so that when the hammer shank or damper is at the closest *distance* to the CNY-70, there is at least a 0.5 millimeter *distance* between the CNY-70 and the hammer or damper. As this gap gets larger, the maximum VO decreases. So, the *distance* gap cannot be too large.
 
 The piano note volume consistency is sensitive to the consistency of the CNY-70 and hammer shank gap between keys.
 
