@@ -1,6 +1,6 @@
-############################################################################
-The following license applies to the contents of this mechanical/ directory.
-############################################################################
+####################################################################################
+The following license applies to anything related to mechanical or building a piano.
+####################################################################################
 
 
 CERN Open Hardware Licence Version 2 - Weakly Reciprocal

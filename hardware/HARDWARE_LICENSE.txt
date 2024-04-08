@@ -1,5 +1,5 @@
 ##########################################################################
-The following license applies to the contents of this hardware/ directory.
+The following license applies to anything hardware.
 ##########################################################################
 
 

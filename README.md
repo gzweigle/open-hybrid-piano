@@ -57,11 +57,11 @@ Real-time code running on custom hardware from *hardware/* directory.
 
 #### [hardware/](hardware/)
 
-All printed circuit boards and related parts and design. A separate open-source license for the hardware is in this directory and applies only to the contents of this *hardware/* directory.
+All printed circuit boards and related parts and design. A separate open-source license for the hardware is in this directory and applies to all hardware.
 
 #### [mechanical/](mechanical/)
 
-Anything to physically build a piano. A separate open-source license for mechanical is in this directory and applies only to the contents of this *mechanical/* directory.
+Anything to physically build a piano. A separate open-source license for mechanical is in this directory and applies to anything mechanical.
 
 #### [software/](software/)
 
