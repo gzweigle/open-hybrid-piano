@@ -173,3 +173,5 @@ The file [ips20_bill_of_materials.txt](ips20_bill_of_materials.txt) lists the pa
 Boards for Gerber files were fabricated and tested.
 
 KiCad files should be identical, but there is a small probability they do not match what was fabricated and tested.
+
+See [../../kicad_general.md](../../kicad_general.md) for information on KiCad files.

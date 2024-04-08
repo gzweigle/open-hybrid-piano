@@ -49,3 +49,5 @@ R2 sets the maximum output voltage. If the output voltage is too large, the anal
 Boards for Gerber files were fabricated and tested.
 
 KiCad files should be identical, but there is a small probability they do not match what was fabricated and tested.
+
+See [../../kicad_general.md](../../kicad_general.md) for information on KiCad files.
