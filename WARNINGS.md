@@ -18,9 +18,11 @@ Take a look at any pending hardware changes or known problems in [Issues](https:
 
 ## Headphone and Audio System Safety
 
-Although unlikely, problems or bugs with the piano could cause multiple (even all 88) notes to play at the maximum MIDI volume level unexpectedly. This could happen even if the piano is not in use. See example from a *stem piano* video at approximately the 3:00 minute mark: https://www.youtube.com/watch?v=gNeLMGaxmG0.
+An external light source can trigger the sensors and cause one or many loud notes to play. Shield the sensors from light.
 
-Before playing, powering up, or using the piano in any way, please verify with another MIDI program as source that volume and all other parameters are acceptable in the event of any piano problem, including as described above.
+Also, although unlikely, problems or bugs with the piano could cause multiple (even all 88) notes to play at the maximum MIDI volume level unexpectedly. This could happen even if the piano is not in use. See example from a *stem piano* video at approximately the 3:00 minute mark: https://www.youtube.com/watch?v=gNeLMGaxmG0.
+
+Before playing, powering up, or using the piano in any way, please verify with another MIDI program as source that volume and all other parameters are acceptable in the event of any piano problem, including as described above. Also, check for external light triggers before increasing volume.
 
 ## Teensy USB and External Power
 

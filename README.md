@@ -4,7 +4,7 @@ Also known as **stem piano**
 
 ![alt text](documentation/ips00_stem_piano_small.jpg)
 
-## How to Build Your Own Piano
+## How to Build A Hybrid Piano
 Go straight to the [pianos/](pianos/) directory!
 
 But first, please read the [WARNINGS](WARNINGS.md) and [HELP](HELP.md) files that are located in this root directory.

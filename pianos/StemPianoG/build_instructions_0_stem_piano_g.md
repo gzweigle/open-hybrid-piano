@@ -4,6 +4,8 @@ Step-by-step instructions to build a complete piano.
 
 For option with no separate damper board.
 
+These instructions start with building hardware. Another option is to start with firmware. Goto Step #3 and compile the firmware and libraries. No hardware needed. The code may even run on a breadboarded Teensy (?), if comment out the Ethernet code. Useful for getting familiar with the code. Then, return to hardware Step #0.
+
 ## (0) Prepare
 
 * Read this and other documentation (including help and warning files).

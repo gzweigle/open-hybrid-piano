@@ -125,8 +125,6 @@ void TftDisplay::HelloWorld() {
     Tft_->print("stem piano");
     Tft_->setCursor(15, 64+56);
     Tft_->print("by greg zweigle");
-    //delay(1500);
-    //Clear();
   }
 }
 
@@ -159,7 +157,7 @@ void TftDisplay::Display(bool tft_switch, const float *hp, const float *dp) {
     if (tft_switch == true) {
 
       if (tft_switch_last_ == false) {
-        HelloWorld();
+        Clear();
       }
 
       int color;
@@ -219,13 +217,11 @@ void TftDisplay::Display(bool tft_switch, const float *hp, const float *dp) {
 
     }
     else {
-      // Done with TFT so clear the screen to avoid burn-in.
-      // Clearing takes quite a bit of time, so only do this once.
-      /// TEMPORARY!!!
-      ///
-      //if (tft_switch_last_ == true || startup_ == true) {
-        //Clear();
-      //}
+      // Done with TFT so redraw the startup screen.
+      // Drawing takes quite a bit of time, so only do once.
+      if (tft_switch_last_ == true || startup_ == true) {
+        HelloWorld();
+      }
     }
     startup_ = false;
   }

@@ -28,7 +28,7 @@ For most pianos the touch screen TFT display is optional. It is added to the pro
 
 The touch screen TFT display requires installing special libraries. See the manufacturer's website for information. If the project fails to compile, try to #define out the TFT code
 
-Some touch screen TFT display SD libraries conflict with the Teensy SD library. Details are found in the build instructions elsewhere in this repo. If the project fails to compile, try to #define out the TFT code.
+Some touch screen TFT display SD libraries conflict with the Teensy SD library. Details are found in the build instructions elsewhere in this repo. If the project fails to compile, try to #define out the TFT code. After updating libraries, the SD error problem could return. So, these steps may need to be repeated.
 
 ## Booting
 

@@ -197,6 +197,10 @@ See the Teensy 4.1 web pages (https://www.pjrc.com/) for required Arduino softwa
 
 If using the optional Adafruit 2.8" TFT, then check the Adafruit web pages for library installation instructions. The Adafruit 2.8" TFT requires an AdaFruit library for the SD card that conflicts with the library for the SD card on the Teensy. As a temporary fix, after all libraries are installed, delete the SdFat/ directory from the Teensy library location (instead of deleting, it is probably better to move the directory to another location in case the directory is needed for another project in future). Deleting SdFat/ will cause warnings when building the project.
 
+If libraries update, may need to delete SdFat/ again.
+
+The SdFat/ directory is likely with the Teensy libraries, not the Arduino libraries.
+
 If not using the optional Adafruit 2.8" TFT, comment out the TFT #define in *stem_piano_ip2.h*. Then the Adafruit 2.8" TFT is not required and deleting the Teensy SD library is not required.
 
 ## Firmware Settings
