@@ -62,7 +62,10 @@ Connects to Integrated Processing System (IPS) 2.X board.
 ## Schematic
 ![sca00_schematic](sca00_schematic.png)
 
-### Manufacturing
+## Design
+Location of timing analysis: [../../../design/data_acquisition/eca0X_ips2X/eca0X_ips2X_timing_design.md](../../../design/data_acquisition/eca0X_ips2X/eca0X_ips2X_timing_design.md).
+
+## Manufacturing
 
 To manufacture a board, send the files in [sca00_gerber/](sca00_gerber/) to a PCB manufacturer. The file [sca00_bill_of_materials.txt](sca00_bill_of_materials.txt) lists the parts required.
 

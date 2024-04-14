@@ -50,7 +50,7 @@ The R1, R2, and RV values are in the HPS bill of materials. Also in the bill of 
 
 * VF is set by the CNY-70. See CNY-70 data sheet [1]. A typical value is 1.2V.
 
-* VR is selected during design. Primarily considerations on the value VR include keeping VCE in proper range when VO is at its largest value and using the maximum ADC dynamic range over all values of VO.
+* VR is selected during design. Primary considerations on the value VR include keeping VCE in proper range when VO is at its largest value and using the maximum ADC dynamic range over all values of VO.
 
 * VCE must be within the constant current range specified by CNY-70 data sheet figure 6 [1]. Typical ranges:
     * VCE > 0.4V

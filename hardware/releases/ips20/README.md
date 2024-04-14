@@ -162,6 +162,9 @@ According to a Teensy 4.1 schematic on the PJRC website, there is an LDO on the 
 
 ![ips20_33dv_pcb](ips20_33dv_power.png)
 
+## Design
+Location of timing analysis: [../../../design/data_acquisition/eca0X_ips2X/eca0X_ips2X_timing_design.md](../../../design/data_acquisition/eca0X_ips2X/eca0X_ips2X_timing_design.md).
+
 ## Manufacturing
 
 To manufacture a board, send the files in [ips20_gerber/](ips20_gerber/) to a PCB manufacturer.

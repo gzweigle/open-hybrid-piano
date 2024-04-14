@@ -8,6 +8,8 @@ Location of detailed step-by-step build instructions: [build_instructions_0_stem
 
 Location of recommended and optional assembly tools: [tools_stem_piano_g.md](./tools_stem_piano_g.md).
 
+Location of timing analysis: [../../design/data_acquisition/eca0X_ips2X/eca0X_ips2X_timing_design.md](../../design/data_acquisition/eca0X_ips2X/eca0X_ips2X_timing_design.md).
+
 ## Features
 
 * Works on grand and upright pianos.
