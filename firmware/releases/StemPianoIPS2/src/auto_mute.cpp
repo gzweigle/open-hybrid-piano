@@ -75,16 +75,6 @@ int AutoMute::AutomaticallyDecreaseVolume(int velocity, int debug_level) {
     simultaneous_note_count_ = 0;
   }
 
-  // All max MIDI volume are muted.
-  // Assumption: piano playing won't use volume of 127 but a
-  // problem could. For example, a bug causing numerical max value.
-  if (velocity >= 127) {
-    return_velocity = mute_velocity_;
-    if (debug_level > 0) {
-      Serial.println("AutoMute Activated - piano volume reduced for this note.");
-    }
-  }
-
   // Assumption: piano playing won't strike more than a certain number
   // of notes "simultaneously". If many notes are played simultaneously,
   // it could be due to a problem. So, mute the volume.
@@ -119,6 +109,16 @@ int AutoMute::AutomaticallyDecreaseVolume(int velocity, int debug_level) {
   // This is the normal case.
   else {
     return_velocity = velocity;
+  }
+
+  // All max MIDI volume are muted.
+  // Assumption: piano playing won't use volume of 127 but a
+  // problem could. For example, a bug causing numerical max value.
+  if (velocity >= 127) {
+    return_velocity = mute_velocity_;
+    if (debug_level > 0) {
+      Serial.println("AutoMute Activated - piano volume reduced for this note.");
+    }
   }
 
   return return_velocity;
