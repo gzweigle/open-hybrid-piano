@@ -36,12 +36,13 @@
 //      - Max velocity should be 127. Need to automate vscale.
 // TODO - Include calibration once testing and documentation is finished.
 
-#define INCLUDE_CALIBRATION 0
+//#define INCLUDE_CALIBRATION
 
 #include "stem_piano_ips2.h"
 
 #include "hammer_settings.h"
 #include "six_channel_analog_00.h"
+#include "auto_mute.h"
 #include "board2board.h"
 #if INCLUDE_CALIBRATION
 #include "calibration_build.h"
@@ -60,10 +61,11 @@
 
 HammerSettings Set;
 SixChannelAnalog00 Adc;
+AutoMute Mute;
 Board2Board B2B;
-#if 0
+#if INCLUDE_CALIBRATION
 CalibrationBuild CalB;
-CalibrationRuntime CalR;
+//CalibrationRuntime CalR;
 #endif
 DspDamper DspD;
 DspHammer DspH;
@@ -121,6 +123,8 @@ void setup(void) {
     Serial.println("Beginning hammer board initialization.");
   }
 
+  Mute.Setup();
+
   // Setup the analog front-end and the board-to-board communication.
   // Physically connecting the board-to-board link is optional and
   // only required if using a separate set of sensors for the dampers.
@@ -132,7 +136,7 @@ void setup(void) {
   // Build the calibration values.
   #if INCLUDE_CALIBRATION
   CalB.Setup(&Tpl);
-  CalR.Setup();
+  //CalR.Setup();
   #endif
 
   // Setup the dampers, hammers, and pedals on hammer board.
@@ -196,7 +200,7 @@ int position_adc_counts[NUM_CHANNELS];
 
 // Damper, hammer, and pedal data.
 bool damper_event[NUM_CHANNELS], hammer_event[NUM_CHANNELS];
-float damper_position[NUM_CHANNELS], hammer_or_pedal_position[NUM_CHANNELS];
+float damper_position[NUM_CHANNELS], position_floats[NUM_CHANNELS];
 float damper_velocity[NUM_CHANNELS], hammer_velocity[NUM_CHANNELS];
 
 // Data for display and also used to build the calibration tables.
@@ -204,7 +208,7 @@ unsigned int rs0, rs1, rs2, rs3;
 
 // Data to send over Ethernet.
 // TODO - This needs some work.
-float raw_to_send[10];
+float raw_to_send[12];
 
 void loop() {
 
@@ -269,18 +273,18 @@ void loop() {
 
     // Undo sensor nonlinearity and, optionally, mechanical tolerances.
     #if INCLUDE_CALIBRATION
-    CalR.Calibrate(raw_samples);
+    //CalR.Calibrate(raw_samples);
     #endif
 
     // Normalize the ADC values.
-    Adc.NormalizeAdcValues(position_adc_counts, hammer_or_pedal_position, raw_samples);
+    Adc.NormalizeAdcValues(position_adc_counts, position_floats, raw_samples);
 
     // Zero out the signal from any unconnected pins to avoid noise
     // or anything else causing an unwanted piano note to play.
     for (int k = 0; k < NUM_CHANNELS; k++) {
       if (Set.connected_channel[k] == false) {
         position_adc_counts[k] = 0;
-        hammer_or_pedal_position[k] = 0.0;
+        position_floats[k] = 0.0;
       }
     }
 
@@ -290,7 +294,7 @@ void loop() {
       B2B.GetDamperData(damper_position);
       for (int k = 0; k < NUM_CHANNELS; k++) {
         if (Set.using_hammer_to_estimate_damper[k] == true) {
-          damper_position[k] = hammer_or_pedal_position[k];
+          damper_position[k] = position_floats[k];
         }
       }
     }
@@ -298,15 +302,15 @@ void loop() {
       // No external damper board.
       // Use the hammer position as an estimate of the damper position.
       for (int k = 0; k < NUM_CHANNELS; k++)
-        damper_position[k] = hammer_or_pedal_position[k];
+        damper_position[k] = position_floats[k];
     }
 
     // Process hammer, damper, and pedal data.
     // For hammer and damper get an event boolean flag and velocity.
     // For pedal get the state of the pedal.
     DspD.GetDamperEventData(damper_event, damper_velocity, damper_position);
-    DspH.GetHammerEventData(hammer_event, hammer_velocity, hammer_or_pedal_position);
-    DspP.UpdatePedalState(hammer_or_pedal_position);
+    DspH.GetHammerEventData(hammer_event, hammer_velocity, position_floats);
+    DspP.UpdatePedalState(position_floats);
 
     // Adjust velocity. Probably not needed in the future.
     Gain.AutomaticGainControl(damper_velocity, damper_event);
@@ -317,37 +321,53 @@ void loop() {
       startup_counter++;
     }
     else {
-      Midi.SendNoteOn(hammer_event, hammer_velocity);
-      Midi.SendNoteOff(damper_event, damper_velocity);
+      Midi.SendNoteOn(&Mute, hammer_event, hammer_velocity);
+      Midi.SendNoteOff(&Mute, damper_event, damper_velocity);
       Midi.SendPedal(&DspP);
 
     }
 
     // Send data over Ethernet. This needs work.
-    raw_to_send[0] = hammer_or_pedal_position[22];
-    raw_to_send[1] = hammer_or_pedal_position[24];
-    raw_to_send[2] = hammer_or_pedal_position[26];
-    raw_to_send[3] = hammer_or_pedal_position[27];
-    raw_to_send[4] = hammer_or_pedal_position[29];
-    raw_to_send[5] = hammer_or_pedal_position[31];
-    raw_to_send[6] = hammer_or_pedal_position[32];
-    raw_to_send[7] = hammer_or_pedal_position[34];
-    raw_to_send[8] = hammer_or_pedal_position[36];
-    raw_to_send[9] = hammer_or_pedal_position[38];
+    #ifdef CALIBRATION_SETUP
+    raw_to_send[0] = position_floats[0];
+    raw_to_send[1] = position_floats[1];
+    #else
+    //int offset = 5 * 12;
+    raw_to_send[0] = position_floats[24]; //offset + 0];
+    raw_to_send[1] = position_floats[26]; //offset + 1];
+    raw_to_send[2] = position_floats[27]; //offset + 2];
+    raw_to_send[3] = position_floats[29]; //offset + 3];
+    raw_to_send[4] = position_floats[31]; //offset + 4];
+    raw_to_send[5] = position_floats[32]; //offset + 5];
+    raw_to_send[6] = position_floats[34]; //offset + 6];
+    raw_to_send[7] = position_floats[36]; //offset + 7];
+    raw_to_send[8] = position_floats[38]; //offset + 8];
+    raw_to_send[9] = position_floats[39]; //offset + 9];
+    raw_to_send[10] = position_floats[41]; //offset + 10];
+    raw_to_send[11] = position_floats[43]; //offset + 11];
+    #endif
+
     Eth.SendPianoPacket(raw_to_send);
 
     // Run the TFT display.
-    Tft.Display(switch_tft, hammer_or_pedal_position, damper_position);
+    Tft.Display(switch_tft, position_floats, damper_position);
 
     // Filter data to be displayed and also that is used for
     // generating the calibration tables. Note that rs* is
     // not used until next processing interval (above) and
     // that is ok since latency does not matter for
     // generating the calibration tables.
+    #ifdef CALIBRATION_SETUP
     rs0 = Utl0.boxcarFilterUInts(position_adc_counts[0]);
     rs1 = Utl1.boxcarFilterUInts(position_adc_counts[1]);
     rs2 = Utl2.boxcarFilterUInts(position_adc_counts[2]);
     rs3 = Utl3.boxcarFilterUInts(position_adc_counts[3]);
+    #else
+    rs0 = Utl0.boxcarFilterUInts(position_adc_counts[26]);
+    rs1 = Utl1.boxcarFilterUInts(position_adc_counts[27]);
+    rs2 = Utl2.boxcarFilterUInts(position_adc_counts[28]);
+    rs3 = Utl3.boxcarFilterUInts(position_adc_counts[29]);
+    #endif
 
 
 
@@ -362,10 +382,10 @@ void loop() {
 
       bool found;
 
-      // Turn on LED if any key is above strike thresold threshold.
+      // Turn on LED if any key is above damper threshold.
       found = false;
       for (int k = 0; k < NUM_NOTES; k++) {
-        if (hammer_or_pedal_position[k] > Set.damper_threshold_using_hammer) {
+        if (position_floats[k] > Set.damper_threshold_using_hammer) {
           Tpl.SetTp9(true);
           found = true;
           break;
@@ -374,10 +394,10 @@ void loop() {
       if (found == false)
         Tpl.SetTp9(false);
 
-      // Turn on LED if any key is above damper threshold.
+      // Turn on LED if any key is above strike thresold threshold.
       found = false;
       for (int k = 0; k < NUM_NOTES; k++) {
-        if (hammer_or_pedal_position[k] > Set.strike_threshold) {
+        if (position_floats[k] > Set.strike_threshold) {
           Tpl.SetTp10(true);
           found = true;
           break;
@@ -386,7 +406,6 @@ void loop() {
       if (found == false)
         Tpl.SetTp10(false);
 
-      // Turn on LED is a pedal is pressed.
       if (DspP.GetSustainCrossedUpThreshold() || 
       DspP.GetSostenutoCrossedUpThreshold() ||
       DspP.GetUnaCordaCrossedUpThreshold()) {
@@ -410,14 +429,14 @@ void loop() {
       }
       else {
         serial_display_toggle = true;
-        if (Set.debug_level >= 1) {
+        //if (Set.debug_level >= 1) {
           Serial.print("Hammer Board ");
-          Serial.print(" r0="); Serial.print(rs0);
-          Serial.print(" r1="); Serial.print(rs1);
-          Serial.print(" r2="); Serial.print(rs2);
-          Serial.print(" r3="); Serial.print(rs3);
+          Serial.print(" r0a="); Serial.print(rs0);
+          Serial.print(" r1a="); Serial.print(rs1);
+          Serial.print(" r0f="); Serial.print(position_floats[0]);//*3.3/2.5);
+          Serial.print(" r1f="); Serial.print(position_floats[1]);//*3.3/2.5);
           Serial.println("");
-        }
+        //}
         Tpl.SetLowerRightLED(true);
         Tpl.SetScaLedL(true);
         Tpl.SetScaLedR(true);

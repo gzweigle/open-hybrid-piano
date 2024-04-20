@@ -168,6 +168,7 @@ If hand soldering the boards, see the *HAND SOLDER* section at the end of this f
 * Each HPS board is marked with a plus (+) symbol, a minus (-) symbol, and an exclamation point (!) symbol.
 * The pins on the IPS board are market with a "3.3V" symbol, a "gnd" symbol, and a "in" symbol.
 * Select the triplet of pins on the IPS board that are closest to the +5V power input and connect (+) to "3.3V", connect (-) to "gnd", and connect (!) to "in". The connection in this initial test is for the lowest note on a piano, A0. It is data index 0 in the firmware.
+* Modify the firmware settings to disable unused inputs.
 
 ### (4.C) Connect USB to Teensy and power up
 

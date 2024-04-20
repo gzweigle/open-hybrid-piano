@@ -94,6 +94,7 @@ Uneven piano dynamics
 * For best dynamics, the piano action regulation should be to the hammer stop bar and sensors.
 
 Random dropped or sounding notes
+* If code includes an auto mute function, it could have activated.
 * External light sources on the sensors can cause the sensors to get false signals. Try shading the sensors from any external light sources.
 * Check that the wires are correctly connected to the sensor boards.
 * Look at the comments around settings in the settings file and consider making changes.

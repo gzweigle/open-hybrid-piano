@@ -51,6 +51,8 @@ High level documentation.
 
 Building a complete piano requires firmware, hardware, mechanical, and sometimes software. The *pianos/* directory provides information on everything needed to build a specific version of a musical instrument.
 
+This is the best place to start for learning to code and hardware.
+
 #### [firmware/](firmware/)
 
 Real-time code running on custom hardware from *hardware/* directory.

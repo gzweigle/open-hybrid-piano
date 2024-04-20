@@ -25,6 +25,7 @@
 // TODO - Easily support other pedal functions.
 
 #include "midiout.h"
+#include "auto_mute.h"
 
 MidiOut::MidiOut() {}
 
@@ -37,12 +38,12 @@ MY_MIDI_INTERFACE *MidiInstance, int debug_level) {
   mi_->begin();
 }
 
-void MidiOut::SendNoteOn(const bool *event, const float *velocity) {
-  SendNote(event, velocity, true);
+void MidiOut::SendNoteOn(AutoMute *mute, const bool *event, const float *velocity) {
+  SendNote(mute, event, velocity, true);
 }
 
-void MidiOut::SendNoteOff(const bool *event, const float *velocity) {
-  SendNote(event, velocity, false);
+void MidiOut::SendNoteOff(AutoMute *mute, const bool *event, const float *velocity) {
+  SendNote(mute, event, velocity, false);
 }
 
 void MidiOut::SendPedal(DspPedal *DspP) {
@@ -84,12 +85,14 @@ void MidiOut::SendPedal(DspPedal *DspP) {
   }
 }
 
-void MidiOut::SendNote(const bool *event, const float *velocity, bool send_on) {
+void MidiOut::SendNote(AutoMute *mute,
+const bool *event, const float *velocity, bool send_on) {
   int velocity_int;
   int midi_note;
+  int velocity_potentially_muted;
   for (int key = 0; key < NUM_NOTES; key++) {
-    midi_note = key + midi_value_for_A0_;
     if (event[key] == true) {
+      midi_note = key + midi_value_for_A0_;
       velocity_int = static_cast<int>(128.0 * velocity[key]);
       if (velocity_int < 0) {
         velocity_int = -velocity_int;
@@ -112,11 +115,15 @@ void MidiOut::SendNote(const bool *event, const float *velocity, bool send_on) {
         Serial.println(" is now OFF.");
         }
       }
+      // Immediately before sending MIDI command, check for certain values and if
+      // detected, automatically reduce the volume level.
+      velocity_potentially_muted = 
+      mute->AutomaticallyDecreaseVolume(velocity_int, debug_level_);
       if (send_on == true) {
-        mi_->sendNoteOn(midi_note, velocity_int, midi_channel_);
+        mi_->sendNoteOn(midi_note, velocity_potentially_muted, midi_channel_);
       }
       else {
-        mi_->sendNoteOff(midi_note, velocity_int, midi_channel_);
+        mi_->sendNoteOff(midi_note, velocity_potentially_muted, midi_channel_);
       }
     }
   }
