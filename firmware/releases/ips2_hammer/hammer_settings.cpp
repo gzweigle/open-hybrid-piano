@@ -43,7 +43,7 @@ void HammerSettings::SetAllSettingValues() {
   //                 Change of switch state.
   // debug_level 2 = Large amount of debug information.
   //                 Details internal to the algorithms.
-  debug_level = 1;
+  debug_level = 0;
 
   if (debug_level >= 2) {
     Serial.print("Warning - debug_level is ");
@@ -89,7 +89,7 @@ void HammerSettings::SetAllSettingValues() {
   adc_is_differential = true;
 
   // Presently support a 16-bit or 18-bit ADC.
-  using18bitadc = true;
+  using18bitadc = false;
 
   // Normally adc_reference and sensor_v_max are the same value.
   // For example, when using a 3.3V ADC, design the boards so that
@@ -105,7 +105,7 @@ void HammerSettings::SetAllSettingValues() {
   // support connecting older and newer ADC systems together.
 
   // The maximum voltage output by the sensor when hammer is at highest position.
-  sensor_v_max = 1.2;
+  sensor_v_max = 2.5;
 
   // Reference value on ADC. When the output of the sensor is at this voltage,
   // the ADC outputs its maximum value.
@@ -115,7 +115,7 @@ void HammerSettings::SetAllSettingValues() {
   // Gain control.
   // This is needed since all hardware and algorithms are not completely
   // finished. Eventually, the goal is not to need a gain control.
-  velocity_scale = 2.0;
+  velocity_scale = 2.5;
 
   ////////
   // Noncritical values for display and LED.
@@ -134,12 +134,18 @@ void HammerSettings::SetAllSettingValues() {
   switch22_sca_pin = 16;
 
   ////////
+  // Calibration Settings.
+  calibration_threshold = 0.6;
+  calibration_match_gain = 0.75;
+  calibration_match_offset = 0.25;
+
+  ////////
   // Damper Settings.
 
   // When the damper position crosses this percentage of max-min
   // damper position, declare a damper event.
   damper_threshold_using_damper = 0.35;
-  damper_threshold_using_hammer = 0.48;
+  damper_threshold_using_hammer = 0.45;
 
   // Magic value to get velocity in range [0,1].
   damper_velocity_scaling = 0.025;
@@ -215,7 +221,7 @@ void HammerSettings::SetAllSettingValues() {
   //
 
   ethernet_start_ind = 0;
-  ethernet_end_ind = 9;
+  ethernet_end_ind = 11;
 
   ////////
   // Canbus.
@@ -248,9 +254,5 @@ void HammerSettings::SetAllSettingValues() {
   for (int channel = 88; channel < 90; channel++) {
     connected_channel[channel] = false;
   }
-
-  ////////
-  // Calibration settings.
-  use_board_to_generate_calibration_values_ = false;
 
 }

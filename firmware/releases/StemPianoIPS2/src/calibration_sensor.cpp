@@ -66,7 +66,7 @@ float match_offset, int debug) {
 
 // Create and apply calibration values.
 void CalibrationSensor::Calibration(bool use_calibration,
-float *out, const float *in) {
+bool disable_calibration, float *out, const float *in) {
 
   /////////////////////////////////
   // APPLYING CALIBRATION VALUES //
@@ -74,7 +74,8 @@ float *out, const float *in) {
 
   // During runtime, undo the CNY-70 nonlinearity.
   for (int k = 0; k < NUM_NOTES; k++) {
-    if (use_calibration == true) {
+    // If calibration disabled, don't use it but don't force rebuilding.
+    if (use_calibration == true && disable_calibration == false) {
       if (max_updated_[k] == true) {
         // See design document for details of the algorithm.
         out[k] = (log(in[k]) - offset_[k]) * gain_[k];
@@ -98,6 +99,7 @@ float *out, const float *in) {
   // BUILDING CALIBRATION VALUES //
   /////////////////////////////////
 
+  // If turn off calibration, force rebuilding next time turn on.
   if (use_calibration == false) {
     for (int k = 0; k < NUM_NOTES; k++) {
       max_updated_staged_[k] = false;

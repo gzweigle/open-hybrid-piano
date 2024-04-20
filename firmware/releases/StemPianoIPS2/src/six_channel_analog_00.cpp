@@ -128,11 +128,11 @@ void SixChannelAnalog00::GetNewAdcValues(unsigned int *adc_array) {
       // Test point so can trigger oscilloscope exactly when muxes switch.
       // The specific mux value it triggers on is arbitrary.
       // Use this test point to help validate signal settling time.
-      //if ( (mux16_next == 15 && mux8_next == 1)) {
-        //Tpl_->SetTp9(true);
+      //if ( (mux16_next == 13 && mux8_next == 3)) {
+      //  Tpl_->SetTp11(true);
       //}
       //else {
-        //Tpl_->SetTp9(false);
+      //  Tpl_->SetTp11(false);
       //}
 
       // Switch all muxes to next analog input channel.

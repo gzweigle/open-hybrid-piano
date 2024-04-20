@@ -29,7 +29,7 @@ class CalibrationSensor
   public:
     CalibrationSensor();
     void Setup(float, float, float, int);
-    void Calibration(bool, float *, const float *);
+    void Calibration(bool, bool, float *, const float *);
  
   private:
 

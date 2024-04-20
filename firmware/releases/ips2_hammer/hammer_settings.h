@@ -57,6 +57,9 @@ class HammerSettings
     int switch12_sca_pin;
     int switch21_sca_pin;
     int switch22_sca_pin;
+    float calibration_threshold;
+    float calibration_match_gain;
+    float calibration_match_offset;
     float damper_threshold_using_damper;
     float damper_threshold_using_hammer;
     float damper_velocity_scaling;
@@ -84,7 +87,6 @@ class HammerSettings
     bool canbus_enable;
     bool using_display;
     bool connected_channel[NUM_CHANNELS];
-    bool use_board_to_generate_calibration_values_;
 };
 
 #endif
