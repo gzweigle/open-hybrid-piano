@@ -23,17 +23,8 @@
 //
 // Main code for hammer board of stem piano.
 //
-//
-//
-//
 // stem piano is an open source hybrid digital piano.
 //
-//
-//
-//
-// TODO - For more than 88 keys, could use local hammer for extra
-//        dampers, and remote for the normal 88.
-//      - Max velocity should be 127. Need to automate vscale.
 
 #include "stem_piano_ips2.h"
 
@@ -46,13 +37,13 @@
 #include "dsp_hammer.h"
 #include "dsp_pedal.h"
 #include "gain_control.h"
+#include "hammer_status.h"
 #include "midiout.h"
 #include "network.h"
 #include "switches.h"
 #include "testpoint_led.h"
 #include "timing.h"
 #include "tft_display.h"
-#include "utilities.h"
 
 HammerSettings Set;
 SixChannelAnalog00 Adc;
@@ -63,6 +54,7 @@ DspDamper DspD;
 DspHammer DspH;
 DspPedal DspP;
 GainControl Gain;
+HammerStatus HStat;
 MidiOut Midi;
 Network Eth;
 Switches SwIPS1;
@@ -72,10 +64,6 @@ Switches SwSCA2;
 TestpointLed Tpl;
 Timing Tmg;
 TftDisplay Tft;
-Utilities Utl0;
-Utilities Utl1;
-Utilities Utl2;
-Utilities Utl3;
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, mi);
 
 void setup(void) {
@@ -125,6 +113,10 @@ void setup(void) {
   Set.using18bitadc, Set.sensor_v_max, Set.adc_reference, &Tpl);
   B2B.Setup(Set.canbus_enable);
 
+  // Diagnostics and status
+  HStat.Setup(&DspP, &Tpl, Set.debug_level, Set.damper_threshold_using_hammer,
+  Set.strike_threshold, Set.serial_display_interval_micro);
+
   // Setup the dampers, hammers, and pedals on hammer board.
   DspD.Setup(Set.using_hammer_to_estimate_damper,
   Set.damper_threshold_using_damper, Set.damper_threshold_using_hammer,
@@ -153,13 +145,7 @@ void setup(void) {
   Tft.Setup(Set.using_display, Set.debug_level);
   Tft.HelloWorld();
 
-  // Utility functionality.
-  Utl0.Setup();
-  Utl1.Setup();
-  Utl2.Setup();
-  Utl3.Setup();
-
-  // Getting ready to run!....
+  // Ready to be a piano.
   if (Set.debug_level >= 1) {
     Serial.println("Finished hammer board initialization.");
   }
@@ -187,9 +173,6 @@ bool damper_event[NUM_CHANNELS], hammer_event[NUM_CHANNELS];
 float damper_position[NUM_CHANNELS], calibrated_floats[NUM_CHANNELS],
 position_floats[NUM_CHANNELS];
 float damper_velocity[NUM_CHANNELS], hammer_velocity[NUM_CHANNELS];
-
-// Data for display and also used to build the calibration tables.
-unsigned int rs0, rs1, rs2, rs3;
 
 // Data to send over Ethernet.
 // TODO - This needs some work.
@@ -245,8 +228,8 @@ void loop() {
     Adc.NormalizeAdcValues(position_adc_counts, position_floats, raw_samples);
 
     // Undo the sensor nonlinearity.
-    Cal.Calibration(switch_use_calibration, switch_disable_calibration,
-    calibrated_floats, position_floats);
+    bool all_notes_using_cal = Cal.Calibration(switch_use_calibration,
+    switch_disable_calibration, calibrated_floats, position_floats);
 
     // Zero out the signal from any unconnected pins to avoid noise
     // or anything else causing an unwanted piano note to play.
@@ -308,92 +291,20 @@ void loop() {
     raw_to_send[7] = calibrated_floats[36]; //offset + 7];
     raw_to_send[8] = calibrated_floats[38]; //offset + 8];
     raw_to_send[9] = calibrated_floats[39]; //offset + 9];
-    raw_to_send[10] = calibrated_floats[71]; //offset + 10];
-    raw_to_send[11] = calibrated_floats[14]; //offset + 11];
+    raw_to_send[10] = calibrated_floats[1]; //offset + 10];
+    raw_to_send[11] = calibrated_floats[0]; //offset + 11];
 
     Eth.SendPianoPacket(raw_to_send);
 
     // Run the TFT display.
     Tft.Display(switch_tft, calibrated_floats, damper_position);
 
-    // Filter data to be displayed and also that is used for
-    // generating the calibration tables. Note that rs* is
-    // not used until next processing interval (above) and
-    // that is ok since latency does not matter for
-    // generating the calibration tables.
-    rs0 = Utl0.boxcarFilterUInts(position_adc_counts[26]);
-    rs1 = Utl1.boxcarFilterUInts(position_adc_counts[27]);
-    rs2 = Utl2.boxcarFilterUInts(position_adc_counts[28]);
-    rs3 = Utl3.boxcarFilterUInts(position_adc_counts[29]);
-
-    /////////////////////////////////////////////////
     // Debug and display information.
-    // Not critical for the piano.
-    /////////////////////////////////////////////////
-    bool found;
-
-    // Turn on LED if any key is above damper threshold.
-    found = false;
-    for (int k = 0; k < NUM_NOTES; k++) {
-      if (calibrated_floats[k] > Set.damper_threshold_using_hammer) {
-        Tpl.SetTp9(true);
-        found = true;
-        break;
-      }
-    }
-    if (found == false)
-      Tpl.SetTp9(false);
-
-    // Turn on LED if any key is above strike thresold threshold.
-    found = false;
-    for (int k = 0; k < NUM_NOTES; k++) {
-      if (calibrated_floats[k] > Set.strike_threshold) {
-        Tpl.SetTp10(true);
-        found = true;
-        break;
-      }
-    }
-    if (found == false)
-      Tpl.SetTp10(false);
-
-    if (DspP.GetSustainCrossedUpThreshold() || 
-    DspP.GetSostenutoCrossedUpThreshold() ||
-    DspP.GetUnaCordaCrossedUpThreshold()) {
-      Tpl.SetTp11(false);
-    }
-    else if (DspP.GetSustainCrossedDownThreshold() || 
-    DspP.GetSostenutoCrossedDownThreshold() ||
-    DspP.GetUnaCordaCrossedDownThreshold()) {
-      Tpl.SetTp11(true);
-    }
-
-    if (micros() - display_last_micros_ > Set.serial_display_interval_micro) {
-      display_last_micros_ = micros();
-      if (serial_display_toggle == true) {
-        serial_display_toggle = false;
-        Tpl.SetLowerRightLED(false);
-        Tpl.SetScaLedL(false);
-        Tpl.SetScaLedR(false);
-        Tpl.SetEthernetLED(false);
-      }
-      else {
-        serial_display_toggle = true;
-        //if (Set.debug_level >= 1) {
-          Serial.print("Hammer Board ");
-          Serial.print(" r0a="); Serial.print(rs0);
-          Serial.print(" r1a="); Serial.print(rs1);
-          Serial.print(" r0f="); Serial.print(calibrated_floats[0]);//*3.3/2.5);
-          Serial.print(" r1f="); Serial.print(calibrated_floats[1]);//*3.3/2.5);
-          Serial.println("");
-        //}
-        Tpl.SetLowerRightLED(true);
-        Tpl.SetScaLedL(true);
-        Tpl.SetScaLedR(true);
-        Tpl.SetEthernetLED(true);
-      }
-    }
-    /////////////////
-
+    HStat.FrontLed(calibrated_floats);
+    HStat.LowerRightLed(all_notes_using_cal);
+    HStat.SCALed();
+    HStat.EthernetLed();
+    HStat.SerialMonitor(position_adc_counts, calibrated_floats);
     Tpl.SetTp8(false);
   }
 }

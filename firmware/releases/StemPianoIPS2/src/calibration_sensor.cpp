@@ -65,7 +65,8 @@ float match_offset, int debug) {
 }
 
 // Create and apply calibration values.
-void CalibrationSensor::Calibration(bool use_calibration,
+// Return true if all NUM_NOTES notes are using a calibrated value.
+bool CalibrationSensor::Calibration(bool use_calibration,
 bool disable_calibration, float *out, const float *in) {
 
   /////////////////////////////////
@@ -73,6 +74,7 @@ bool disable_calibration, float *out, const float *in) {
   /////////////////////////////////
 
   // During runtime, undo the CNY-70 nonlinearity.
+  bool all_notes_are_using_calibration_values = true; // Initialize.
   for (int k = 0; k < NUM_NOTES; k++) {
     // If calibration disabled, don't use it but don't force rebuilding.
     if (use_calibration == true && disable_calibration == false) {
@@ -84,10 +86,12 @@ bool disable_calibration, float *out, const float *in) {
       }
       else {
         out[k] = in[k];
+        all_notes_are_using_calibration_values = false;
       }
     }
     else {
       out[k] = in[k];
+      all_notes_are_using_calibration_values = false;
     }
   }
   // Except, copy pedals over without modification.
@@ -159,4 +163,7 @@ bool disable_calibration, float *out, const float *in) {
       }
     }
   }
+
+  return all_notes_are_using_calibration_values;
+
 }
