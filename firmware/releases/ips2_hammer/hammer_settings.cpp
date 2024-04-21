@@ -37,11 +37,12 @@ void HammerSettings::SetAllSettingValues() {
   // Debug
   // Set this to zero during normal operation.
   // debug_level 0 = No debug information on serial port.
-  // debug_level 1 = Small amount of debug information.
+  // debug_level 1 = Periodic statistics on serial port.
+  // debug_level 2 = Small amount of debug information.
   //                 Errors and warnings.
   //                 MIDI send notification.
   //                 Change of switch state.
-  // debug_level 2 = Large amount of debug information.
+  // debug_level 3 = Large amount of debug information.
   //                 Details internal to the algorithms.
   debug_level = 0;
 
@@ -91,12 +92,6 @@ void HammerSettings::SetAllSettingValues() {
   // Presently support a 16-bit or 18-bit ADC.
   using18bitadc = false;
 
-  // Normally adc_reference and sensor_v_max are the same value.
-  // For example, when using a 3.3V ADC, design the boards so that
-  // the maximum sensor output (and associated sensor_v_max) is 3.3V
-  // and design the ADC support circuitry so that the ADC reference
-  // voltage (and associated adc_reference) is 3.3V.
-  //
   // Historically, ADC changes during development resulted in
   // 1.2V, 2.5V, 3.0V, and 3.3V for adc_reference. 
   // Also, ADC changes during development resulted in using

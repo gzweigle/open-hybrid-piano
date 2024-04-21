@@ -4,15 +4,13 @@
 
 The Stem Piano G hardware and firmware in the repository works and is a very playable piano.
 
-The action frame and sensor mechanical system, as presently implemented, causes some note-to-note dynamics variation. This is unrelated to the firmware, software, or circuit boards.
-
-Documentation, code, and hardware for calibrating the CNY-70 sensor nonlinearity and note-to-note dyanamics variation is not yet posted.
+Depending on pianist skill, the piano accuracy may need further improvement. For example, the action frame and sensor mechanical system tolerances cause note-to-note dynamics variation. Also, sensor errors have been improved but are not zero.
 
 ## Major Historical Milestones
 
-### April 6, 2024 - Build Instructions
+### April 21, 2024 - Accuracy Improvement
 
-Detailed step-by-step design and build instructions for *stem piano g*.
+Improve CNY-70 related note-to-note inconsistency. Now the benefits of optional trimmer resistor are even smaller. Option without trimmers reduces the piano hardware cost.
 
 ### November 26, 2023 - Open Source Hybrid Piano, Digital Architecture
 

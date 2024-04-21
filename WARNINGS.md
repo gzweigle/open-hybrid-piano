@@ -2,6 +2,8 @@
 
 The warnings below may be repeated or described in more detail elsewhere in the repo. It cannot be guaranteed, but it is the intent that this *WARNINGS.md* file contains a high-level superset of all warnings.
 
+Check this page regularly for updates.
+
 ## Project is Active
 
 New pianos, features, capabilities, and enhancements could be added in the future. These changes could impact the hardware, firmware, software, or the mechanical structure.

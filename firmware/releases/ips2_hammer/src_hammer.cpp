@@ -152,10 +152,6 @@ void setup(void) {
 
 }
 
-// Temporary debug and diagnostic stuff.
-unsigned long display_last_micros_ = micros();
-bool serial_display_toggle = false;
-
 // After startup, wait before sending anything to MIDI
 // in order to avoid any potential startup transients.
 int startup_counter = 0;
