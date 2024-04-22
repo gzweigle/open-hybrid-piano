@@ -97,7 +97,7 @@ unsigned long *dip_last_micros, const char *switch_name) {
     else if (*dip_last_micros >= switch_pu_do_interval_) {
       *dip_state = 1;
       *dip_last_micros = micros();
-      if (debug_level_ >= 1) {
+      if (debug_level_ >= DEBUG_STATS) {
         char display_string[MAX_SWITCH_NAME_LENGTH];
         sprintf(display_string,"DIP %s is now ON", switch_name);
         Serial.println(display_string);
@@ -111,7 +111,7 @@ unsigned long *dip_last_micros, const char *switch_name) {
     else if (*dip_last_micros >= switch_pu_do_interval_) {
       *dip_state = 0;
       *dip_last_micros = micros();
-      if (debug_level_ >= 1) {
+      if (debug_level_ >= DEBUG_STATS) {
         char display_string[MAX_SWITCH_NAME_LENGTH];
         sprintf(display_string,"DIP %s is now OFF", switch_name);
         Serial.println(display_string);

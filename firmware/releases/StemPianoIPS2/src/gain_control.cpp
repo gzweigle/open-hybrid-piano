@@ -40,7 +40,7 @@ const bool *velocity_event) {
     if (velocity_event[key] == true) {
       velocity_data[key] *= velocity_scale_;
       if (velocity_data[key] > 1.0) {
-        if (debug_level_ >= 2) {
+        if (debug_level_ >= DEBUG_ALL) {
           Serial.print("velocity of ");
           Serial.print(key);
           Serial.print(" hit limit, orig velocity was ");

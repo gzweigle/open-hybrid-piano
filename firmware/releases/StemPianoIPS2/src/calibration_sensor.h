@@ -22,6 +22,8 @@
 #ifndef CALIBRATION_SENSOR_H_
 #define CALIBRATION_SENSOR_H_
 
+#define CALIBRATION_FILTER_SAMPLES 4
+
 #include "stem_piano_ips2.h"
 
 class CalibrationSensor
@@ -29,7 +31,7 @@ class CalibrationSensor
   public:
     CalibrationSensor();
     void Setup(float, float, float, int);
-    bool Calibration(bool, bool, float *, const float *);
+    bool Calibration(bool, bool, bool, float *, const float *);
  
   private:
 
@@ -37,11 +39,14 @@ class CalibrationSensor
     float offset_staged_[NUM_NOTES], offset_[NUM_NOTES];
     float max_[NUM_NOTES];
     float min_[NUM_NOTES];
-    int debug_;
+    int debug_level_;
     bool max_updated_staged_[NUM_NOTES], max_updated_[NUM_NOTES];
     float orig_gain_, orig_offset_;
     float threshold_;
     float update_threshold_;
+
+    float filter_buffer_[NUM_NOTES][CALIBRATION_FILTER_SAMPLES];
+    int buffer_index_;
 
 };
 

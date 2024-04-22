@@ -89,7 +89,7 @@ void DspDamper::GetDamperEventData(bool *event, float *velocity, const float *po
           samples_per_second_ / static_cast<float>(NUM_DELAY_ELEMENTS);
           velocity[key] *= velocity_scaling_;
           event_block_counter_[key] = 2*(NUM_DELAY_ELEMENTS);
-          if (debug_level_ >= 2) {
+          if (debug_level_ >= DEBUG_ALL) {
             Serial.println("GetDamperEventData() - damper up");
             Serial.print("  key=");
             Serial.print(key);
@@ -112,7 +112,7 @@ void DspDamper::GetDamperEventData(bool *event, float *velocity, const float *po
           samples_per_second_ / static_cast<float>(NUM_DELAY_ELEMENTS);
           velocity[key] *= velocity_scaling_;
           event_block_counter_[key] = 2*(NUM_DELAY_ELEMENTS);
-          if (debug_level_ >= 2) {
+          if (debug_level_ >= DEBUG_ALL) {
             Serial.println("GetDamperEventData() - damper down");
             Serial.print("  key=");
             Serial.print(key);

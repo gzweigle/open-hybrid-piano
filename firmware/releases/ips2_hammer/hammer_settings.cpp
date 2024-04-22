@@ -33,29 +33,10 @@ HammerSettings::HammerSettings() {}
 
 void HammerSettings::SetAllSettingValues() {
 
-  ////////
-  // Debug
-  // Set this to zero during normal operation.
-  // debug_level 0 = No debug information on serial port.
-  // debug_level 1 = Periodic statistics on serial port.
-  // debug_level 2 = Small amount of debug information.
-  //                 Errors and warnings.
-  //                 MIDI send notification.
-  //                 Change of switch state.
-  // debug_level 3 = Large amount of debug information.
-  //                 Details internal to the algorithms.
-  debug_level = 0;
-
-  if (debug_level >= 2) {
-    Serial.print("Warning - debug_level is ");
-    Serial.print(debug_level);
-    Serial.println(" in hammer_settings.cpp");
-    Serial.println("Extra debug information will be printed to the serial port.");
-  }
-  else if (debug_level == 1) {
-    Serial.println("Warning - debug_level is set at 1 in hammer_settings.cpp");
-    Serial.println("Some debug information will be printed to the serial port.");
-  }
+  // Debug. See stem_piano_ips2.h for information.
+  debug_level = DEBUG_STATS;
+  Serial.print("Debug level is set to ");
+  Serial.println(debug_level);
 
   // Avoid risk of anything bad happening on startup. Probably not needed.
   // Wait this number of ADC samples before allow piano sounds.
@@ -74,7 +55,7 @@ void HammerSettings::SetAllSettingValues() {
   // WARNING - This value must match the value on damper board.
   adc_sample_period_microseconds = 300;
   
-  if (debug_level >= 1) {
+  if (debug_level >= DEBUG_STATS) {
     Serial.print("The sample period is set to ");
     Serial.print(adc_sample_period_microseconds);
     Serial.println(" microseconds.");
@@ -113,11 +94,7 @@ void HammerSettings::SetAllSettingValues() {
   velocity_scale = 2.5;
 
   ////////
-  // Noncritical values for display and LED.
-  serial_display_interval_micro = 1000000;
-
-  ////////
-  // DIP switch settings.
+  // Switch settings.
   switch_debounce_micro = 500000; // Read DIP switches at this interval, microseconds.
   switch11_ips_pin = 3;
   switch12_ips_pin = 22;
@@ -227,7 +204,7 @@ void HammerSettings::SetAllSettingValues() {
   connected_to_remote_damper_board = false;
   canbus_enable = false;
 
-  if (debug_level >= 1) {
+  if (debug_level >= DEBUG_STATS) {
     if (canbus_enable == false && connected_to_remote_damper_board == true) {
       Serial.println("Warning - trying to use remote board without Can bus enabled.");
     }

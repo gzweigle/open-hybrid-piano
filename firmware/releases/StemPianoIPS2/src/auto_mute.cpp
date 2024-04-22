@@ -80,7 +80,7 @@ int AutoMute::AutomaticallyDecreaseVolume(int velocity, int debug_level) {
   // it could be due to a problem. So, mute the volume.
   if (velocity > max_simultaneous_volume_) {
 
-    if (debug_level > 1) {
+    if (debug_level >= DEBUG_ALL) {
       Serial.print("AutoMute: simultaneous = ");
       Serial.print(simultaneous_note_count_);
       Serial.print(" interval = ");
@@ -90,7 +90,7 @@ int AutoMute::AutomaticallyDecreaseVolume(int velocity, int debug_level) {
     if (millis() - last_loud_note_time_ < loud_note_interval_) {
       if (simultaneous_note_count_ >= max_simultaneous_notes_) {
         return_velocity = mute_velocity_;
-        if (debug_level > 0) {
+        if (debug_level >= DEBUG_MINOR) {
           Serial.println("AutoMute Activated - piano volume reduced for this note.");
         }
       }
@@ -116,7 +116,7 @@ int AutoMute::AutomaticallyDecreaseVolume(int velocity, int debug_level) {
   // problem could. For example, a bug causing numerical max value.
   if (velocity >= 127) {
     return_velocity = mute_velocity_;
-    if (debug_level > 0) {
+    if (debug_level >= DEBUG_MINOR) {
       Serial.println("AutoMute Activated - piano volume reduced for this note.");
     }
   }

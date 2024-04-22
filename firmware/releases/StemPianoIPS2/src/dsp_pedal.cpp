@@ -173,7 +173,7 @@ void DspPedal::UpdateSustainMaxValue(float position) {
   if (max_position_valid_[Ind::sustain] == true) {
     if (position > max_position_[Ind::sustain]) {
       max_position_[Ind::sustain] = position;
-      if (debug_level_ >= 2) {
+      if (debug_level_ >= DEBUG_ALL) {
         Serial.print("UpdateSustainMaxValue() new max = ");
         Serial.println(position);
       }
@@ -184,7 +184,7 @@ void DspPedal::UpdateSostenutoMaxValue(float position) {
   if (max_position_valid_[Ind::sostenuto] == true) {
     if (position > max_position_[Ind::sostenuto]) {
       max_position_[Ind::sostenuto] = position;
-      if (debug_level_ >= 2) {
+      if (debug_level_ >= DEBUG_ALL) {
         Serial.print("UpdateSostenutoMaxValue() new max = ");
         Serial.println(position);
       }
@@ -195,7 +195,7 @@ void DspPedal::UpdateUnaCordaMaxValue(float position) {
   if (max_position_valid_[Ind::una_corda] == true) {
     if (position > max_position_[Ind::una_corda]) {
       max_position_[Ind::una_corda] = position;
-      if (debug_level_ >= 2) {
+      if (debug_level_ >= DEBUG_ALL) {
         Serial.print("UpdateUnaCordaMaxValue() new max = ");
         Serial.println(position);
       }

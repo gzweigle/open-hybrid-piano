@@ -47,7 +47,6 @@ class HammerSettings
     float sensor_v_max;
     float adc_reference;
     float velocity_scale;
-    unsigned long serial_display_interval_micro;
     int switch_debounce_micro;
     int switch11_ips_pin;
     int switch12_ips_pin;

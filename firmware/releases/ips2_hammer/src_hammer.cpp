@@ -99,7 +99,7 @@ void setup(void) {
   SwSCA2.Setup(Set.switch_debounce_micro,
   Set.switch21_sca_pin, Set.switch22_sca_pin, Set.debug_level);
 
-  if (Set.debug_level >= 1) {
+  if (Set.debug_level >= DEBUG_STATS) {
     Serial.println("Beginning hammer board initialization.");
   }
 
@@ -114,8 +114,7 @@ void setup(void) {
   B2B.Setup(Set.canbus_enable);
 
   // Diagnostics and status
-  HStat.Setup(&DspP, &Tpl, Set.debug_level, Set.damper_threshold_using_hammer,
-  Set.strike_threshold, Set.serial_display_interval_micro);
+  HStat.Setup(&DspP, &Tpl, Set.debug_level, Set.damper_threshold_using_hammer, Set.strike_threshold);
 
   // Setup the dampers, hammers, and pedals on hammer board.
   DspD.Setup(Set.using_hammer_to_estimate_damper,
@@ -146,7 +145,7 @@ void setup(void) {
   Tft.HelloWorld();
 
   // Ready to be a piano.
-  if (Set.debug_level >= 1) {
+  if (Set.debug_level >= DEBUG_STATS) {
     Serial.println("Finished hammer board initialization.");
   }
 
@@ -156,9 +155,9 @@ void setup(void) {
 // in order to avoid any potential startup transients.
 int startup_counter = 0;
 
-// Place declaration of all variables for DIP switches here.
+// Switches.
 bool switch_tft;
-bool switch_use_calibration, switch_disable_calibration;
+bool switch_use_calibration, switch_disable_calibration, switch_lock_calibration;
 
 // Data from ADC.
 unsigned int raw_samples[NUM_CHANNELS];
@@ -186,7 +185,8 @@ void loop() {
 
   // Read all switch inputs.
   switch_tft = SwIPS2.read_switch_1();
-  switch_use_calibration = SwIPS1.read_switch_1();
+  switch_use_calibration = SwIPS2.read_switch_2();
+  switch_lock_calibration = SwIPS1.read_switch_1();
   switch_disable_calibration = SwIPS1.read_switch_2();
 
   // When the TFT is operational, turn off the alorithms that
@@ -213,8 +213,7 @@ void loop() {
 
     Tpl.SetTp8(true); // Front left test point asserts during processing.
     
-    // Get all data: local hammer (ADC), remote damper (board-to-board) data,
-    // and local pedals (also from ADC data). Place in raw_samples[NUM_CHANNELS].
+    // Get hammer and pedal data from ADC.
     Adc.GetNewAdcValues(raw_samples);
 
     // Reorder the back row.
@@ -225,7 +224,8 @@ void loop() {
 
     // Undo the sensor nonlinearity.
     bool all_notes_using_cal = Cal.Calibration(switch_use_calibration,
-    switch_disable_calibration, calibrated_floats, position_floats);
+    switch_disable_calibration, switch_lock_calibration,
+    calibrated_floats, position_floats);
 
     // Zero out the signal from any unconnected pins to avoid noise
     // or anything else causing an unwanted piano note to play.
@@ -272,24 +272,22 @@ void loop() {
       Midi.SendNoteOn(&Mute, hammer_event, hammer_velocity);
       Midi.SendNoteOff(&Mute, damper_event, damper_velocity);
       Midi.SendPedal(&DspP);
-
     }
 
     // Send data over Ethernet. This needs work.
     //int offset = 5 * 12;
-    raw_to_send[0] = calibrated_floats[24]; //offset + 0];
-    raw_to_send[1] = calibrated_floats[26]; //offset + 1];
-    raw_to_send[2] = calibrated_floats[27]; //offset + 2];
-    raw_to_send[3] = calibrated_floats[29]; //offset + 3];
-    raw_to_send[4] = calibrated_floats[31]; //offset + 4];
-    raw_to_send[5] = calibrated_floats[32]; //offset + 5];
-    raw_to_send[6] = calibrated_floats[34]; //offset + 6];
-    raw_to_send[7] = calibrated_floats[36]; //offset + 7];
-    raw_to_send[8] = calibrated_floats[38]; //offset + 8];
-    raw_to_send[9] = calibrated_floats[39]; //offset + 9];
-    raw_to_send[10] = calibrated_floats[1]; //offset + 10];
-    raw_to_send[11] = calibrated_floats[0]; //offset + 11];
-
+    raw_to_send[0] = calibrated_floats[27]; //offset + 0];
+    raw_to_send[1] = calibrated_floats[29]; //offset + 1];
+    raw_to_send[2] = calibrated_floats[31]; //offset + 2];
+    raw_to_send[3] = calibrated_floats[32]; //offset + 3];
+    raw_to_send[4] = calibrated_floats[34]; //offset + 4];
+    raw_to_send[5] = calibrated_floats[36]; //offset + 5];
+    raw_to_send[6] = calibrated_floats[38]; //offset + 6];
+    raw_to_send[7] = calibrated_floats[39]; //offset + 7];
+    raw_to_send[8] = calibrated_floats[41]; //offset + 8];
+    raw_to_send[9] = calibrated_floats[43]; //offset + 9];
+    raw_to_send[10] = calibrated_floats[44]; //offset + 10];
+    raw_to_send[11] = calibrated_floats[46]; //offset + 11];
     Eth.SendPianoPacket(raw_to_send);
 
     // Run the TFT display.
@@ -300,7 +298,7 @@ void loop() {
     HStat.LowerRightLed(all_notes_using_cal);
     HStat.SCALed();
     HStat.EthernetLed();
-    HStat.SerialMonitor(position_adc_counts, calibrated_floats);
+    HStat.SerialMonitor(position_adc_counts, calibrated_floats, hammer_event);
     Tpl.SetTp8(false);
   }
 }

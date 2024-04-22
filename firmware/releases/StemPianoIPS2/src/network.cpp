@@ -112,7 +112,7 @@ int udp_port) {
 
   udp_port_ = udp_port;
 
-  if (debug_level_ >= 1) {
+  if (debug_level_ >= DEBUG_STATS) {
     Serial.println("For proper Ethernet operation the following values");
     Serial.println("must match for the program running on computer and");
     Serial.println("attempting to communicate with the IPS 2.X board.");
@@ -143,12 +143,12 @@ void Network::SetupNetwork() {
   IPAddress ip(teensy_ip_[0], teensy_ip_[1], teensy_ip_[2], teensy_ip_[3]);
   Ethernet.begin(mac_address_, ip);
   if (Ethernet.hardwareStatus() == EthernetNoHardware) {
-    if (debug_level_ >= 1) {
+    if (debug_level_ >= DEBUG_STATS) {
       Serial.println("Error - no hardware found.");
     }
   }
   else if (Ethernet.linkStatus() == LinkOFF) {
-    if (debug_level_ >= 1) {
+    if (debug_level_ >= DEBUG_STATS) {
       Serial.println("Error - no ethernet cable.");
     }
   }
@@ -162,7 +162,7 @@ void Network::SetupNetwork() {
 
 Network::Network() {}
 void Network::Setup(int a, int b, int c, int debug_level) {
-  if (debug_level >= 1) {
+  if (debug_level >= DEBUG_STATS) {
     Serial.println("Ethernet is not in build and is not used.");
   }
 }

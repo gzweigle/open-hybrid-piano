@@ -98,7 +98,7 @@ void DspHammer::ComputeDerivative(const float *position) {
     velocity_buffer_[key][buffer_pointer_] = position[key];
   }
   buffer_pointer_++;
-  if (buffer_pointer_ == DERIVATIVE_AVERAGE_SAMPLES) {
+  if (buffer_pointer_ >= DERIVATIVE_AVERAGE_SAMPLES) {
     buffer_pointer_ = 0;
   }
 }
@@ -152,7 +152,7 @@ void DspHammer::DetectHammerStrike(bool *event, float *velocity, const float *po
     // Therefore, do not allow a 2nd strike until the hammer drops below a threshold.
     released_[key] == true)
     {
-      if (debug_level_ >= 2) {
+      if (debug_level_ >= DEBUG_ALL) {
         Serial.println("DetectHammerStrike()");
         Serial.print("  key=");
         Serial.print(key);

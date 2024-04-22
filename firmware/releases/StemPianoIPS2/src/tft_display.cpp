@@ -83,7 +83,7 @@ void TftDisplay::Setup(bool using_display, int debug_level) {
     bool ts_status = Ts_->begin(FT62XX_DEFAULT_THRESHOLD, &Wire2);
     if (ts_status == false) {
       using_display_ = false;
-      if (debug_level_ >= 1) {
+      if (debug_level_ >= DEBUG_STATS) {
         Serial.println("TFT display failed, do not know why.");
         Serial.println("TFT display will not be used.");
       }
@@ -93,13 +93,13 @@ void TftDisplay::Setup(bool using_display, int debug_level) {
         sd_card_detected_ = true;
         if (!SD_.begin(sd_cs_, SD_SCK_MHZ(10))) {
           sd_card_started_ = false;
-          if (debug_level_ >= 1) {
+          if (debug_level_ >= DEBUG_STATS) {
             Serial.println("Could not start SD card.");
           }
         }
         else {
           sd_card_started_ = true;
-          if (debug_level_ >= 1) {
+          if (debug_level_ >= DEBUG_STATS) {
             Serial.println("Successfully started SD card.");
           }
         }
@@ -107,7 +107,7 @@ void TftDisplay::Setup(bool using_display, int debug_level) {
       else {
         sd_card_detected_ = false;
         sd_card_started_ = false;
-        if (debug_level_ >= 1) {
+        if (debug_level_ >= DEBUG_STATS) {
           Serial.println("No card detected for displaying images.");
         }
       }
@@ -269,7 +269,7 @@ void TftDisplay::GetTouchPosition(int *x, int *y) {
       touch_point = Ts_->getPoint();
       *x = width_ - touch_point.y;
       *y = height_ - touch_point.x;
-      if (debug_level_ >= 2) {
+      if (debug_level_ >= DEBUG_MINOR) {
         Serial.print("Touchscreen position (x=");
         Serial.print(*x);
         Serial.print(",y=");
@@ -296,20 +296,20 @@ void TftDisplay::Picture() {
       SD_.end();
       if (!SD_.begin(sd_cs_, SD_SCK_MHZ(10))) {
         sd_card_started_ = false;
-        if (debug_level_ >= 1) {
+        if (debug_level_ >= DEBUG_STATS) {
           Serial.println("Continue to cannot start SD card.");
         }
       }
       else {
         sd_card_started_ = true;
-        if (debug_level_ >= 1) {
+        if (debug_level_ >= DEBUG_STATS) {
           Serial.println("Started SD card after multiple tries.");
         }
       }
     }
     if (sd_card_started_ == true) {
       ImageReturnCode stat;
-      if (debug_level_ >= 2) {
+      if (debug_level_ >= DEBUG_MINOR) {
         Serial.println("New TFT picture.");
       }
       if (picture_number == 0) {
@@ -332,7 +332,7 @@ void TftDisplay::Picture() {
         stat = Reader_.drawBMP("/diy_24_thumbnail.bmp", *Tft_, 0, 0);
         picture_number = 0;
       }
-      if (debug_level_ >= 2) {
+      if (debug_level_ >= DEBUG_MINOR) {
         Serial.println("TftDisplay::Picture()");
         Serial.println(stat);
       }
@@ -345,7 +345,7 @@ void TftDisplay::Picture() {
 TftDisplay::TftDisplay() {}
 
 void TftDisplay::Setup(bool not_used, int debug_level) {
-  if (debug_level >= 1) {
+  if (debug_level >= DEBUG_STATS) {
     Serial.println("TFT Display is not in build and is not used.");
   }
 }

@@ -68,4 +68,10 @@
 #error "ERROR - number of notes is greater than number of physical channels."
 #endif
 
+// Shared among all files.
+#define DEBUG_NONE 0
+#define DEBUG_STATS 1
+#define DEBUG_MINOR 2
+#define DEBUG_ALL 3
+
 #endif

@@ -24,8 +24,7 @@
 HammerStatus::HammerStatus() {}
 
 void HammerStatus::Setup(DspPedal *dspp, TestpointLed *testp,
-int debug_level, float damper_threshold, float strike_threshold,
-unsigned long serial_display_interval_micros) {
+int debug_level, float damper_threshold, float strike_threshold) {
 
   debug_level_ = debug_level;
 
@@ -47,10 +46,18 @@ unsigned long serial_display_interval_micros) {
   ethernet_led_last_change_ = millis();
   ethernet_led_state_ = false;
 
-  serial_interval_micros_ = serial_display_interval_micros;
-  serial_last_change_micros_ = micros();
+  serial_interval_ = 2000;
+  serial_last_change_ = millis();
   filter0_.Setup();
   filter1_.Setup();
+
+  statistics_interval_ = 5000;
+  statistics_last_change_ = millis();
+  for (int k = 0; k < NUM_NOTES; k++) {
+    min_[k] = 1.0;
+    max_[k] = 0.0;
+    played_count_[k] = 0;
+  }
 
 }
 
@@ -142,21 +149,96 @@ void HammerStatus::EthernetLed() {
 }
 
 // General information sent to the serial monitor.
-void HammerStatus::SerialMonitor(const int *adc, const float *position) {
+void HammerStatus::SerialMonitor(const int *adc, const float *position,
+const bool *event) {
 
-  // Filter displayed data.
-  unsigned int rs0, rs1;
-  rs0 = filter0_.boxcarFilterUInts(adc[39]);
-  rs1 = filter1_.boxcarFilterUInts(adc[53]);
-
-  if (micros() - serial_last_change_micros_ > serial_interval_micros_) {
-    if (debug_level_ >= 1) {
-      Serial.print("Hammer Board ");
-      Serial.print(" position=");
+  if (debug_level_ >= DEBUG_MINOR) {
+    // Filter displayed data.
+    unsigned int rs0, rs1;
+    rs0 = filter0_.boxcarFilterUInts(adc[39]);  // Middle C.
+    rs1 = filter1_.boxcarFilterUInts(adc[53]);  // D5.
+    // Display the raw ADC counts and the fully calibrated floats for two notes.
+    if (millis() - serial_last_change_ > serial_interval_) {
+      Serial.print("Hammer Board");
+      Serial.print("    position=(");
       Serial.print(rs0);
-      Serial.print(" position=");
-      Serial.println(rs1);
+      Serial.print(")(");
+      Serial.print(position[39]);
+      Serial.print(")    position=(");
+      Serial.print(rs1);
+      Serial.print(")(");
+      Serial.print(position[53]);
+      Serial.println(")");
+      serial_last_change_ = millis();
     }
-    serial_last_change_micros_ = micros();
+  }
+
+  if (debug_level_ >= DEBUG_STATS) {
+    if (millis() - statistics_last_change_ > statistics_interval_) {
+
+      statistics_last_change_ = millis();
+
+      // Find largest and smallest values, of all the values,
+      // and highlight when display with all capital letters.
+      int smallest_ind = 0;
+      int largest_ind = 0;
+      float smallest_value = 1.0;
+      float largest_value = 0.0;
+      for (int k = 0; k < NUM_NOTES; k++) {
+        if (min_[k] < smallest_value) {
+          smallest_value = min_[k];
+          smallest_ind = k;
+        }
+        if (max_[k] > largest_value) {
+          largest_value = max_[k];
+          largest_ind = k;
+        }
+      }
+
+      // For each note, display statistics since last time.
+      for (int k = 0; k < NUM_NOTES; k++) {
+        if (k < 10)
+          Serial.print("index=0");  // Insert 0 to keep vertical alignment.
+        else
+          Serial.print("index=");
+        Serial.print(k);
+        if (played_count_[k] < 10)
+          Serial.print(" count=0");  // Insert 0 to keep vertical alignment.
+        else
+          Serial.print(" count=");
+        Serial.print(played_count_[k]);
+        if (k == smallest_ind)
+          Serial.print("   N ");
+        else
+          Serial.print(" min=");
+        Serial.print(min_[k]);
+        if (k == largest_ind)
+          Serial.print("   X ");
+        else
+          Serial.print(" max=");
+        Serial.print(max_[k]);
+        if (k%4 == 3)
+          Serial.println();
+        else
+          Serial.print(" ");
+        
+        // Start over for the next display.
+        played_count_[k] = 0;
+        min_[k] = 1.0;
+        max_[k] = 0.0;
+      }
+      Serial.println();
+    }
+    else {
+      // In between display updates, keep track of statistics.
+      for (int k = 0; k < NUM_NOTES; k++) {
+        if (position[k] < min_[k])
+          min_[k] = position[k];
+        else if (position[k] > max_[k])
+          max_[k] = position[k];
+        if (event[k] == true)
+          played_count_[k]++;
+      }
+    }
   }
 }
