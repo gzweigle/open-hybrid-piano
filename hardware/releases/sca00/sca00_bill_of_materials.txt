@@ -9,12 +9,12 @@ C6,      1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,          
 C7,      1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
 C8,      470pF Ceramic,         0805,       C0805C471J3RACTU,     Yes,           0.40,        X7R or better. 5% or smaller. 10 VDC or higher rating.
 C9,      1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
-J1,      1x13 pin male 0.1in,   -,          -,                    Yes,           0.26,        Header for connection to IPS mainboard.
-J2,      1x3 pin male 0.1in,    -,          -,                    Yes,           0.06,        Header for connection to IPS mainboard.
-J3,      1x6 pin male 0.1in,    -,          -,                    Yes,           0.12,        Header for connection to IPS mainboard.
-J4,      1x3 pin male 0.1in,    -,          -,                    Yes,           0.06,        Header for connection to IPS mainboard.
-J5,      1x1 pin male 0.1in,    -,          -,                    No,            0.02,        Header for connection to IPS mainboard.
-J6,      1x1 pin male 0.1in,    -,          -,                    No,            0.02,        Header for connection to IPS mainboard.
+J1,      1x13 pin male 0.1in,   -,          -,                    Yes,           0.26,        Header for connection to IPS mainboard. Connect on back of PCB.
+J2,      1x3 pin male 0.1in,    -,          -,                    Yes,           0.06,        Header for connection to IPS mainboard. Connect on back of PCB.
+J3,      1x6 pin male 0.1in,    -,          -,                    Yes,           0.12,        Header for connection to IPS mainboard. Connect on back of PCB.
+J4,      1x3 pin male 0.1in,    -,          -,                    Yes,           0.06,        Header for connection to IPS mainboard. Connect on back of PCB.
+J5,      1x1 pin male 0.1in,    -,          -,                    No,            0.02,        Header for connection to IPS mainboard. Optional. Connect on back of PCB.
+J6,      1x1 pin male 0.1in,    -,          -,                    No,            0.02,        Header for connection to IPS mainboard. Optional. Connect on back of PCB.
 R1,      120K ohms,             0805,       ERA-6AED124V,         Yes,           0.50,        0.125W. 5% tolerance or better.
 R2,      0.2 ohms,              0805,       ERJ-U6SFR20V,         Yes,           0.25,        Resistance less than 0.5 ohms. 0.125W. 5% or better tolerance.
 R3,      47 ohms,               0805,       ERA-6AED470V,         Yes,           0.50,        0.125W. 5% tolerance or better.
