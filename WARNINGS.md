@@ -44,7 +44,7 @@ Please see the PJRC Teensy 4.1 website for more details: https://www.pjrc.com.
 
 Some boards include places to install fuses and some may not. Use fuses.
 
-Use an external power supply that includes short-circuit (overcurrent) protection.
+Use power supplies that include short-circuit (overcurrent), overvoltage, thermal, and other protection for safety.
 
 Some boards include low dropout voltage regulators (LDO). The LDO should include short-circuit protection. This means that if the LDO output is accidentally shorted to ground, the LDO will current limit to a specified value. This current limit can be used when calculating the worst-case total current of the board. See the *bill_of_materials* files in hardware directories for recommended LDO devices.
 
@@ -52,7 +52,7 @@ Some boards include low dropout voltage regulators (LDO). The LDO should include
 
 Some pins on the circuit boards are at power level and some are at ground level. Be careful not to accidentally connect them together. Be careful with placing anything near or around the circuit boards, or with anything related to the circuit boards that are accessible to others.
 
-## Static sensitive parts
+## Static Sensitive Parts
 
 Be careful when soldering, assembling and using the electronic parts. Electrostatic Discharge (ESD) can damage components. An ESD damaged component could cause an intermittent failure that is very difficult to debug.
 
@@ -63,3 +63,7 @@ For a low level of ESD prevention, work in a very dry environment, with carpet, 
 ## Lead Free
 
 Recommend lead free for everything.
+
+## it is all: As Is
+
+Read the licenses, disclaimers of warranty, no liabilities, the "as is" sections, etc.
