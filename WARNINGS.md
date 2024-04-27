@@ -48,13 +48,23 @@ Use power supplies that include short-circuit (overcurrent), overvoltage, therma
 
 Some boards include low dropout voltage regulators (LDO). The LDO should include short-circuit protection. This means that if the LDO output is accidentally shorted to ground, the LDO will current limit to a specified value. This current limit can be used when calculating the worst-case total current of the board. See the *bill_of_materials* files in hardware directories for recommended LDO devices.
 
-## Power, Ground, Other
+## Exposed Connections
 
-Some pins on the circuit boards are at power level and some are at ground level. Be careful not to accidentally connect them together. Be careful with placing anything near or around the circuit boards, or with anything related to the circuit boards that are accessible to others.
+Instructions are not provided for circuit board or piano enclosures.
+
+Shield the circuit boards from physical access.
+
+Some pins on the circuit boards are at power level and some are at ground level. Be careful not to accidentally connect them together. For example, be careful with anything conductive near the circuit boards.
+
+Be careful with placing anything near or around the circuit boards, or with anything related to the circuit boards that are accessible to others.
+
+The boards are low-voltage (five volts and below) but portions could under unexpected or unforseen circumstances get hot. For example a fuse. Keep the circuit boards clear of any materials.
 
 ## Static Sensitive Parts
 
 Be careful when soldering, assembling and using the electronic parts. Electrostatic Discharge (ESD) can damage components. An ESD damaged component could cause an intermittent failure that is very difficult to debug.
+
+Use a nonconductive instrument for moving the configuration switches.
 
 Many resources on the internet provide information about ESD.
 
