@@ -54,11 +54,11 @@ The R1, R2, and RV values are in the HPS bill of materials. Also in the bill of 
 
 * VCE must be within the constant current range specified by CNY-70 data sheet figure 6 [1]. Typical ranges:
     * VCE > 0.4V
-    * VCE < 10V
+    * VCE < 10V (individual designs may be less)
 
 * Forward current IF. The upper range limit listed here is smaller than the datasheet because the *stem piano* design takes into account worst-case temperature [2] restrictions.
     * IF > 5mA
-    * IF < 25mA
+    * IF < 25mA (absolute max, individual designs may require less)
 
 * For collector current IC, see CNY-70 data sheet [1] figure 9 for an example of IC vs *distance*.
 
