@@ -21,7 +21,14 @@ Version 0.8 is the recommended sensor for surface mount.
 * CNY70 sensor.
 * All resistors are surface mount packages.
 
-### Manufacturing
+## Specifications
+
+* Current is approximately 11 milliamps.
+* Because of CNY-70 tolerances, test results show that the output voltage maximum ranges from 1.5 volts to 2.5 volts. The average maximum is approximately 2 volts. (the maximum voltage is when the distance from the CNY-70 to a white reflective surface is at approximately 1 millimeter).
+
+## Manufacturing
+
+**Gerber and KiCad files will be added after board testing is complete.**
 
 To manufacture a board, send the files in (*coming soon*) to a PCB manufacturer.
 
