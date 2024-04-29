@@ -23,8 +23,15 @@ Version 0.8 is the recommended sensor for surface mount.
 
 ## Specifications
 
-* Current is approximately 11 milliamps.
-* Because of CNY-70 tolerances, test results show that the output voltage maximum ranges from 1.5 volts to 2.5 volts. The average maximum is approximately 2 volts. (the maximum voltage is when the distance from the CNY-70 to a white reflective surface is at approximately 1 millimeter).
+Current is approximately 11 milliamps.
+
+Because of CNY-70 tolerances each HPS 0.8 board has a different maximum output voltage. The maximum output voltage happens when the distance from the CNY-70 on the HPS 0.8, to a white reflective surface, is at approximately 1 millimeter.
+
+Test results:
+* The board to board maximum output voltage ranges from 1.5 volts to 2.5 volts.
+* The board to board average maximum output voltage is approximately 2 volts.
+
+The maximum output voltage for each HPS 0.8 board individually does not vary. So, for example, if an HPS 0.8 board maximum output voltage is 2.1 volts when distance is smallest, the maximum output voltage is consistently 2.1 volts each time the distance is smallest.
 
 ## Manufacturing
 
