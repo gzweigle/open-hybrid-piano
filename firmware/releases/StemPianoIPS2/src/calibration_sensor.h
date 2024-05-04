@@ -31,7 +31,7 @@ class CalibrationSensor
   public:
     CalibrationSensor();
     void Setup(float, float, float, int);
-    bool Calibration(bool, bool, bool, float *, const float *);
+    bool Calibration(bool, bool, float *, const float *);
  
   private:
 

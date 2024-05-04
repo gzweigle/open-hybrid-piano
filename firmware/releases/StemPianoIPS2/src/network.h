@@ -38,8 +38,8 @@ class Network
 {
   public:
     Network();
-    void Setup(const char *, const char *, int, int, int, int);
-    void SendPianoPacket(const float *);
+    void Setup(const char *, const char *, int, int, int, int, int);
+    void SendPianoPacket(const float *, bool);
 
   private:
     int debug_level_;
@@ -53,11 +53,18 @@ class Network
     int end_ind_;
     uint8_t ethernet_values_[3*(MAX_ETHERNET_BYTES)];
 
+    bool network_has_been_setup_;
+
+    int switch_debounce_micro_;
+    unsigned long start_time_micros_; 
+    bool first_network_setup_call_;
+    bool startup_delay_finished_;
+
     EthernetUDP Udp;
 
     void GetMacAddress();
     void SetIpAddresses(const char *, const char *, int);
-    void SetupNetwork();
+    void SetupNetwork(bool);
 };
 
 #else

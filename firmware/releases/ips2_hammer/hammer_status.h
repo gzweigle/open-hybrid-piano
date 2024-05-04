@@ -34,12 +34,12 @@ class HammerStatus
 {
   public:
     HammerStatus();
-    void Setup(DspPedal *, TestpointLed *, int, float, float);
-    void FrontLed(const float *);
+    void Setup(DspPedal *, TestpointLed *, int, float, float, float);
+    void FrontLed(const float *, bool);
     void LowerRightLed(bool);
     void SCALed();
     void EthernetLed();
-    void SerialMonitor(const int *, const float *, const bool *);
+    void SerialMonitor(const int *, const float *, const bool *, bool, bool);
  
   private:
 
@@ -47,7 +47,8 @@ class HammerStatus
 
     DspPedal *dspp_;
     TestpointLed *testp_;
-    float damper_threshold_;
+    float damper_threshold_low_;
+    float damper_threshold_high_;
     float strike_threshold_;
 
     unsigned long lower_r_led_interval_when_all_notes_calibrated_;

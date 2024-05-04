@@ -69,40 +69,28 @@ float match_offset, int debug_level) {
 
 // Create and apply calibration values.
 // Return true if all NUM_NOTES notes are using a calibrated value.
-//
-// Switch these individually, not in combinations.
-// use_calibration = apply values, update values.
-// disable_calibration = do not apply values, but keep updating them.
-// lock_calibration = apply values, but stop updating them.
-bool CalibrationSensor::Calibration(bool use_calibration,
-bool disable_calibration, bool lock_calibration, float *out, const float *in) {
+bool CalibrationSensor::Calibration(bool switch_freeze_cal_values,
+bool switch_disable_and_reset_calibration, float *out, const float *in) {
 
   /////////////////////////////////
   // APPLYING CALIBRATION VALUES //
   /////////////////////////////////
-
-  // During runtime, undo the CNY-70 nonlinearity.
-  bool all_notes_are_using_calibration_values = true; // Initialize.
   for (int note = 0; note < NUM_NOTES; note++) {
-    // If calibration disabled, don't use it but don't force rebuilding.
-    if (use_calibration == true && disable_calibration == false) {
+    if (switch_disable_and_reset_calibration == false) {
       if (max_updated_[note] == true) {
         // See design document for details of the algorithm.
         out[note] = (log(in[note]) - offset_[note]) * gain_[note];
-        // Put in same approx range as originals.
         out[note] = out[note] * orig_gain_ + orig_offset_;
       }
       else {
         out[note] = in[note];
-        all_notes_are_using_calibration_values = false;
       }
     }
     else {
       out[note] = in[note];
-      all_notes_are_using_calibration_values = false;
     }
   }
-  // Except, copy pedals over without modification.
+  // Copy pedals over without modification.
   for (int note = NUM_NOTES; note < NUM_CHANNELS; note++) {
       out[note] = in[note];
   }
@@ -112,7 +100,7 @@ bool disable_calibration, bool lock_calibration, float *out, const float *in) {
   /////////////////////////////////
 
   // If turn off calibration, force rebuilding next time turn on.
-  if (use_calibration == false) {
+  if (switch_disable_and_reset_calibration == true) {
     for (int note = 0; note < NUM_NOTES; note++) {
       gain_staged_[note] = 1.0;
       offset_staged_[note] = 0.0;
@@ -124,7 +112,8 @@ bool disable_calibration, bool lock_calibration, float *out, const float *in) {
       max_updated_[note] = false;
     }
   }
-  else if (lock_calibration == false) {
+  // If calibration values not frozen, update them.
+  else if (switch_freeze_cal_values == false) {
 
     bool max_updated;
 
@@ -143,20 +132,21 @@ bool disable_calibration, bool lock_calibration, float *out, const float *in) {
         max_updated = false;
 
         // Show the values preceding the selected value.
-        Serial.print("NEW MINIMUM FOR ");
-        Serial.print(note);
-        Serial.print(" ");
-        int index = buffer_index_;
-        for (int sample = 0; sample < CALIBRATION_FILTER_SAMPLES; sample++) {
-          Serial.print(filter_buffer_[note][index]);
+        if (debug_level_ > DEBUG_NONE) {
+          Serial.print("NEW MINIMUM FOR ");
+          Serial.print(note);
           Serial.print(" ");
-          index--;
-          if (index < 0) {
-            index = CALIBRATION_FILTER_SAMPLES;
+          int index = buffer_index_;
+          for (int sample = 0; sample < CALIBRATION_FILTER_SAMPLES; sample++) {
+            Serial.print(filter_buffer_[note][index]);
+            Serial.print(" ");
+            index--;
+            if (index < 0) {
+              index = CALIBRATION_FILTER_SAMPLES;
+            }
           }
+          Serial.println();
         }
-        Serial.println();
-
       }
       else {
         max_updated = false;
@@ -213,6 +203,14 @@ bool disable_calibration, bool lock_calibration, float *out, const float *in) {
 
   }
 
+  // Its a big AND gate.
+  bool all_notes_are_using_calibration_values = true;
+  for (int note = 0; note < NUM_NOTES; note++) {
+    if (max_updated_[note] == false) {
+      all_notes_are_using_calibration_values = false;
+      break;
+    }
+  }
   return all_notes_are_using_calibration_values;
 
 }

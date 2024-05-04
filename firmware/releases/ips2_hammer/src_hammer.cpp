@@ -114,11 +114,11 @@ void setup(void) {
   B2B.Setup(Set.canbus_enable);
 
   // Diagnostics and status
-  HStat.Setup(&DspP, &Tpl, Set.debug_level, Set.damper_threshold_using_hammer, Set.strike_threshold);
+  HStat.Setup(&DspP, &Tpl, Set.debug_level, Set.damper_threshold_low,
+  Set.damper_threshold_high, Set.strike_threshold);
 
   // Setup the dampers, hammers, and pedals on hammer board.
-  DspD.Setup(Set.using_hammer_to_estimate_damper,
-  Set.damper_threshold_using_damper, Set.damper_threshold_using_hammer,
+  DspD.Setup( Set.damper_threshold_low, Set.damper_threshold_high,
   Set.damper_velocity_scaling, Set.adc_sample_period_microseconds, Set.debug_level);
   DspH.Setup(Set.adc_sample_period_microseconds, Set.strike_threshold,
   Set.release_threshold, Set.min_repetition_seconds, Set.min_strike_velocity,
@@ -138,7 +138,8 @@ void setup(void) {
   Cal.Setup(Set.calibration_threshold, Set.calibration_match_gain,
   Set.calibration_match_offset, Set.debug_level);
   Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port,
-  Set.ethernet_start_ind, Set.ethernet_end_ind, Set.debug_level);
+  Set.ethernet_start_ind, Set.ethernet_end_ind,
+  Set.switch_debounce_micro, Set.debug_level);
   Tpl.Setup();
   Tmg.Setup(Set.adc_sample_period_microseconds);
   Tft.Setup(Set.using_display, Set.debug_level);
@@ -156,8 +157,14 @@ void setup(void) {
 int startup_counter = 0;
 
 // Switches.
-bool switch_tft;
-bool switch_use_calibration, switch_disable_calibration, switch_lock_calibration;
+bool switch_high_damper_threshold;
+bool switch_external_damper_board;
+bool switch_enable_ethernet;
+bool switch_tft_display;
+bool switch_velocity_scaling_1;
+bool switch_velocity_scaling_0;
+bool switch_freeze_cal_values;
+bool switch_disable_and_reset_calibration;
 
 // Data from ADC.
 unsigned int raw_samples[NUM_CHANNELS];
@@ -180,24 +187,29 @@ void loop() {
   // what is actually read is the internal state of timers.
   SwIPS1.updatePuDoState("IPS11", "IPS12");
   SwIPS2.updatePuDoState("IPS21", "IPS22");
-  SwSCA1.updatePuDoState("SCA11", "SCA12");
   SwSCA2.updatePuDoState("SCA21", "SCA22");
+  SwSCA1.updatePuDoState("SCA11", "SCA12");
 
   // Read all switch inputs.
-  switch_tft = SwIPS2.read_switch_1();
-  switch_use_calibration = SwIPS2.read_switch_2();
-  switch_lock_calibration = SwIPS1.read_switch_1();
-  switch_disable_calibration = SwIPS1.read_switch_2();
+  switch_high_damper_threshold = SwIPS1.read_switch_2();
+  switch_external_damper_board = SwIPS1.read_switch_1();
+  switch_enable_ethernet = SwIPS2.read_switch_2();
+  switch_tft_display = SwIPS2.read_switch_1();
+  switch_velocity_scaling_1 = SwSCA2.read_switch_2();
+  switch_velocity_scaling_0 = SwSCA2.read_switch_1();
+  switch_freeze_cal_values = SwSCA1.read_switch_2();
+  switch_disable_and_reset_calibration = SwSCA1.read_switch_1();
 
   // When the TFT is operational, turn off the alorithms that
   // could generate MIDI output and slow down the sampling.
   // Slow down sampling because the TFT takes a long time for
   // processing. But, do keep the sampling going so that the TFT
   // can display things like maximum and minimum hammer positions.
-  if (switch_tft == true) {
+  if (switch_tft_display == true) {
     DspD.Enable(false);
     DspH.Enable(false);
     DspP.Enable(false);
+    switch_freeze_cal_values = true; // Ignore switch value.
     Tmg.ResetInterval(Set.adc_sample_period_microseconds_during_tft);
   }
   else {
@@ -223,9 +235,8 @@ void loop() {
     Adc.NormalizeAdcValues(position_adc_counts, position_floats, raw_samples);
 
     // Undo the sensor nonlinearity.
-    bool all_notes_using_cal = Cal.Calibration(switch_use_calibration,
-    switch_disable_calibration, switch_lock_calibration,
-    calibrated_floats, position_floats);
+    bool all_notes_using_cal = Cal.Calibration(switch_freeze_cal_values,
+    switch_disable_and_reset_calibration, calibrated_floats, position_floats);
 
     // Zero out the signal from any unconnected pins to avoid noise
     // or anything else causing an unwanted piano note to play.
@@ -237,14 +248,9 @@ void loop() {
     }
 
     // Select source for damper signals.
-    if (Set.connected_to_remote_damper_board == true) {
+    if (switch_external_damper_board == true) {
       // There exists a damper board so use remote data from the damper board.
       B2B.GetDamperData(damper_position);
-      for (int k = 0; k < NUM_CHANNELS; k++) {
-        if (Set.using_hammer_to_estimate_damper[k] == true) {
-          damper_position[k] = calibrated_floats[k];
-        }
-      }
     }
     else {
       // No external damper board.
@@ -256,7 +262,8 @@ void loop() {
     // Process hammer, damper, and pedal data.
     // For hammer and damper get an event boolean flag and velocity.
     // For pedal get the state of the pedal.
-    DspD.GetDamperEventData(damper_event, damper_velocity, damper_position);
+    DspD.GetDamperEventData(damper_event, damper_velocity, damper_position,
+    switch_high_damper_threshold);
     DspH.GetHammerEventData(hammer_event, hammer_velocity, calibrated_floats);
     DspP.UpdatePedalState(calibrated_floats);
 
@@ -288,17 +295,18 @@ void loop() {
     raw_to_send[9] = calibrated_floats[43]; //offset + 9];
     raw_to_send[10] = calibrated_floats[44]; //offset + 10];
     raw_to_send[11] = calibrated_floats[46]; //offset + 11];
-    Eth.SendPianoPacket(raw_to_send);
+    Eth.SendPianoPacket(raw_to_send, switch_enable_ethernet);
 
     // Run the TFT display.
-    Tft.Display(switch_tft, calibrated_floats, damper_position);
+    Tft.Display(switch_tft_display, calibrated_floats, damper_position);
 
     // Debug and display information.
-    HStat.FrontLed(calibrated_floats);
+    HStat.FrontLed(calibrated_floats, switch_high_damper_threshold);
     HStat.LowerRightLed(all_notes_using_cal);
     HStat.SCALed();
     HStat.EthernetLed();
-    HStat.SerialMonitor(position_adc_counts, calibrated_floats, hammer_event);
+    HStat.SerialMonitor(position_adc_counts, calibrated_floats, hammer_event,
+    Set.canbus_enable, switch_external_damper_board);
     Tpl.SetTp8(false);
   }
 }

@@ -36,8 +36,8 @@ class DspDamper
   public:
 
     DspDamper();
-    void Setup(const bool *, float, float, float, int, int);
-    void GetDamperEventData(bool *, float *, const float *);
+    void Setup(float, float, float, int, int);
+    void GetDamperEventData(bool *, float *, const float *, bool);
     void Enable(bool);
 
   private:
@@ -45,7 +45,8 @@ class DspDamper
     bool enable_;
     int debug_level_;
 
-    float damper_threshold_[NUM_CHANNELS];
+    float damper_threshold_low_;
+    float damper_threshold_high_;
 
     int event_block_counter_[NUM_CHANNELS];
 
