@@ -34,6 +34,10 @@ HammerSettings::HammerSettings() {}
 void HammerSettings::SetAllSettingValues() {
 
   // Debug. See stem_piano_ips2.h for information.
+  // DEBUG_NONE
+  // DEBUG_STATS
+  // DEBUG_MINOR
+  // DEBUG_ALL
   debug_level = DEBUG_STATS;
   Serial.print("Debug level is set to ");
   Serial.println(debug_level);
@@ -116,18 +120,11 @@ void HammerSettings::SetAllSettingValues() {
 
   // When the damper position crosses this percentage of max-min
   // damper position, declare a damper event.
-  damper_threshold_using_damper = 0.35;
-  damper_threshold_using_hammer = 0.45;
+  damper_threshold_low = 0.5;
+  damper_threshold_high = 0.6;
 
   // Magic value to get velocity in range [0,1].
   damper_velocity_scaling = 0.025;
-
-  // Set to true if using hammer as an estimate of damper.
-  // For keys with this set as true, using the damper_threshold_using_hammer.
-  // For keys with this set as false, using the damper_threshold_using_damper.
-  for (int channel = 0; channel < NUM_CHANNELS; channel++) {
-    using_hammer_to_estimate_damper[channel] = true;
-  }
 
   ////////
   // Hammer Settings.
@@ -136,7 +133,7 @@ void HammerSettings::SetAllSettingValues() {
   // Value does not need to be precise.
   // Just needs to be large enough to avoid checking when the hammer
   // is near its rest position and could have noisy data.
-  strike_threshold = 0.7;
+  strike_threshold = 0.8;
 
   // After a strike, do not allow another until the hammer has dropped
   // below this threshold. Set higher if signal is less noisy.
@@ -198,17 +195,9 @@ void HammerSettings::SetAllSettingValues() {
   ////////
   // Canbus.
 
-  // Set to true if using separate remote board for measuring the
-  // damper position. If this is set to false, then the damper
-  // position will be estimated based on the hammer position.
-  connected_to_remote_damper_board = false;
+  // Must be true if using separate remote board for measuring the
+  // damper position.
   canbus_enable = false;
-
-  if (debug_level >= DEBUG_STATS) {
-    if (canbus_enable == false && connected_to_remote_damper_board == true) {
-      Serial.println("Warning - trying to use remote board without Can bus enabled.");
-    }
-  }
 
   ////////
   // TFT display.

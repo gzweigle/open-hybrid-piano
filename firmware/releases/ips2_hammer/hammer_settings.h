@@ -59,10 +59,9 @@ class HammerSettings
     float calibration_threshold;
     float calibration_match_gain;
     float calibration_match_offset;
-    float damper_threshold_using_damper;
-    float damper_threshold_using_hammer;
+    float damper_threshold_low;
+    float damper_threshold_high;
     float damper_velocity_scaling;
-    bool using_hammer_to_estimate_damper[NUM_CHANNELS];
     float strike_threshold;
     float release_threshold;
     float min_repetition_seconds;
@@ -82,7 +81,6 @@ class HammerSettings
     int upd_port;
     int ethernet_start_ind;
     int ethernet_end_ind;
-    bool connected_to_remote_damper_board;
     bool canbus_enable;
     bool using_display;
     bool connected_channel[NUM_CHANNELS];
