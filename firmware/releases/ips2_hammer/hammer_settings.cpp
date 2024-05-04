@@ -95,7 +95,7 @@ void HammerSettings::SetAllSettingValues() {
   // Gain control.
   // This is needed since all hardware and algorithms are not completely
   // finished. Eventually, the goal is not to need a gain control.
-  velocity_scale = 2.5;
+  velocity_scale = 0.45;
 
   ////////
   // Switch settings.
@@ -153,13 +153,11 @@ void HammerSettings::SetAllSettingValues() {
   // This setting creates the "undesirable" silent strike when
   // a pianist strikes a key for ppppp... too slowly.
   // Set to zero disables the functionality.
-  min_strike_velocity = 0.05;
+  min_strike_velocity = 0.20;
 
-  // Swing distance at CNY70 location in meters.
-  // Measure this after building the mechanical system and structure
-  // that holds the sensors. The measurement is in inches so includes
-  // a conversion to meters (0.0254 meters / inch)
-  hammer_travel_meters = .0254 * 0.3125; 
+  // Swing distance at hammer. Measurement is in inches so
+  // includes a conversion to meters (0.0254 meters / inch).
+  hammer_travel_meters = .0254 * 1.75;
 
   ////////
   // Pedal Settings.

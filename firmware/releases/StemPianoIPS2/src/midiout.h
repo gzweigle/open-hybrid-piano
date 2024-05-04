@@ -50,6 +50,10 @@ class MidiOut
     MY_MIDI_INTERFACE *mi_;
     void SendNote(AutoMute *, const bool *, const float *, bool);
 
+    // Some receiving software treats 127 special.
+    // So, option for a smaller max value.
+    int max_midi_value_;
+
 };
 
 #endif

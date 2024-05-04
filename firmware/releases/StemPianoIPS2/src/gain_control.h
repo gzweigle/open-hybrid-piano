@@ -31,10 +31,15 @@ class GainControl
   public:
     GainControl();
     void Setup(float, int);
-    void AutomaticGainControl(float *, const bool *);
+    void HammerVelocityScale(float *, bool, const bool *);
+    void DamperVelocityScale(float *, const bool *);
  
   private:
     float velocity_scale_;
+    bool last_switch_value_;
+    float reciprocal_max_hammer_velocity_;
+    float max_hammer_velocity_working_;
+    bool found_at_least_one_new_max_;
     int debug_level_;
 
 };

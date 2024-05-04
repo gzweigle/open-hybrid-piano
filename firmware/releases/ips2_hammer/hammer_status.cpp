@@ -219,12 +219,12 @@ const bool *event, bool canbus_enable, bool switch_external_damper_board) {
           Serial.print(" count=");
         Serial.print(played_count_[k]);
         if (k == smallest_ind)
-          Serial.print("   N ");
+          Serial.print("   - ");
         else
           Serial.print(" min=");
         Serial.print(min_[k]);
         if (k == largest_ind)
-          Serial.print("   X ");
+          Serial.print("   + ");
         else
           Serial.print(" max=");
         Serial.print(max_[k]);

@@ -35,6 +35,7 @@ MY_MIDI_INTERFACE *MidiInstance, int debug_level) {
   midi_channel_ = midi_channel;
   mi_ = MidiInstance;
   midi_value_for_A0_ = 21;  // MIDI standard.
+  max_midi_value_ = 126;
   mi_->begin();
 }
 
@@ -48,7 +49,7 @@ void MidiOut::SendNoteOff(AutoMute *mute, const bool *event, const float *veloci
 
 void MidiOut::SendPedal(DspPedal *DspP) {
   if (DspP->GetSustainCrossedDownThreshold() == true) {
-    mi_->sendControlChange(64, 127, midi_channel_);
+    mi_->sendControlChange(64, max_midi_value_, midi_channel_);
     if (debug_level_ >= DEBUG_STATS) {
       Serial.println("MIDI sustain is now ON.");
     }
@@ -60,7 +61,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     }
   }
   if (DspP->GetSostenutoCrossedDownThreshold() == true) {
-    mi_->sendControlChange(66, 127, midi_channel_);
+    mi_->sendControlChange(66, max_midi_value_, midi_channel_);
     if (debug_level_ >= DEBUG_STATS) {
       Serial.println("MIDI sostenuto is now ON.");
     }
@@ -72,7 +73,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     }
   }
   if (DspP->GetUnaCordaCrossedDownThreshold() == true) {
-    mi_->sendControlChange(67, 127, midi_channel_);
+    mi_->sendControlChange(67, max_midi_value_, midi_channel_);
     if (debug_level_ >= DEBUG_STATS) {
       Serial.println("MIDI una corda is now ON.");
     }
@@ -97,8 +98,8 @@ const bool *event, const float *velocity, bool send_on) {
       if (velocity_int < 0) {
         velocity_int = -velocity_int;
       }
-      if (velocity_int > 127) {
-        velocity_int = 127;
+      if (velocity_int > max_midi_value_) {
+        velocity_int = max_midi_value_;
       }
       if (debug_level_ >= DEBUG_STATS) {
         Serial.print("MIDI note (");

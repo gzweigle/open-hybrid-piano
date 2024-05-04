@@ -161,8 +161,7 @@ bool switch_high_damper_threshold;
 bool switch_external_damper_board;
 bool switch_enable_ethernet;
 bool switch_tft_display;
-bool switch_velocity_scaling_1;
-bool switch_velocity_scaling_0;
+bool switch_set_peak_velocity;
 bool switch_freeze_cal_values;
 bool switch_disable_and_reset_calibration;
 
@@ -195,8 +194,7 @@ void loop() {
   switch_external_damper_board = SwIPS1.read_switch_1();
   switch_enable_ethernet = SwIPS2.read_switch_2();
   switch_tft_display = SwIPS2.read_switch_1();
-  switch_velocity_scaling_1 = SwSCA2.read_switch_2();
-  switch_velocity_scaling_0 = SwSCA2.read_switch_1();
+  switch_set_peak_velocity = SwSCA2.read_switch_1();
   switch_freeze_cal_values = SwSCA1.read_switch_2();
   switch_disable_and_reset_calibration = SwSCA1.read_switch_1();
 
@@ -268,8 +266,8 @@ void loop() {
     DspP.UpdatePedalState(calibrated_floats);
 
     // Adjust velocity. Probably not needed in the future.
-    Gain.AutomaticGainControl(damper_velocity, damper_event);
-    Gain.AutomaticGainControl(hammer_velocity, hammer_event);
+    Gain.DamperVelocityScale(damper_velocity, damper_event);
+    Gain.HammerVelocityScale(hammer_velocity, switch_set_peak_velocity, hammer_event);
 
     // Sending data over MIDI.
     if (startup_counter < Set.startup_counter_value) {
