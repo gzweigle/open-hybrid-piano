@@ -1,0 +1,56 @@
+%TF.SameCoordinates,Original*%
+%TF.FileFunction,Soldermask,Bot*%
+%TF.FilePolarity,Negative*%
+%FSLAX46Y46*%
+G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
+%MOMM*%
+%LPD*%
+G01*
+G04 APERTURE LIST*
+G04 Aperture macros list*
+%AMRoundRect*
+0 Rectangle with rounded corners*
+0 $1 Rounding radius*
+0 $2 $3 $4 $5 $6 $7 $8 $9 X,Y pos of 4 corners*
+0 Add a 4 corners polygon primitive as box body*
+4,1,4,$2,$3,$4,$5,$6,$7,$8,$9,$2,$3,0*
+0 Add four circle primitives for the rounded corners*
+1,1,$1+$1,$2,$3*
+1,1,$1+$1,$4,$5*
+1,1,$1+$1,$6,$7*
+1,1,$1+$1,$8,$9*
+0 Add four rect primitives between the rounded corners*
+20,1,$1+$1,$2,$3,$4,$5,0*
+20,1,$1+$1,$4,$5,$6,$7,0*
+20,1,$1+$1,$6,$7,$8,$9,0*
+20,1,$1+$1,$8,$9,$2,$3,0*%
+G04 Aperture macros list end*
+%ADD10R,1.700000X1.700000*%
+%ADD11O,1.700000X1.700000*%
+%ADD12C,3.900000*%
+%ADD13C,7.000000*%
+%ADD14RoundRect,0.249600X0.550400X0.550400X-0.550400X0.550400X-0.550400X-0.550400X0.550400X-0.550400X0*%
+%ADD15C,1.600000*%
+G04 APERTURE END LIST*
+D10*
+%TO.C,J0*%
+X122935999Y-100314999D03*
+D11*
+X122935999Y-97774999D03*
+X122935999Y-95234999D03*
+%TD*%
+D12*
+%TO.C,H0*%
+X105410000Y-97790000D03*
+D13*
+X105410000Y-97790000D03*
+%TD*%
+D14*
+%TO.C,U1*%
+X135890000Y-96520000D03*
+D15*
+X135890000Y-99060000D03*
+X133090000Y-99060000D03*
+X133090000Y-96520000D03*
+%TD*%
+M02*

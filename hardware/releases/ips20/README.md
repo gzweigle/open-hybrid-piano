@@ -117,20 +117,20 @@ There are six Low Dropout (LDO) voltage regulators. Each converts +5V to +3.3V. 
 
 If using an HPS board for remote sensor, then the total current out of an LDO for sensors is given by the following equation:
 
-16 * 15 mA = 240 mA.
+16 * 14 mA = 224 mA.
 
-According to its data sheet, the 16:1 analog mux worst-case current draw is 50mA.
+According to its data sheet, the 16:1 analog mux worst-case current draw is 16mA (use twice the (ICC + delta ICC) values).
 
 Some of the LDO integrated circuits power either the pedal circuit or (optionally) the SCA.
 * The pedal circuit draws approximately 5 mA.
-* The SCA current draw depends on the SCA circuit. Seems unlikely this would exceed 50mA.
+* The SCA current draw depends on the SCA circuit. Seems unlikely this would exceed 50mA absolute maximum.
 
 Summing all numbers above gives a worst-case current for an LDO:
-240 + 50 + 50 = 340 mA.
+224 + 16 + 50 = 290 mA.
 
 The SCA also has a second +3.3V input (see later section below) which can be used instead.
 In this case the worst case current for an LDO:
-240 + 50 = 290 mA.
+224 + 16 = 240 mA.
 
 Select the LDO based on above math. The LDO in [ips20_bill_of_materials.txt](ips20_bill_of_materials.txt) was selected based on the above math.
 

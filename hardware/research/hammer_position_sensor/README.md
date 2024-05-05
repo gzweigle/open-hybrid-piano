@@ -11,5 +11,5 @@ Historically this was for hammers. However, the sensor is also used for dampers.
 
 ### Capabilties
 * CNY70 sensor.
-* Maximum current draw < 15mA.
+* Maximum current draw < 14mA.
 * Fixed resistor and trimming resistor versions.
