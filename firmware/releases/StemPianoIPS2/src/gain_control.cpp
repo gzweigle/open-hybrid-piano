@@ -67,11 +67,11 @@ bool switch_set_peak_velocity, const bool *velocity_event) {
       // Don't let it be zero. And, any small value is probably wrong.
       if (max_hammer_velocity_working_ < 0.25) {
         max_hammer_velocity_working_ = 0.25;
-        if (debug_level_ > DEBUG_NONE) {
+        if (debug_level_ >= DEBUG_MINOR) {
           Serial.println("Warning - max hammer velocity set to 0.25");
         }
       }
-      if (debug_level_ > DEBUG_NONE) {
+      if (debug_level_ >= DEBUG_MINOR) {
         Serial.print("Found a new max hammer velocity = ");
         Serial.print(max_hammer_velocity_working_);
         Serial.println(".");
@@ -79,7 +79,7 @@ bool switch_set_peak_velocity, const bool *velocity_event) {
       reciprocal_max_hammer_velocity_ = 1.0 / max_hammer_velocity_working_;
     }
     else {
-      if (debug_level_ > DEBUG_NONE) {
+      if (debug_level_ >= DEBUG_MINOR) {
         Serial.println("Warning - did not find a new max hammer velocity");
         Serial.print("          keeping the previous max hammer velocity of ");
         Serial.print(1.0/reciprocal_max_hammer_velocity_);

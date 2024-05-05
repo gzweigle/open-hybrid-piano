@@ -132,7 +132,7 @@ bool switch_disable_and_reset_calibration, float *out, const float *in) {
         max_updated = false;
 
         // Show the values preceding the selected value.
-        if (debug_level_ > DEBUG_NONE) {
+        if (debug_level_ >= DEBUG_ALL) {
           Serial.print("NEW MINIMUM FOR ");
           Serial.print(note);
           Serial.print(" ");
@@ -164,7 +164,7 @@ bool switch_disable_and_reset_calibration, float *out, const float *in) {
         // This note is ready to go.
         max_updated_staged_[note] = true;
 
-        if (debug_level_ >= DEBUG_STATS) {
+        if (debug_level_ >= DEBUG_MINOR) {
           Serial.print("==>Index: ");
           Serial.print(note);
           Serial.print(" Max: ");
@@ -182,7 +182,7 @@ bool switch_disable_and_reset_calibration, float *out, const float *in) {
       // resting position. Otherwise, could get one bad note when gain and
       // offset change while the hammer/damper is moving toward the sensor.
       if (in[note] < 1.5 * min_[note]) {
-        if (debug_level_ >= DEBUG_STATS) {
+        if (debug_level_ >= DEBUG_MINOR) {
           if (max_updated_[note] == false && max_updated_staged_[note] == true) {
             Serial.print("Now using a calibrated value. In=");
             Serial.print(in[note]);

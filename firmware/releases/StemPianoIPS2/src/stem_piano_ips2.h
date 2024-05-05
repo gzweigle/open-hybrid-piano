@@ -50,7 +50,7 @@
 //
 // The TFT is not necessary for the piano to work. If comment out the
 // following #define, then the above steps are not required.
-#define TFT_INSTALLED
+// #define TFT_INSTALLED
 
 // If Ethernet was not soldered onto the IPS 2.X board, comment this out.
 #define ETHERNET_INSTALLED
