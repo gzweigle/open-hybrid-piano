@@ -25,28 +25,50 @@
 #define CALIBRATION_FILTER_SAMPLES 4
 
 #include "stem_piano_ips2.h"
+#include "nonvolatile.h"
 
 class CalibrationSensor
 {
   public:
     CalibrationSensor();
-    void Setup(float, float, float, int);
+    void Setup(float, float, float, int, Nonvolatile *);
     bool Calibration(bool, bool, float *, const float *);
  
   private:
+
+    int debug_level_;
 
     float gain_staged_[NUM_NOTES], gain_[NUM_NOTES];
     float offset_staged_[NUM_NOTES], offset_[NUM_NOTES];
     float max_[NUM_NOTES];
     float min_[NUM_NOTES];
-    int debug_level_;
-    bool max_updated_staged_[NUM_NOTES], max_updated_[NUM_NOTES];
+
+    float gain_default_;
+
+    bool min_at_least_one_[NUM_NOTES], max_at_least_one_[NUM_NOTES];
+
     float orig_gain_, orig_offset_;
+
     float threshold_;
-    float update_threshold_;
+    float staged_scaling_value_;
+
+    bool switch_freeze_cal_values_last_;
+    bool switch_disable_and_reset_calibration_last_;
 
     float filter_buffer_[NUM_NOTES][CALIBRATION_FILTER_SAMPLES];
     int buffer_index_;
+
+    Nonvolatile *Nv_;
+    unsigned long last_write_time_;
+    unsigned long min_write_interval_millis_;
+
+    float GetGain(float, float);
+    float GetOffset(float);
+    void InitializeState(Nonvolatile *, int);
+    float ClipLimit(float);
+    void ApplyCalibrationValues(bool, float *, const float *);
+    bool BuildCalibrationValues(bool, bool, const float *);
+    void WriteEeprom(bool, bool, bool);
 
 };
 

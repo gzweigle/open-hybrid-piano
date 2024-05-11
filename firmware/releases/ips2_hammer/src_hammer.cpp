@@ -40,6 +40,7 @@
 #include "hammer_status.h"
 #include "midiout.h"
 #include "network.h"
+#include "nonvolatile.h"
 #include "switches.h"
 #include "testpoint_led.h"
 #include "timing.h"
@@ -57,6 +58,7 @@ GainControl Gain;
 HammerStatus HStat;
 MidiOut Midi;
 Network Eth;
+Nonvolatile Nonv;
 Switches SwIPS1;
 Switches SwIPS2;
 Switches SwSCA1;
@@ -89,6 +91,14 @@ void setup(void) {
   // Load the settings. Must be first in the setup() function.
   Set.SetAllSettingValues();
 
+  if (Set.debug_level >= DEBUG_STATS) {
+    Serial.println("Beginning hammer board initialization.");
+  }
+
+  // Initialize the nonvolatile memory.
+  // Initialize early in case any setup() uses storage.
+  Nonv.Setup(Set.debug_level);
+
   // Setup reading the switches.
   SwIPS1.Setup(Set.switch_debounce_micro,
   Set.switch11_ips_pin, Set.switch12_ips_pin, Set.debug_level);
@@ -98,10 +108,6 @@ void setup(void) {
   Set.switch11_sca_pin, Set.switch12_sca_pin, Set.debug_level);
   SwSCA2.Setup(Set.switch_debounce_micro,
   Set.switch21_sca_pin, Set.switch22_sca_pin, Set.debug_level);
-
-  if (Set.debug_level >= DEBUG_STATS) {
-    Serial.println("Beginning hammer board initialization.");
-  }
 
   Mute.Setup();
 
@@ -136,7 +142,7 @@ void setup(void) {
 
   // Common on hammer and pedal board: Ethernet, test points, TFT display, etc.
   Cal.Setup(Set.calibration_threshold, Set.calibration_match_gain,
-  Set.calibration_match_offset, Set.debug_level);
+  Set.calibration_match_offset, Set.debug_level, &Nonv);
   Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port,
   Set.ethernet_start_ind, Set.ethernet_end_ind,
   Set.switch_debounce_micro, Set.debug_level);
