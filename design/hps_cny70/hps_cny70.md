@@ -1,11 +1,11 @@
-# Analog Front-End for HPS, using CNY-70
+# Analog Front-End for HPS, using CNY70
 
-This directory contains information on the analog front-end design for *stem piano* using the Hammer Position Sensor (HPS) boards with CNY-70 sensors.
+This directory contains information on the analog front-end design for *stem piano* using the Hammer Position Sensor (HPS) boards with CNY70 sensors.
 
 Selecting the HPS resistors and getting an output voltage in the correct range could involve some trial-and-error testing when building a *stem piano*. The reason is because of many influences on the output voltage:
 * Reflective surface.
-* Variation between CNY-70 parts.
-* Physical distance between hammer shank and the CNY-70.
+* Variation between CNY70 parts.
+* Physical distance between hammer shank and the CNY70.
 
 This document explains the reasons behind resistor values in the bill of materials for the HPS boards. Understanding the design and resistor selection process is helpful because each piano is unique and could require adjustments.
 
@@ -15,18 +15,20 @@ The project progress YouTube videos https://www.youtube.com/@gzpiano88 may prove
 
 ![alt text](hps_cny70.jpg)
 
-The R1, R2, and RV values are in the HPS bill of materials. Also in the bill of materials is the REF integrated circuit component (unless integrated with the ADC). The information below explains how values are selected. Additional resources are the CNY-70 data sheet [1] and application guide [2]. See end of this file for the full names of those documents.
+The R1, R2, and RV values are in the HPS bill of materials. Also in the bill of materials is the REF integrated circuit component (unless integrated with the ADC). The information below explains how values are selected. Additional resources are the CNY70 data sheet [1] and application guide [2]. See end of this file for the full names of those documents.
+
+Resistor RV is optional and in most cases is not needed.
 
 ## Definitions
 
 ### HPS Components
-* CNY-70 = Optical sensor.
+* CNY70 = Optical sensor.
 * ADC = Analog to Digital Converter.
 * REF = Something generating the ADC reference voltage. This is an external integrated circuit or it is included with the ADC.
 * SURFACE = Reflective surface such as a hammer shank or the damper location at back of a piano key.
 * R1 = Resistor to set forward current IF.
-* RV = Optional adjustable resistor to compensate for variation from one CNY-70 to another CNY-70. See this video for an explanation of the CNY-70 variation issue: https://www.youtube.com/watch?v=C9174TC4kLs
-* R2 = Resistor to set the value of VO when CNY-70 distance is closest to the SURFACE.
+* RV = Optional adjustable resistor to put CNY70 output close to full ADC dynamic range. See this video for an explanation of the CNY70 variation issue: https://www.youtube.com/watch?v=C9174TC4kLs
+* R2 = Resistor to set the value of VO when CNY70 distance is closest to the SURFACE.
 
 ### Electrical Quantities
 * VDD = Power supply voltage.
@@ -40,7 +42,7 @@ The R1, R2, and RV values are in the HPS bill of materials. Also in the bill of 
 
 ### Physical Quantities
 
-* *distance* = vertical distance from the CNY-70 to a reflective surface.
+* *distance* = vertical distance from the CNY70 to a reflective surface.
 
 ## Design Constraints
 
@@ -48,11 +50,11 @@ The R1, R2, and RV values are in the HPS bill of materials. Also in the bill of 
     * VO > 0
     * VO < VR 
 
-* VF is set by the CNY-70. See CNY-70 data sheet [1]. A typical value is 1.2V.
+* VF is set by the CNY70. See CNY70 data sheet [1]. A typical value is 1.2V.
 
 * VR is selected during design. Primary considerations on the value VR include keeping VCE in proper range when VO is at its largest value and using the maximum ADC dynamic range over all values of VO.
 
-* VCE must be within the constant current range specified by CNY-70 data sheet figure 6 [1]. Typical ranges:
+* VCE must be within the constant current range specified by CNY70 data sheet figure 6 [1]. Typical ranges:
     * VCE > 0.4V
     * VCE < 10V (individual designs may be less)
 
@@ -60,7 +62,7 @@ The R1, R2, and RV values are in the HPS bill of materials. Also in the bill of 
     * IF > 5mA
     * IF < 25mA (absolute max, individual designs may require less)
 
-* For collector current IC, see CNY-70 data sheet [1] figure 9 for an example of IC vs *distance*.
+* For collector current IC, see CNY70 data sheet [1] figure 9 for an example of IC vs *distance*.
 
 ## Design Principles
 
@@ -94,15 +96,15 @@ As another example, consider a scenario of VO = VR/2, instead of VO closer to ze
 
 ### Selecting the Correct values of R1, RV, R2, and *SURFACE* reflectivity
 
-The resistor values in the HPS bill of materials were selected by engineering analysis and then by testing many CNY-70. The resistor values attempt to ensure VO < VR for all variants of CNY-70. This means that for some CNY-70, the output voltage VO is much less than VR.
+The resistor values in the HPS bill of materials were selected by engineering analysis and then by testing many CNY70. The resistor values attempt to ensure VO < VR for all variants of CNY70. This means that for some CNY70, the output voltage VO is much less than VR.
 
-Unfortunately, each CNY-70 exhibits a slightly different response for the same values of R1, RV, and R2. Some CNY-70 output larger VO and some CNY-70 output smaller VO. The following subsections describe solutions if VO is too small or too large on for some CNY-70.
+Unfortunately, each CNY70 exhibits a slightly different response for the same values of R1, RV, and R2. Some CNY70 output larger VO and some CNY70 output smaller VO. The following subsections describe solutions if VO is too small or too large on for some CNY70.
 
 #### VO Too Small
 
 * Correct by firmware calibration in the Teensy. Measure the output and multiply by a constant to increase the floating-point value.
 * Correct by using a version of HPS with VR, and adjust VR smaller to increase VO until VO = VR when the *distance* is at its smallest value. See [../../hardware/releases/hps07/README.md](../../hardware/releases/hps07/README.md) for directions on adjusting VR.
-* Test many CNY-70 and throw away the ones with small output voltages when in the HPS circuit configuration.
+* Test many CNY70 and throw away the ones with small output voltages when in the HPS circuit configuration.
 * Use a more reflective surface. When selecting R1, RV, R2 in the bill of materials, the system was tested with a white sheet of printer paper. White printer paper has one of the highest reflective surfaces according to [2]. When the circuit boards are installed on the piano, if the *SURFACE* is the piano shank wood, it will have a lower reflectivity. Then VO is lower. If VO is too low (for example, the piano does not play at all or plays poorly), put white stickers on each piano shank or damper.  See *stem piano* video https://www.youtube.com/watch?v=ZMxMio3L9dk at approximately 0:45 time mark for an example. Another option is white paint.
 * Position the sensor rail closer vertically to the hammer or damper.
 
@@ -113,7 +115,7 @@ Unfortunately, each CNY-70 exhibits a slightly different response for the same v
 However, if R2 is too large (similarly R1 too small), the output voltage VO clips. The firmware cannot fix clipping because the signal is distorted. If the signal clips, fix it in hardware either by:
 
 * Correct by using a version of HPS with VR, and adjust VR later to decrease VO until VO = VR when the *distance* is at its smallest value. See [../../hardware/releases/hps07/README.md](../../hardware/releases/hps07/README.md) for directions on adjusting VR.
-* Test many CNY-70 and throw away the ones with VO > VR when in the HPS circuit configuration.
+* Test many CNY70 and throw away the ones with VO > VR when in the HPS circuit configuration.
 * Using a less reflective surface, such as adding a sticker or paint with less reflectivity.
 * Position the sensor rail further away vertically from the hammer or damper.
 
@@ -121,7 +123,7 @@ To avoid clipping, the goal of resistor values in the HPS bill of materials is t
 
 ### Circuit Testing
 
-Before assembling a *stem piano*, it is recommended to test each HPS board to check that VO < VR when the CNY-70 is very close to *SURFACE* and in the *stem piano* HPS circuit configuration.
+Before assembling a *stem piano*, it is recommended to test each HPS board to check that VO < VR when the CNY70 is very close to *SURFACE* and in the *stem piano* HPS circuit configuration.
 
 See these *stem piano* videos for examples of process:
 * https://www.youtube.com/watch?v=uJTaKLZaluc at approximately the 2:20 time mark.
@@ -133,24 +135,24 @@ Options:
     * Best option: edit the firmware so the Arduino serial monitor displays the Teensy internal float value for each key, one at a time.
     * Alternate: write software on a computer that receives Ethernet values from the *stem piano* and displays the results on a computer.
     * Alternate: install the TFT display on the circuit board. Select a switch to enable the display (if this is the option in the version of *stem piano* built). The display shows the internal Teensy float value.
-* Build a small prototype breadboard test station. Connect a power supply and ground to the power and ground HPS pins. Connect the HPS output voltage to a multimeter or oscilloscope. Move a piece of white paper close to the CNY-70 sensor. Measure the output voltage and check that it is in proper range.
+* Build a small prototype breadboard test station. Connect a power supply and ground to the power and ground HPS pins. Connect the HPS output voltage to a multimeter or oscilloscope. Move a piece of white paper close to the CNY70 sensor. Measure the output voltage and check that it is in proper range.
 
 ## Other Considerations
 
 According to [2], a smaller value of R2 results in a larger bandwidth. R2 = 2000 ohms is approximately 10KHz bandwidth. Tests show R2 < 5000 ohms work ok.
 
-The CNY-70 output voltage degrades with time [2]. Expect 10% loss at 1,000 hours and 20% loss at 10,000 hours. However, at normal room temperature the lifetime is longer [2]. If after many years the piano does not play as well, check the voltage VO of each CNY-70 with a multimeter or oscilloscope.
+The CNY70 output voltage degrades with time [2]. Expect 10% loss at 1,000 hours and 20% loss at 10,000 hours. However, at normal room temperature the lifetime is longer [2]. If after many years the piano does not play as well, check the voltage VO of each CNY70 with a multimeter or oscilloscope.
 
-Room lighting and ambient lighting could interfere with the CNY-70 operation [2].
+Room lighting and ambient lighting could interfere with the CNY70 operation [2].
 
-The output voltage VO could drop suddenly if the *distance* between CNY-70 and *SURFACE* gets very close to zero. When building the sensor rail and piano frame, position each CNY-70 so that when the hammer shank or damper is at the closest *distance* to the CNY-70, there is at least a 0.5 millimeter *distance* between the CNY-70 and the hammer or damper. As this gap gets larger, the maximum VO decreases. So, the *distance* gap cannot be too large.
+The output voltage VO could drop suddenly if the *distance* between CNY70 and *SURFACE* gets very close to zero. When building the sensor rail and piano frame, position each CNY70 so that when the hammer shank or damper is at the closest *distance* to the CNY70, there is at least a 0.5 millimeter *distance* between the CNY70 and the hammer or damper. As this gap gets larger, the maximum VO decreases. So, the *distance* gap cannot be too large.
 
-The piano note volume consistency is sensitive to the consistency of the CNY-70 and hammer shank gap between keys.
+The piano note volume consistency is sensitive to the consistency of the CNY70 and hammer shank gap between keys.
 
 ## References
 
 These documents are on the Vishay website.
 
-[1] *"Reflective Optical Sensor with Transistor Output"*, CNY-70, Vishay Semiconductors, Rev. 1.8, 30-Jul-12.
+[1] *"Reflective Optical Sensor with Transistor Output"*, CNY70, Vishay Semiconductors, Rev. 1.8, 30-Jul-12.
 
 [2] *"Application of Optical Sensors"*, Rev. 1.0, 27-Sept-06.
