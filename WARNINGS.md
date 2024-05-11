@@ -60,6 +60,9 @@ Be careful with placing anything near or around the circuit boards, or with anyt
 
 The boards are low-voltage (five volts and below) but portions could under unexpected or unforseen circumstances get hot. For example a fuse. Keep the circuit boards clear of any materials.
 
+## EEPROM
+The nonvolatile EEPROM Teensy memory wears out after approximately 100,000 writes. Under normal use this limit is sufficient. A firmware or hardware problem could result in excessive writes. Use caution when modifying firmware or hardware related to the EEPROM. At startup some firmware (depending on debug setting) displays total lifetime writes.
+
 ## Static Sensitive Parts
 
 Be careful when soldering, assembling and using the electronic parts. Electrostatic Discharge (ESD) can damage components. An ESD damaged component could cause an intermittent failure that is very difficult to debug.
