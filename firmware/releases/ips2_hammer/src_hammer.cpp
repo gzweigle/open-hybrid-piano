@@ -91,9 +91,12 @@ void setup(void) {
   // Load the settings. Must be first in the setup() function.
   Set.SetAllSettingValues();
 
+  // Notification messages.
   if (Set.debug_level >= DEBUG_STATS) {
     Serial.println("Beginning hammer board initialization.");
   }
+  Tft.Setup(Set.using_display, Set.debug_level);
+  Tft.HelloWorld();
 
   // Initialize the nonvolatile memory.
   // Initialize early in case any setup() uses storage.
@@ -148,13 +151,13 @@ void setup(void) {
   Set.switch_debounce_micro, Set.debug_level);
   Tpl.Setup();
   Tmg.Setup(Set.adc_sample_period_microseconds);
-  Tft.Setup(Set.using_display, Set.debug_level);
-  Tft.HelloWorld();
 
   // Ready to be a piano.
   if (Set.debug_level >= DEBUG_STATS) {
     Serial.println("Finished hammer board initialization.");
   }
+  delay(2000);
+  Tft.Clear();
 
 }
 
@@ -228,7 +231,7 @@ void loop() {
   if (Tmg.AllowProcessing() == true) {
 
     Tpl.SetTp8(true); // Front left test point asserts during processing.
-    
+
     // Get hammer and pedal data from ADC.
     Adc.GetNewAdcValues(raw_samples);
 

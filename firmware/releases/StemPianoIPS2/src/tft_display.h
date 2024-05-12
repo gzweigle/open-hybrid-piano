@@ -46,10 +46,10 @@ class TftDisplay
     TftDisplay();
     void Setup(bool, int);
     void HelloWorld();
+    void Clear();
     void Display(bool, const float *, const float *);
 
   private:
-    void Clear();
     void GetTouchPosition(int *, int *);
     void Picture();
     int ReturnColor(unsigned int, unsigned int, unsigned int);
@@ -57,6 +57,7 @@ class TftDisplay
     void PrintType(bool, int, int, int, int);
     void PrintKey(int, int, int, int, int);
     void PrintValue(float, int, int, int, int);
+    void LiveDraw();
 
     TftText Text_;
 
@@ -67,7 +68,6 @@ class TftDisplay
 
     int debug_level_;
     bool using_display_;
-    bool startup_;
     bool tft_switch_last_;
 
     int cs_;
@@ -83,6 +83,10 @@ class TftDisplay
 
     bool sd_card_started_;
     bool sd_card_detected_;
+
+    int live_draw_x_, live_draw_y_, live_draw_l_;
+    unsigned long live_last_time_, live_wait_time_;
+    bool live_draw_state_;
 
 };
 

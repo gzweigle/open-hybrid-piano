@@ -37,7 +37,6 @@ void TftDisplay::Setup(bool using_display, int debug_level) {
   debug_level_ = debug_level;
 
   using_display_ = using_display;
-  startup_ = true;
   tft_switch_last_ = false;
 
   // Hardcoded based on pcb layout.
@@ -52,6 +51,14 @@ void TftDisplay::Setup(bool using_display, int debug_level) {
   screen_rotation_ = 1;
   width_ = 320;
   height_ = 240;
+
+  // Drawing while running.
+  live_draw_x_ = 0;
+  live_draw_y_ = 0;
+  live_draw_l_ = 2;
+  live_draw_state_ = false;
+  live_last_time_ = micros();
+  live_wait_time_ = 500000;
 
   if (using_display_ == true) {
 
@@ -208,22 +215,22 @@ void TftDisplay::Display(bool tft_switch, const float *hp, const float *dp) {
       max_key_last = max_key;
       was_hammer_last = was_hammer;
 
-      // If touch the lower right corner, display an image for 0.5 seconds!
+      // If touch the lower right corner, display an image for 1.0 seconds.
       if (tx > 250 && ty < 50) {
         Picture();
-        delay(500);
+        delay(1000);
         Clear();
       }
 
     }
-    else {
+    else if (tft_switch_last_ == true) {
       // Done with TFT so redraw the startup screen.
       // Drawing takes quite a bit of time, so only do once.
-      if (tft_switch_last_ == true || startup_ == true) {
-        HelloWorld();
-      }
+      Clear();
     }
-    startup_ = false;
+    else {
+      LiveDraw();
+    }
   }
   tft_switch_last_ = tft_switch;
 }
@@ -338,6 +345,48 @@ void TftDisplay::Picture() {
       }
     }
   }
+}
+
+void TftDisplay::LiveDraw() {
+  #if 1
+  if (live_draw_state_ == false) {
+    if (debug_level_ >= DEBUG_STATS) {
+      // Ok to borrow this as not used next time through.
+      live_last_time_ = micros();
+    }
+    // Takes approximately 20 microseconds.
+    Tft_->drawFastHLine(live_draw_x_, live_draw_y_, live_draw_l_, ILI9341_WHITE);
+    if (debug_level_ >= DEBUG_STATS) {
+      Serial.print("TFT drawing time = ");
+      Serial.print(micros() - live_last_time_);
+      Serial.println(" microseconds.");
+    }
+    live_last_time_ = micros();
+    live_draw_state_ = true;
+  }
+  else if (micros() - live_last_time_ > live_wait_time_) {
+    if (debug_level_ >= DEBUG_STATS) {
+      // Ok to borrow this as not used next time through.
+      live_last_time_ = micros();
+    }
+    // Takes approximately 7 microseconds.
+    Tft_->drawFastHLine(live_draw_x_, live_draw_y_, live_draw_l_, ILI9341_BLACK);
+    if (debug_level_ >= DEBUG_STATS) {
+      Serial.print("TFT drawing time = ");
+      Serial.print(micros() - live_last_time_);
+      Serial.println(" microseconds.");
+    }
+    live_draw_x_ = live_draw_x_ + random(5);
+    if (live_draw_x_ >= width_ - live_draw_l_) {
+      live_draw_x_ = 0;
+    }
+    live_draw_y_ = live_draw_y_ + random(5);
+    if (live_draw_y_ >= height_) {
+      live_draw_y_ = 0;
+    }
+    live_draw_state_ = false;
+  }
+  #endif
 }
 
 #else
