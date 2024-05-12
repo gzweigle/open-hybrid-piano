@@ -97,8 +97,8 @@ R29,    100K ohms,             0805,       ERA-6AED104V,         Yes,           
 R23,    4700 ohms,             0805,       ERA-6AED472V,         Yes,           0.50,        0.125W. 5% tolerance or better. For pedals.
 R25,    4700 ohms,             0805,       ERA-6AED472V,         Yes,           0.50,        0.125W. 5% tolerance or better. For pedals.
 R28,    4700 ohms,             0805,       ERA-6AED472V,         Yes,           0.50,        0.125W. 5% tolerance or better. For pedals.
-F1,     Fuse,                  1210,       MF-PSML400/8-2,       Yes,           1.50,        PTC resettable fuse. 4.0 amps.
-F2,     Fuse,                  1210,       MF-PSML400/8-2,       Yes,           1.50,        PTC resettable fuse. 4.0 amps.
+F1,     Fuse,                  1210,       -,                    Yes,           1.50,        Zero ohm resistor and see documentation for details.
+F2,     Fuse,                  1210,       -,                    Yes,           1.50,        Zero ohm resistor and see documentation for details.
 SW1,    2 position switch,     -,          DS04-254-1-02BK-SMT,  No,            0.75,        Install if would like switch for configuration functions.
 SW2,    2 position switch,     -,          DS04-254-1-02BK-SMT,  No,            0.75,        Install if would like switch for configuration functions.
 TP5,    16:1 out,              -,          Keystone 500X,        No,            0.40,        Any breadboard header should work. This is a testpoint so optional.

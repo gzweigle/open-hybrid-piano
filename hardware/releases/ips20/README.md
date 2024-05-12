@@ -52,7 +52,7 @@ For connecting pedals.
 External power connection. Do not connect external +5V power while Teensy 4.1 is connected to a USB cable that is supplying power from an external source.
 
 ### Fuse
-Location for fuses.
+Location for fuses. The +5V power and USB must must automatically protect from short circuits, overcurrent, thermal, and all other failure conditions. Fuses can be added after analysis including coordination. The parts list shows zero-ohm resistors and in this case, protection relies on the +5V power and USB power features.
 
 ### Power jumper
 As an extra safety measure, disconnect this jumper J12 and the +5V power input when Teensy 4.1 is connected to a USB cable and that USB cable is supplying power from an external source.
@@ -101,9 +101,9 @@ The +5V power arrives simultaneously from two inputs:
 
 Do not connect both external +5V power and USB power inputs at the same time. See the PJRC website for more information, including how to cut a Teensy 4.1 pad to avoid shorting the two power inputs together.
 
-The external power supply must automatically protect from short circuits, overcurrent, and other failure conditions. Or, use an external fuse. Select protection or fuse level based on current and power values from analysis below.
+The external power supplies must automatically protect from short circuits, overcurrent, thermal, and all other failure conditions.
 
-The external power supply must be able to deliver 1.75 amps if not using a separate damper board and 3.5 amps if using a separate damper board. This value is calculated by summing all current values in sections below and by testing. See *stem piano* video at the approximate 2:20 time https://www.youtube.com/watch?v=TemXGmkoc-g
+The external power supplies must be able to deliver 1.75 amps if not using a separate damper board and 3.5 amps if using a separate damper board. This value is calculated by summing all current values in sections below and by testing. See *stem piano* video at the approximate 2:20 time https://www.youtube.com/watch?v=TemXGmkoc-g
 
 A typical USB port on a computer may not be able to supply a full 3.5 A. Therefore, it is possible that the board will not be able to run all 88 keys sensors unless the board is powered by an external +5V power supply, through the +5V power jack. In this case (and in all cases when using the +5V external power), see instructions on https://www.pjrc.com website.
 

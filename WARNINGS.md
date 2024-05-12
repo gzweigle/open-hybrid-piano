@@ -40,11 +40,11 @@ However, when *stem piano* has all 88 key sensors connected, the total current d
 
 Please see the PJRC Teensy 4.1 website for more details: https://www.pjrc.com.
 
-## Fuses and Short Circuit Protection
+## Power Supply Protection
 
-Some boards include places to install fuses and some may not. Use fuses.
+Some boards include places to install fuses and some may not. Fuses require design and coordination with external power sources. See each circuit board documentation.
 
-Use power supplies that include short-circuit (overcurrent), overvoltage, thermal, and other protection for safety.
+Use power supplies that include short-circuit (overcurrent), overvoltage, thermal, and all other protection for safety. This includes the USB power source.
 
 Some boards include low dropout voltage regulators (LDO). The LDO should include short-circuit protection. This means that if the LDO output is accidentally shorted to ground, the LDO will current limit to a specified value. This current limit can be used when calculating the worst-case total current of the board. See the *bill_of_materials* files in hardware directories for recommended LDO devices.
 
