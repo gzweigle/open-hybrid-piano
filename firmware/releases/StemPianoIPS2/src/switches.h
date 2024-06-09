@@ -40,6 +40,8 @@ class Switches
     void updatePuDoState(const char *, const char *);
     bool read_switch_1();
     bool read_switch_2();
+    bool direct_read_switch_1();
+    bool direct_read_switch_2();
 
   private:
 

@@ -39,7 +39,7 @@ class Network
 {
   public:
     Network();
-    void Setup(const char *, const char *, int, int, int);
+    void Setup(const char *, const char *, int, bool, int);
     void SendPianoPacket(const float *, bool, bool, float);
 
   private:
@@ -53,11 +53,7 @@ class Network
     uint8_t ethernet_values_[3*(MAX_ETHERNET_BYTES)];
 
     bool network_has_been_setup_;
-
-    int switch_debounce_micro_;
-    unsigned long start_time_micros_; 
-    bool first_network_setup_call_;
-    bool startup_delay_finished_;
+    bool switch_enable_ethernet_last_;
 
     int ethernet_start_ind_;
 

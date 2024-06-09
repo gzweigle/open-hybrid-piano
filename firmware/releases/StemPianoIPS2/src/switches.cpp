@@ -74,6 +74,8 @@ void Switches::updatePuDoState(const char *sw_1_name, const char *sw_2_name) {
   update_state(sw_2_value, &sw2_state_, &sw2_last_micros_, sw_2_name);
 }
 
+// Use these for reading switch value.
+// These are debounced values.
 bool Switches::read_switch_1() {
   if (sw1_state_ == 0)
     return false;
@@ -85,6 +87,21 @@ bool Switches::read_switch_2() {
     return false;
   else
     return true;
+}
+
+// On rare occasions a direct read of switch may be necessary.
+// Example is to know state of switch upon board powerup.
+bool Switches::direct_read_switch_1() {
+  if (digitalRead(pin_1_) == 0)
+    return true;
+  else
+    return false;
+}
+bool Switches::direct_read_switch_2() {
+  if (digitalRead(pin_2_) == 0)
+    return true;
+  else
+    return false;
 }
 
 // Pick-up / Drop-out logic to eliminate transients.

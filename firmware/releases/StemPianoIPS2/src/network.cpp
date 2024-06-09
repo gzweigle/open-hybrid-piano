@@ -39,22 +39,21 @@
 Network::Network() {}
 
 void Network::Setup(const char *computer_ip, const char *teensy_ip, int udp_port,
-int switch_debounce_micro, int debug_level) {
+bool switch_enable_ethernet, int debug_level) {
 
   debug_level_ = debug_level;
   network_ok_ = false;
   disable_network_ = false;
 
   // For checking configuration switch ane Ethernet enable.
-  switch_debounce_micro_ = switch_debounce_micro;
-  first_network_setup_call_ = false;
-  startup_delay_finished_ = false;
   network_has_been_setup_ = false;
+  switch_enable_ethernet_last_ = true;
 
   ethernet_start_ind_ = NUM_CHANNELS - ETHERNET_PACKET_SIZE_FLOATS;
 
   GetMacAddress();
   SetIpAddresses(computer_ip, teensy_ip, udp_port);
+  SetupNetwork(switch_enable_ethernet);
 }
 
 // When sustain pedal goes low to high, find the first note that is above the
@@ -92,7 +91,14 @@ bool key_on_threshold, float damper_threshold) {
 void Network::SendPianoPacket(const float *data_in, bool switch_enable_ethernet,
 bool sustain_pressed, float key_on_threshold) {
 
-  SetupNetwork(switch_enable_ethernet);
+  // If switch goes from low to high, setup the network.
+  if (switch_enable_ethernet == true && switch_enable_ethernet_last_ == false) {
+    if (debug_level_ >= DEBUG_STATS) {
+      Serial.println("Detected switch to enable Ethernet, setting up the network...");
+    }
+    SetupNetwork(true);
+  }
+  switch_enable_ethernet_last_ = switch_enable_ethernet;
 
   if (switch_enable_ethernet == true) {
 
@@ -182,30 +188,7 @@ int udp_port) {
 
 void Network::SetupNetwork(bool switch_enable_ethernet) {
 
-  // Why this code?
-  // Teensy will hang in setup below if Ethernet cable is not connected.
-  // Therefore, setup code only runs if the configuration switch is set
-  // for using Ethernet.
-  // However, must ensure the configuration switch is in a valid state
-  // after turn on the board.
-  if (first_network_setup_call_ == false) {
-    // Get the start time once, after power up.
-    // Can't put in setup() because need the delay
-    // while switches update in loop().
-    start_time_micros_ = micros();
-  }
-  first_network_setup_call_ = true;
-  if (startup_delay_finished_ == false) {
-    // Check once to avoid micros() rollover.
-    // 5X the debounce for extra margin.
-    if (micros() > start_time_micros_ +
-    static_cast<unsigned long>(5 * switch_debounce_micro_)) {
-      startup_delay_finished_ = true;
-    }
-  }
-
-  if (switch_enable_ethernet == true && network_has_been_setup_ == false &&
-  startup_delay_finished_ == true) {
+  if (switch_enable_ethernet == true && network_has_been_setup_ == false) {
 
     // If here and Ethernet is not connected, code hangs until
     // Ethernet is connected. With Ethernet disconnected, changing
@@ -232,6 +215,10 @@ void Network::SetupNetwork(bool switch_enable_ethernet) {
     }
 
     network_has_been_setup_ = true;
+
+    if (debug_level_ >= DEBUG_STATS) {
+      Serial.println("Ethernet is setup.");
+    }
 
   }
 

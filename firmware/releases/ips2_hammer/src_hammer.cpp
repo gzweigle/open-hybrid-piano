@@ -147,8 +147,8 @@ void setup(void) {
   // Common on hammer and pedal board: Ethernet, test points, TFT display, etc.
   Cal.Setup(Set.calibration_threshold, Set.calibration_match_gain,
   Set.calibration_match_offset, Set.debug_level, &Nonv);
-  Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port, Set.switch_debounce_micro,
-  Set.debug_level);
+  Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port,
+  SwIPS2.direct_read_switch_2(), Set.debug_level);
   Tpl.Setup();
   Tmg.Setup(Set.adc_sample_period_microseconds);
 
