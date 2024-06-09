@@ -2,22 +2,18 @@
 
 ## To get data from hammer board
 
-Edit get_ethernet_data_hammer.py to add IP address and port number.
+Edit get_hammer_data.py and add IP address and port number.
 
 These must match the values in the board's settings .cpp file.
 
-From a command line type: python get_ethernet_data_hammer.py.
-
-## To get data from damper board
-
-Edit get_ethernet_data_damper.py to add IP address and port number.
-
-These must match the values in the board's settings .cpp file.
-
-From a command line type: python get_ethernet_data_damper.py.
+From a command line type: python get_hammer_data.py.
 
 ## To plot the data
 
-After the data is acquired, from Octave or Matlab run: plot_ethernet_data.m.
+After the data is acquired.
 
-If only one board is used, edit plot_ethernet_data.m to comment out the unused data file.
+Run Octave or Matlab run.
+
+Type in command line:
+
+clear; x = load("hammer_position.txt"); plot(x); grid;

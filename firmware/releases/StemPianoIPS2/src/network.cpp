@@ -39,10 +39,11 @@
 Network::Network() {}
 
 void Network::Setup(const char *computer_ip, const char *teensy_ip, int udp_port,
-int start_ind, int end_ind, int switch_debounce_micro, int debug_level) {
+int switch_debounce_micro, int debug_level) {
 
   debug_level_ = debug_level;
   network_ok_ = false;
+  disable_network_ = false;
 
   // For checking configuration switch ane Ethernet enable.
   switch_debounce_micro_ = switch_debounce_micro;
@@ -50,38 +51,63 @@ int start_ind, int end_ind, int switch_debounce_micro, int debug_level) {
   startup_delay_finished_ = false;
   network_has_been_setup_ = false;
 
-  // Temporary - this needs work!
-  start_ind_ = start_ind;
-  end_ind_ = end_ind;
-  if (end_ind_ - start_ind_ + 1 > MAX_ETHERNET_BYTES) {
-    Serial.println("Error - too many values to send over Ethernet");
-    disable_network_ = true;
-  }
-  else {
-    disable_network_ = false;
-  }
+  ethernet_start_ind_ = NUM_CHANNELS - ETHERNET_PACKET_SIZE_FLOATS;
 
   GetMacAddress();
   SetIpAddresses(computer_ip, teensy_ip, udp_port);
 }
 
-// Send floats as 3 bytes for a total of 24-bits.
-void Network::SendPianoPacket(const float *data, bool switch_enable_ethernet) {
+// When sustain pedal goes low to high, find the first note that is above the
+// damper threshold. That note is the starting point for ETHERNET_PACKET_SIZE_FLOATS
+// values to send over Ethernet. Use that start point until pedal transitions again.
+// If sustain goes low to high and no note is pressed, default to the highest
+// index data (this enables sending pedal measurements).
+void Network::BuildPacket(float *data_out, const float *data_in,
+bool key_on_threshold, float damper_threshold) {
+  if (key_on_threshold == true) {
+    // Default if find no key that crossed the threshold.
+    ethernet_start_ind_ = NUM_CHANNELS - ETHERNET_PACKET_SIZE_FLOATS;
+    for (int key = 0; key < NUM_CHANNELS; key++) {
+      if (data_in[key] > damper_threshold) {
+        ethernet_start_ind_ = key;
+        if (debug_level_ >= DEBUG_STATS) {
+          Serial.print("New ethernet start index = ");
+          Serial.println(ethernet_start_ind_);
+        }
+        break;
+      }
+    }
+  }
+  for (int key = 0; key < ETHERNET_PACKET_SIZE_FLOATS; key++) {
+    if (key + ethernet_start_ind_ < NUM_CHANNELS) {
+      data_out[key] = data_in[key + ethernet_start_ind_];
+    }
+    else {
+      // If try to go past max number of inputs, send zeros.
+      data_out[key] = 0.0;
+    }
+  }
+}
+
+void Network::SendPianoPacket(const float *data_in, bool switch_enable_ethernet,
+bool sustain_pressed, float key_on_threshold) {
 
   SetupNetwork(switch_enable_ethernet);
 
   if (switch_enable_ethernet == true) {
 
+    float data[ETHERNET_PACKET_SIZE_FLOATS];
+    BuildPacket(data, data_in, sustain_pressed, key_on_threshold);
+
     int data_int;
 
     if (network_ok_ == true && disable_network_ == false) {
 
-      int num_send_values = end_ind_ - start_ind_ + 1;
+      for (int ind = 0; ind < ETHERNET_PACKET_SIZE_FLOATS; ind++) {
 
-      for (int i = 0; i < num_send_values; i++) {
-
+        // Input data is in range -1.0, ... 1.0 as floats.
         // Multiply by 2^23 and limit to signed 24-bit value.
-        data_int = static_cast<int>(data[start_ind_ + i]*8388608.0);
+        data_int = static_cast<int>(data[ind]*8388608.0);
         if (data_int > 8388607) {
           data_int = 8388607;
         }
@@ -90,15 +116,15 @@ void Network::SendPianoPacket(const float *data, bool switch_enable_ethernet) {
         }
 
         // Send a value in range [-2^23, ..., 2^23-1] as three bytes.
-        ethernet_values_[3*i+0] = data_int&255;
-        ethernet_values_[3*i+1] = (data_int>>8)&255;
-        ethernet_values_[3*i+2] = (data_int>>16)&255;
+        ethernet_values_[3*ind+0] = data_int&255;
+        ethernet_values_[3*ind+1] = (data_int>>8)&255;
+        ethernet_values_[3*ind+2] = (data_int>>16)&255;
       }
 
       // Send the data via UDP.
       IPAddress ip(computer_ip_[0], computer_ip_[1], computer_ip_[2], computer_ip_[3]);
       Udp.beginPacket(ip, udp_port_);
-      Udp.write(ethernet_values_, 3*num_send_values);
+      Udp.write(ethernet_values_, 3*(ETHERNET_PACKET_SIZE_FLOATS));
       Udp.endPacket();
       Udp.flush();
     }

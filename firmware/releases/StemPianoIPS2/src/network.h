@@ -33,13 +33,14 @@
 #include <NativeEthernetUdp.h>
 
 #define MAX_ETHERNET_BYTES (2*(NUM_CHANNELS))
+#define ETHERNET_PACKET_SIZE_FLOATS 12
 
 class Network
 {
   public:
     Network();
-    void Setup(const char *, const char *, int, int, int, int, int);
-    void SendPianoPacket(const float *, bool);
+    void Setup(const char *, const char *, int, int, int);
+    void SendPianoPacket(const float *, bool, bool, float);
 
   private:
     int debug_level_;
@@ -49,8 +50,6 @@ class Network
     int udp_port_;
     bool network_ok_;
     bool disable_network_;
-    int start_ind_;
-    int end_ind_;
     uint8_t ethernet_values_[3*(MAX_ETHERNET_BYTES)];
 
     bool network_has_been_setup_;
@@ -60,11 +59,14 @@ class Network
     bool first_network_setup_call_;
     bool startup_delay_finished_;
 
+    int ethernet_start_ind_;
+
     EthernetUDP Udp;
 
     void GetMacAddress();
     void SetIpAddresses(const char *, const char *, int);
     void SetupNetwork(bool);
+    void BuildPacket(float *, const float *, bool, float);
 };
 
 #else

@@ -79,8 +79,6 @@ class HammerSettings
     char teensy_ip[IP_STRING_LENGTH];
     char computer_ip[IP_STRING_LENGTH];
     int upd_port;
-    int ethernet_start_ind;
-    int ethernet_end_ind;
     bool canbus_enable;
     bool using_display;
     bool connected_channel[NUM_CHANNELS];

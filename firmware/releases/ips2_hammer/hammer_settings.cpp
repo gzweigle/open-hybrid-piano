@@ -187,9 +187,6 @@ void HammerSettings::SetAllSettingValues() {
   upd_port = X;  // Must match UDP port in receiver code
   //
 
-  ethernet_start_ind = 0;
-  ethernet_end_ind = 11;
-
   ////////
   // Canbus.
 

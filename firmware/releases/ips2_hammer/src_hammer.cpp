@@ -66,6 +66,7 @@ Switches SwSCA2;
 TestpointLed Tpl;
 Timing Tmg;
 TftDisplay Tft;
+
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, mi);
 
 void setup(void) {
@@ -146,9 +147,8 @@ void setup(void) {
   // Common on hammer and pedal board: Ethernet, test points, TFT display, etc.
   Cal.Setup(Set.calibration_threshold, Set.calibration_match_gain,
   Set.calibration_match_offset, Set.debug_level, &Nonv);
-  Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port,
-  Set.ethernet_start_ind, Set.ethernet_end_ind,
-  Set.switch_debounce_micro, Set.debug_level);
+  Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port, Set.switch_debounce_micro,
+  Set.debug_level);
   Tpl.Setup();
   Tmg.Setup(Set.adc_sample_period_microseconds);
 
@@ -184,10 +184,6 @@ float damper_position[NUM_CHANNELS], calibrated_floats[NUM_CHANNELS],
 position_floats[NUM_CHANNELS];
 float damper_velocity[NUM_CHANNELS], hammer_velocity[NUM_CHANNELS];
 
-// Data to send over Ethernet.
-// TODO - This needs some work.
-float raw_to_send[12];
-
 void loop() {
 
   // Measure every processing interval so the pickup and
@@ -198,11 +194,13 @@ void loop() {
   SwSCA2.updatePuDoState("SCA21", "SCA22");
   SwSCA1.updatePuDoState("SCA11", "SCA12");
 
-  // Read all switch inputs.
   switch_high_damper_threshold = SwIPS1.read_switch_2();
+
+  // Read all switch inputs.
   switch_external_damper_board = SwIPS1.read_switch_1();
   switch_enable_ethernet = SwIPS2.read_switch_2();
   switch_tft_display = SwIPS2.read_switch_1();
+
   switch_set_peak_velocity = SwSCA2.read_switch_1();
   switch_freeze_cal_values = SwSCA1.read_switch_2();
   switch_disable_and_reset_calibration = SwSCA1.read_switch_1();
@@ -288,21 +286,15 @@ void loop() {
       Midi.SendPedal(&DspP);
     }
 
-    // Send data over Ethernet. This needs work.
-    //int offset = 5 * 12;
-    raw_to_send[0] = calibrated_floats[27]; //offset + 0];
-    raw_to_send[1] = calibrated_floats[29]; //offset + 1];
-    raw_to_send[2] = calibrated_floats[31]; //offset + 2];
-    raw_to_send[3] = calibrated_floats[32]; //offset + 3];
-    raw_to_send[4] = calibrated_floats[34]; //offset + 4];
-    raw_to_send[5] = calibrated_floats[36]; //offset + 5];
-    raw_to_send[6] = calibrated_floats[38]; //offset + 6];
-    raw_to_send[7] = calibrated_floats[39]; //offset + 7];
-    raw_to_send[8] = calibrated_floats[41]; //offset + 8];
-    raw_to_send[9] = calibrated_floats[43]; //offset + 9];
-    raw_to_send[10] = calibrated_floats[44]; //offset + 10];
-    raw_to_send[11] = calibrated_floats[46]; //offset + 11];
-    Eth.SendPianoPacket(raw_to_send, switch_enable_ethernet);
+    // Send a packet of calibrated data.
+    bool sustain_pressed = DspP.GetSustainCrossedUpThreshold();
+    float key_on_threshold;
+    if (switch_high_damper_threshold == true)
+      key_on_threshold = Set.damper_threshold_high;
+    else
+      key_on_threshold = Set.damper_threshold_low;
+    Eth.SendPianoPacket(calibrated_floats, switch_enable_ethernet,
+    sustain_pressed, key_on_threshold);
 
     // Run the TFT display.
     Tft.Display(switch_tft_display, calibrated_floats, damper_position);
@@ -314,6 +306,7 @@ void loop() {
     HStat.EthernetLed();
     HStat.SerialMonitor(position_adc_counts, calibrated_floats, hammer_event,
     Set.canbus_enable, switch_external_damper_board);
+
     Tpl.SetTp8(false);
   }
 }
