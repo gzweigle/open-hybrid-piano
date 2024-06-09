@@ -47,6 +47,8 @@ Designs and engineering analysis. To keep the repository small, associated data 
 
 High level documentation.
 
+Includes [documentation/video_documentation.md](documentation/video_documentation.md) for historical, how-to, and other documentation in video form.
+
 #### [pianos/](pianos/)
 
 Building a complete piano requires firmware, hardware, mechanical, and sometimes software. The *pianos/* directory provides information on everything needed to build a specific version of a musical instrument.
@@ -69,11 +71,19 @@ Anything to physically build a piano. A separate open-source license for mechani
 
 Code running on a standard computer or Raspberry Pi connected to the piano over Ethernet or MIDI.
 
-## History
+## Repositories
 
-Started December 2020.
+#### (1) Original
 
-Please see [documentation/video_documentation.md](documentation/video_documentation.md) for historical, how-to, and other documentation in video form.
+This "DIY" repository. Organized per above.
+
+#### (2) Stem Piano
+
+https://github.com/stem-piano
+
+Experimenting with a GitHub organization. The documentation and links for building individual pianos is here. Links are back to this original "DIY" repository.
+
+May or may not migrate all files in the future. To be decided in the future.
 
 ## Related Projects:
 

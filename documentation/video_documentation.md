@@ -254,3 +254,16 @@ Step 27 - Hammer and Damper Processing https://www.youtube.com/watch?v=NmziaIYKS
 Step 28 - Precision and Accuracy https://www.youtube.com/watch?v=TemXGmkoc-g
 1. Analyze position and velocity for (attempting to) strike 10 notes simultaneously.
 2. Build system that could be used for a future CNY-70 sensor calibration system.
+
+Step 29 - Fixing Sources of Inaccuracy https://www.youtube.com/watch?v=yqkRKSGX6kw
+1. Analyze and fix mechanisms causing note-to-note inconsistency:
+2. Piano action.
+3. Horizontal sensor position.
+4. Vertical sensor position.
+5. CNY70 - nonlinearity.
+6. CNY70 - out of tolerance.
+7. Crosstalk.
+8. Shank angle.
+9. Analog front end.
+10. Reflective material.
+11. Ambient light.
