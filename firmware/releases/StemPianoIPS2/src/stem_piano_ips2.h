@@ -64,6 +64,9 @@
 // immediately below NUM_CHANNELS reminds of the relationship.
 #define NUM_NOTES 88
 
+// Better if this is in the midi class.
+#define MIDI_BUFFER_SIZE 128
+
 #if NUM_NOTES > NUM_CHANNELS
 #error "ERROR - number of notes is greater than number of physical channels."
 #endif

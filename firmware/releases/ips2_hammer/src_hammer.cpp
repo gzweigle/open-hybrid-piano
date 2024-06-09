@@ -68,6 +68,7 @@ Timing Tmg;
 TftDisplay Tft;
 
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, mi);
+uint8_t Midi_Buffer[MIDI_BUFFER_SIZE];
 
 void setup(void) {
 
@@ -143,6 +144,7 @@ void setup(void) {
 
   // Setup sending damper, hammer, and pedal data over MIDI.
   Midi.Setup(Set.midi_channel, &mi, Set.debug_level);
+  Serial1.addMemoryForWrite(Midi_Buffer, sizeof(Midi_Buffer));
 
   // Common on hammer and pedal board: Ethernet, test points, TFT display, etc.
   Cal.Setup(Set.calibration_threshold, Set.calibration_match_gain,
