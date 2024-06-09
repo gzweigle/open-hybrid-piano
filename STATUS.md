@@ -10,7 +10,7 @@ Depending on pianist skill, the piano accuracy may need further improvement. For
 
 ### April 21, 2024 - Accuracy Improvement
 
-Improve CNY-70 related note-to-note inconsistency. Now the benefits of optional trimmer resistor are even smaller. Option without trimmers reduces the piano hardware cost.
+Improve note-to-note consistency. Eliminate trimming resistors.
 
 ### November 26, 2023 - Open Source Hybrid Piano, Digital Architecture
 
