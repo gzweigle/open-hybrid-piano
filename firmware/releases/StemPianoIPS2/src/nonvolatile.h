@@ -45,6 +45,8 @@ class Nonvolatile
 
     void UpdateAndWriteTotalWrites();
     int ReadTotalWrites();
+
+    bool NonvolatileWasWritten();
     
   private:
 
@@ -59,6 +61,8 @@ class Nonvolatile
     float calibration_scale_value_;
 
     int total_writes_address_;
+
+    bool nonvolatile_was_written_;
 
 };
 

@@ -38,6 +38,7 @@ float strike_threshold) {
   lower_r_led_interval_when_all_notes_calibrated_ = 250;
   lower_r_led_last_change_ = millis();
   lower_r_led_state_ = false;
+  lower_r_led_in_nonvol_mode_ = false;
 
   sca_led_interval_ = 1000;
   sca_led_last_change_ = millis();
@@ -115,19 +116,35 @@ bool switch_high_damper_threshold) {
 }
 
 // Flash lower right LED (under TFT) based on calibration status.
-void HammerStatus::LowerRightLed(bool all_notes_using_cal) {
-  unsigned long interval;
-  if (all_notes_using_cal == true)
-    interval = 6 * lower_r_led_interval_when_all_notes_calibrated_;
-  else
-    interval = lower_r_led_interval_when_all_notes_calibrated_;
-
-  if (millis() - lower_r_led_last_change_ > interval) {
-    lower_r_led_state_ = !lower_r_led_state_;
+// Also indicate if nonvolatile was written.
+void HammerStatus::LowerRightLed(bool all_notes_using_cal, 
+bool nonvolatile_was_written) {
+  // If Nonvolatile memory was written, turn on LED for a long duration.
+  if (nonvolatile_was_written == true) {
+    lower_r_led_in_nonvol_mode_ = true;
     lower_r_led_last_change_ = millis();
+    testp_->SetLowerRightLED(true);
   }
-
-  testp_->SetLowerRightLED(lower_r_led_state_);
+  else if (lower_r_led_in_nonvol_mode_ == true) {
+    if (millis() - lower_r_led_last_change_ > 24 *
+    lower_r_led_interval_when_all_notes_calibrated_) {
+      lower_r_led_in_nonvol_mode_ = false;
+    }
+  }
+  // Flash slowly if all keys calibrated else flash quickly if some are not.
+  else {
+    unsigned long interval;
+    if (all_notes_using_cal == true)
+      interval = 6 * lower_r_led_interval_when_all_notes_calibrated_;
+    else
+      interval = lower_r_led_interval_when_all_notes_calibrated_;
+  
+    if (millis() - lower_r_led_last_change_ > interval) {
+      lower_r_led_state_ = !lower_r_led_state_;
+      lower_r_led_last_change_ = millis();
+    }
+    testp_->SetLowerRightLED(lower_r_led_state_);
+  }
 }
 
 // Control the two LEDs under the Six Channel Analog (SCA) board.

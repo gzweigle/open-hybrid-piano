@@ -40,6 +40,10 @@ void Nonvolatile::Setup(int debug_level) {
   // Uses 3 addresses. Increment total_writes_address_ by 3 for next address.
   total_writes_address_ = calibration_flag_address_ + 1;
 
+  // Set to true in code below anytime nonvolatile memory was written.
+  // Cleared by ReturnTrueIfNonvolatileWasWritten().
+  nonvolatile_was_written_ = false;
+
   if (debug_level >= DEBUG_STATS) {
     Serial.print("Total EEPROM writes = ");
     Serial.print(ReadTotalWrites());
@@ -47,6 +51,12 @@ void Nonvolatile::Setup(int debug_level) {
     Serial.println("EEPROM is ok up to 100,000 writes.");
   }
 
+}
+
+bool Nonvolatile::NonvolatileWasWritten() {
+  bool return_value = nonvolatile_was_written_;
+  nonvolatile_was_written_ = false;
+  return return_value;
 }
 
 
@@ -89,6 +99,7 @@ void Nonvolatile::WriteCalibrationDoneFlag(bool data) {
   else
     write_data = 0;
   EEPROM.write(calibration_flag_address_, write_data);
+  nonvolatile_was_written_ = true;
 }
 
 float Nonvolatile::ReadNormalizedFloat(int address) {
@@ -103,6 +114,7 @@ void Nonvolatile::WriteNormalizedFloat(int address, float data) {
   for (int shift = 0; shift < 3; shift++) {
     EEPROM.write(address + shift, (data_int >> (8*shift)) & 0x0FF);
   }
+  nonvolatile_was_written_ = true;
 }
 /////////////////////////////////////////////
 
@@ -114,6 +126,7 @@ void Nonvolatile::UpdateAndWriteTotalWrites() {
   for (int shift = 0; shift < 3; shift++) {
     EEPROM.write(total_writes_address_ + shift, (x >> (8*shift)) & 0x0FF);
   }
+  nonvolatile_was_written_ = true;
 }
 int Nonvolatile::ReadTotalWrites() {
   int x = 0;

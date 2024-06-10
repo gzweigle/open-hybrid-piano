@@ -303,7 +303,7 @@ void loop() {
 
     // Debug and display information.
     HStat.FrontLed(calibrated_floats, switch_high_damper_threshold);
-    HStat.LowerRightLed(all_notes_using_cal);
+    HStat.LowerRightLed(all_notes_using_cal, Nonv.NonvolatileWasWritten());
     HStat.SCALed();
     HStat.EthernetLed();
     HStat.SerialMonitor(position_adc_counts, calibrated_floats, hammer_event,

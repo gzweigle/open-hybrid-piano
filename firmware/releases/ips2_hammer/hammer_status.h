@@ -36,7 +36,7 @@ class HammerStatus
     HammerStatus();
     void Setup(DspPedal *, TestpointLed *, int, float, float, float);
     void FrontLed(const float *, bool);
-    void LowerRightLed(bool);
+    void LowerRightLed(bool, bool);
     void SCALed();
     void EthernetLed();
     void SerialMonitor(const int *, const float *, const bool *, bool, bool);
@@ -54,6 +54,7 @@ class HammerStatus
     unsigned long lower_r_led_interval_when_all_notes_calibrated_;
     unsigned long lower_r_led_last_change_;
     bool lower_r_led_state_;
+    bool lower_r_led_in_nonvol_mode_;
 
     unsigned long sca_led_interval_;
     unsigned long sca_led_last_change_;
