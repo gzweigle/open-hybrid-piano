@@ -75,6 +75,10 @@ J42,    1x8 pin male 0.1in,    -,          -,                    Yes,           
 J43,    1x8 pin male 0.1in,    -,          -,                    Yes,           0.16,        Header for connection to external sensors.
 J44,    1x8 pin male 0.1in,    -,          -,                    Yes,           0.16,        Header for connection to external sensors.
 J45,    1x8 pin male 0.1in,    -,          -,                    Yes,           0.16,        Header for connection to external sensors.
+-,      1x6 pin female 0.1in,  -,          -,                    Yes,           0.16,        SCA header. Top. Next to D6.
+-,      1x3 pin female 0.1in,  -,          -,                    Yes,           0.16,        SCA header. Right. Next to R14 and J11.
+-,      1x13 pin female 0.1in, -,          -,                    Yes,           0.16,        SCA header. Bottom. Next to D7 and R13.
+-,      1x2 pin female 0.1in,  -,          -,                    Yes,           0.16,        SCA header. Left. Solder to 3.3v and 5v. Do not solder a connection to gnd location.
 R1,     120  ohms,             0805,       ERA-6VEB1200V,        Yes,           0.75,        0.25W. 0.2% tolerance or better.
 R2,     7500 ohms,             0805,       ERA-6AED752V,         No,            0.30,        For LED.  Can use smaller/larger value for brighter/dimmer LED.
 R3,     7500 ohms,             0805,       ERA-6AED752V,         No,            0.30,        For LED.  Can use smaller/larger value for brighter/dimmer LED.
