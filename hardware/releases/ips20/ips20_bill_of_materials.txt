@@ -1,20 +1,20 @@
 Label,  Description,           Package,    Part Number,          Required?,    Est Cost,     Comment
 -,      IPS 2.0 circuit board, -,          -,                    Yes,          50.00,        -
 U9,     SCA 0.0 circuit board, -,          -,                    Yes,              0,        Cost is in the SCA bill of materials.
-C1,     1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
-C2,     1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C1,     10uF Ceramic,          0805,       C0805C106J8RAC,       Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C2,     10uF Ceramic,          0805,       C0805C106J8RAC,       Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
 C3,     0.1uF Ceramic,         0805,       C0805C104K3RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
 C4,     1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
-C5,     1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
-C6,     1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
-C7,     1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
-C8,     1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
-C9,     1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
-C10,    1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
-C11,    1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
-C12,    1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
-C13,    1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
-C14,    1uF Ceramic,           0805,       C0805C105J4RACTU,     Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C5,     10uF Ceramic,          0805,       C0805C106J8RAC,       Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C6,     10uF Ceramic,          0805,       C0805C106J8RAC,       Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C7,     10uF Ceramic,          0805,       C0805C106J8RAC,       Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C8,     10uF Ceramic,          0805,       C0805C106J8RAC,       Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C9,     10uF Ceramic,          0805,       C0805C106J8RAC,       Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C10,    10uF Ceramic,          0805,       C0805C106J8RAC,       Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C11,    10uF Ceramic,          0805,       C0805C106J8RAC,       Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C12,    10uF Ceramic,          0805,       C0805C106J8RAC,       Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C13,    10uF Ceramic,          0805,       C0805C106J8RAC,       Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
+C14,    10uF Ceramic,          0805,       C0805C106J8RAC,       Yes,           0.25,        X7R or better. 5% or smaller. 10 VDC or higher rating.
 D1,     LED - any color,       0805,       -,                    No,            0.50,        Any SMD LED in an 0805 package.
 D2,     LED - any color,       0805,       -,                    No,            0.50,        Any SMD LED in an 0805 package.
 D3,     LED - any color,       0805,       -,                    No,            0.50,        Any SMD LED in an 0805 package.
@@ -125,12 +125,12 @@ U7,     Teensy4.1,             -,          -,                    Yes,          3
 U7,     1x24 pin female 0.1in, -,          -,                    Yes,           0.48,        Solder onto PCB so can socket the Teensy instead of soldering the Teensy to PCB.
 U7,     1x24 pin female 0.1in, -,          -,                    Yes,           0.48,        Solder onto PCB so can socket the Teensy instead of soldering the Teensy to PCB.
 U8,     CAN Bus driver,        SOIC-8,     TCAN330G,             No,            3.50,        Install if need CAN Bus for board to board communication.
-U11,    LDO voltage regulator, SOT-23,     TLV73333PQDB,         Yes,           0.50,        5V-in. 3.3V-out. At least 300mA drive current. With overcurrent protection.
-U15,    LDO voltage regulator, SOT-23,     TLV73333PQDB,         Yes,           0.50,        5V-in. 3.3V-out. At least 300mA drive current. With overcurrent protection.
-U16,    LDO voltage regulator, SOT-23,     TLV73333PQDB,         Yes,           0.50,        5V-in. 3.3V-out. At least 300mA drive current. With overcurrent protection.
-U17,    LDO voltage regulator, SOT-23,     TLV73333PQDB,         Yes,           0.50,        5V-in. 3.3V-out. At least 300mA drive current. With overcurrent protection.
-U18,    LDO voltage regulator, SOT-23,     TLV73333PQDB,         Yes,           0.50,        5V-in. 3.3V-out. At least 300mA drive current. With overcurrent protection.
-U19,    LDO voltage regulator, SOT-23,     TLV73333PQDB,         Yes,           0.50,        5V-in. 3.3V-out. At least 300mA drive current. With overcurrent protection.
+U11,    LDO voltage regulator, SOT-23,     TLV75533PDBVR,        Yes,           0.50,        5V-in. 3.3V-out. 500mA drive current. With overcurrent protection.
+U15,    LDO voltage regulator, SOT-23,     TLV75533PDBVR,        Yes,           0.50,        5V-in. 3.3V-out. 500mA drive current. With overcurrent protection.
+U16,    LDO voltage regulator, SOT-23,     TLV75533PDBVR,        Yes,           0.50,        5V-in. 3.3V-out. 500mA drive current. With overcurrent protection.
+U17,    LDO voltage regulator, SOT-23,     TLV75533PDBVR,        Yes,           0.50,        5V-in. 3.3V-out. 500mA drive current. With overcurrent protection.
+U18,    LDO voltage regulator, SOT-23,     TLV75533PDBVR,        Yes,           0.50,        5V-in. 3.3V-out. 500mA drive current. With overcurrent protection.
+U19,    LDO voltage regulator, SOT-23,     TLV75533PDBVR,        Yes,           0.50,        5V-in. 3.3V-out. 500mA drive current. With overcurrent protection.
 -,      Adafruit TFT LCD,      -,          Product ID 1770,      No,           30.00,        Install if using display. Connect display to J11 and U12.
 H1,     Mounting hole 2.2mm,   -,          -,                    -,                0,        Nothing to install. just noting the mounting hole diameter for bolt selection.
 H2,     Mounting hole 2.2mm,   -,          -,                    -,                0,        Nothing to install. just noting the mounting hole diameter for bolt selection.
