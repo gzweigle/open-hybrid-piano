@@ -1,7 +1,7 @@
 Label,   Description,           Package,    Part Number,          Required?,     Est Cost,     Comment
 -,       HPS 0.6 circuit board, -,          -,                    Yes,           1.00,        -
 RV0,     Trimmer, 200 ohm,      -,          3224X-1-201E,         Yes,           5.00,        -
-R1,      50 ohm resistor,       0805,       CRCW080550R0FKTA,     Yes,           0.25,        0.125W. 5% tolerance or better. On back of PCB.
+R1,      51 ohm resistor,       0805,       ERA-6AED510V,         Yes,           0.25,        0.125W. 5% tolerance or better. On back of PCB.
 R2,      4120 ohm resistor,     0805,       ERA-6AEB4121V,        Yes,           0.25,        0.125W. 5% tolerance or better. On back of PCB.
 U1,      CNY70 optical sensor,  -,          CNY70,                Yes,           1.00,        On back of PCB.
 J0,      1x3 pin male 0.1in,    -,          -,                    Yes,           0.06,        -

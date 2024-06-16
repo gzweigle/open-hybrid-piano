@@ -1,6 +1,6 @@
 Label,   Description,           Package,    Part Number,          Required?,     Est Cost,     Comment
 -,       HPS 0.8 circuit board, -,          -,                    Yes,           1.00,        -
-R1,      180 ohm resistor,      0805,       -,                    Yes,           0.25,        0.125W. 1% tolerance or better. On back of PCB.
+R1,      180 ohm resistor,      0805,       ERA-6AED181V,         Yes,           0.25,        0.125W. 1% tolerance or better. On back of PCB.
 R2,      4300 ohm resistor,     0805,       ERA-6AEB432V,         Yes,           0.25,        0.125W. 1% tolerance or better. On back of PCB.
 U1,      CNY70 optical sensor,  -,          CNY70,                Yes,           1.00,        On back of PCB.
 J0,      1x3 pin male 0.1in,    -,          -,                    Yes,           0.06,        -

@@ -1,5 +1,7 @@
 # KiCad General Information
 
+KiCad information and also information about the KiCad libraries located in this directory.
+
 ## Libraries
 
 ### Versions

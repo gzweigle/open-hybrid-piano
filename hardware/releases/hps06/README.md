@@ -4,6 +4,8 @@
 
 Originally, the HPS PCB was for hammers.  However, the sensor also works for dampers.  Not changing the name because many circuit boards have already been built.
 
+This circuit board includes a trimming resistor. Unless needed for a specific use case, the circuit board with trimming resistor is not recommended.
+
 ## Features
 
 ### I/O
@@ -19,6 +21,11 @@ Originally, the HPS PCB was for hammers.  However, the sensor also works for dam
 * CNY70 sensor.
 * Trimming resistor to fine tune output voltage maximum value.
 * All resistors are surface mount packages.
+
+### Pin Order:
+* Power
+* Signal
+* Ground
 
 ## Calibrating
 

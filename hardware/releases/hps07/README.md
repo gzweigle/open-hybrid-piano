@@ -4,9 +4,9 @@
 
 Originally, the HPS PCB was for hammers.  However, the sensor also works for dampers.  Not changing the name because many circuit boards have already been built.
 
-Version 0.7 changes the header pin order. This provides a better physical match to some mainboards.
+Version 0.7 is the same as version 0.6 except with a different header pin order. This provides a better physical match to some mainboards.
 
-Version 0.7 is the recommended sensor, if using the trimmer resistor.
+This circuit board includes a trimming resistor. Unless needed for a specific use case, the circuit board with trimming resistor is not recommended.
 
 ## Features
 
@@ -23,6 +23,11 @@ Version 0.7 is the recommended sensor, if using the trimmer resistor.
 * CNY70 sensor.
 * Trimming resistor to fine tune output voltage maximum value.
 * All resistors are surface mount packages.
+
+### Pin Order:
+* Power
+* Ground
+* Signal
 
 ## Calibrating
 
