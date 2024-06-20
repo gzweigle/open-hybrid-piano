@@ -132,7 +132,7 @@ The SCA also has a second +3.3V input (see later section below) which can be use
 In this case the worst case current for an LDO:
 224 + 16 = 240 mA.
 
-Select the LDO based on above math. The LDO in [ips20_bill_of_materials.txt](ips20_bill_of_materials.txt) was selected based on the above math.
+Select the LDO based on above math. The LDO in [ips20_bill_of_materials_0.txt](ips20_bill_of_materials_0.txt) was selected based on the above math.
 
 ![ips20_33av_pcb](ips20_33av_power.png)
 
@@ -140,7 +140,7 @@ Select the LDO based on above math. The LDO in [ips20_bill_of_materials.txt](ips
 
 Ground pins are labeled on the PCB.
 
-Be careful not to accidentally short a +3.3V pin with a ground pin.  For safety, select an LDO that tolerates a shorted output indefinitely. The LDO in [ips20_bill_of_materials.txt](ips20_bill_of_materials.txt) was selected based on this criteria.
+Be careful not to accidentally short a +3.3V pin with a ground pin.  For safety, select an LDO that tolerates a shorted output indefinitely. The LDO in [ips20_bill_of_materials_0.txt](ips20_bill_of_materials_0.txt) was selected based on this criteria.
 
 ### +3.3 Volt Digital
 
@@ -169,7 +169,7 @@ Location of timing analysis: [../../../design/data_acquisition/eca0X_ips2X/eca0X
 
 To manufacture a board, send the files in [ips20_gerber/](ips20_gerber/) to a PCB manufacturer.
 
-The file [ips20_bill_of_materials.txt](ips20_bill_of_materials.txt) lists the parts required.
+The file [ips20_bill_of_materials_0.txt](ips20_bill_of_materials_0.txt) lists the parts required.
 
 ### KiCad vs Gerbers
 

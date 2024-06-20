@@ -1,0 +1,28 @@
+Label,  Description,                  Package,    Part Number,   Required?,    Est Cost,     Comment
+-,      ACE A 0.0 circuit board,            -,              -,         Yes,       10.00,      -
+J1,     1x8 connector socket 0.1in,         -,              -,         Yes,        0.16,      Solder to bottom side of circuit board.
+J2,     1x8 connector pin 0.1in,            -,              -,         Yes,        0.16,      Solder to top side of circuit board.
+J3,     1x2 connector socket 0.1in,         -,              -,         Yes,        0.16,      Solder to bottom side of circuit board.
+J4,     1x8 connector pin 0.1in,            -,              -,         Yes,        0.16,      Solder to top side of circuit board.
+J5,     1x8 connector pin 0.1in,            -,              -,         Yes,        0.16,      Solder to top side of circuit board.
+J6,     1x8 connector socket 0.1in,         -,              -,         Yes,        0.16,      Solder to bottom side of circuit board (board label is not next to connector).
+J7,     1x8 connector pin 0.1in,            -,              -,         Yes,        0.16,      Solder to top side of circuit board.
+J8,     1x2 connector socket 0.1in,         -,              -,         Yes,        0.16,      Solder to bottom side of circuit board.
+J9,     1x8 connector pin 0.1in,            -,              -,         Yes,        0.16,      Solder to top side of circuit board.
+J10,    1x8 connector pin 0.1in,            -,              -,         Yes,        0.16,      Solder to top side of circuit board.
+R1,     4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R2,     4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R3,     4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R4,     4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R5,     4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R6,     4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R7,     4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R8,     4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R9,     4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R10,    4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R11,    4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R12,    4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R13,    4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R14,    4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R15,    4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
+R16,    4300 ohm resistor,               0805,   ERA-6AEB432V,         Yes,        0.25,      0.125W. 1% tolerance or better.
