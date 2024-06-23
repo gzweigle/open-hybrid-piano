@@ -98,9 +98,9 @@ R16,    7500 ohms,             0805,       ERA-6AED752V,         No,            
 R22,    10 ohms,               0805,       10 ohm resistor,      Yes,           0.40,        0.125W. 20% tolerance or better. For pedals.
 R26,    10 ohms,               0805,       10 ohm resistor,      Yes,           0.40,        0.125W. 20% tolerance or better. For pedals.
 R29,    10 ohms,               0805,       10 ohm resistor,      Yes,           0.40,        0.125W. 20% tolerance or better. For pedals.
-R23,    4700 ohms,             0805,       ERA-6AED472V,         Yes,           0.50,        0.125W. 5% tolerance or better. For pedals.
-R25,    4700 ohms,             0805,       ERA-6AED472V,         Yes,           0.50,        0.125W. 5% tolerance or better. For pedals.
-R28,    4700 ohms,             0805,       ERA-6AED472V,         Yes,           0.50,        0.125W. 5% tolerance or better. For pedals.
+R23,    4700 ohms,             0805,       ERA-6AED472V,         No,            0.50,        0.125W. 5% tolerance or better. For pedals. Install if using passive pedals.
+R25,    4700 ohms,             0805,       ERA-6AED472V,         No,            0.50,        0.125W. 5% tolerance or better. For pedals. Install if using passive pedals.
+R28,    4700 ohms,             0805,       ERA-6AED472V,         No,            0.50,        0.125W. 5% tolerance or better. For pedals. Install if using passive pedals.
 F1,     Fuse,                  1210,       zero ohm resistor,    Yes,           1.50,        Zero ohm resistor and see documentation for details.
 F2,     Fuse,                  1210,       zero ohm resistor,    Yes,           1.50,        Zero ohm resistor and see documentation for details.
 SW1,    2 position switch,     -,          DS04-254-1-02BK-SMT,  No,            0.75,        Install if would like switch for configuration functions.
