@@ -103,6 +103,13 @@ void HammerSettings::SetAllSettingValues() {
   // finished. Eventually, the goal is not to need a gain control.
   velocity_scale = 0.45;
 
+  // Any MIDI velocity equal to this value or larger is muted.
+  // Typically set to 127. But is user configurable. Assumption
+  // is that normal piano playing won't use a volume of 127 but a
+  // problem could. For example, a firmware or mechanical issue.
+  // To disable, set >= max MIDI velocity (128 most likely).
+  maximum_midi_velocity = 127;
+
   ////////
   // Switch settings.
   switch_debounce_micro = 500000; // Read DIP switches at this interval, microseconds.

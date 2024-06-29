@@ -43,7 +43,7 @@
 
 AutoMute::AutoMute() {}
 
-void AutoMute::Setup() {
+void AutoMute::Setup(int maximum_midi_velocity) {
   // Set mute velocity to a non-zero value so that the condition is audible
   // which alerts to user that something did try to play.
   mute_velocity_ = 16;
@@ -61,6 +61,9 @@ void AutoMute::Setup() {
   // considered "simultaneous".
   loud_note_interval_ = 5;
   last_loud_note_time_ = millis();
+
+  // Any MIDI velocity equal to or above this is muted.
+  maximum_midi_velocity_ = maximum_midi_velocity;
 
 }
 
@@ -112,10 +115,7 @@ int AutoMute::AutomaticallyDecreaseVolume(int velocity, int debug_level) {
   }
 
   // All max MIDI volume are muted.
-  // Assumption: piano playing won't use volume of 127 but a
-  // problem could. For example, a bug causing numerical max value.
-  // TODO - Match MIDI max.
-  if (velocity >= 120) {
+  if (velocity >= maximum_midi_velocity_) {
     return_velocity = mute_velocity_;
     if (debug_level >= DEBUG_STATS) {
       Serial.println("AutoMute Activated - piano volume reduced for this note.");

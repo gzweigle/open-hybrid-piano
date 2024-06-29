@@ -28,7 +28,7 @@ class AutoMute
 {
   public:
     AutoMute();
-    void Setup();
+    void Setup(int);
     int AutomaticallyDecreaseVolume(int, int);
  
   private:
@@ -36,6 +36,7 @@ class AutoMute
     int max_simultaneous_notes_;
     int simultaneous_note_count_;
     int max_simultaneous_volume_;
+    int maximum_midi_velocity_;
     unsigned long last_loud_note_time_;
     unsigned long loud_note_interval_;
 

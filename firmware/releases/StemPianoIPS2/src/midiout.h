@@ -38,7 +38,7 @@ class MidiOut
 {
   public:
     MidiOut();
-    void Setup(int, MY_MIDI_INTERFACE *, int);
+    void Setup(int, MY_MIDI_INTERFACE *, int, int);
     void SendNoteOn(AutoMute *, const bool *, const float *);
     void SendNoteOff(AutoMute *, const bool *, const float *);
     void SendPedal(DspPedal *);
@@ -52,7 +52,10 @@ class MidiOut
 
     // Some receiving software treats 127 special.
     // So, option for a smaller max value.
-    int max_midi_value_;
+    int maximum_midi_value_;
+
+    // What to send when a threshold pedal is activated.
+    int pedal_midi_value_;
 
 };
 

@@ -114,7 +114,7 @@ void setup(void) {
   SwSCA2.Setup(Set.switch_debounce_micro,
   Set.switch21_sca_pin, Set.switch22_sca_pin, Set.debug_level);
 
-  Mute.Setup();
+  Mute.Setup(Set.maximum_midi_velocity);
 
   // Setup the analog front-end and the board-to-board communication.
   // Physically connecting the board-to-board link is optional and
@@ -143,7 +143,7 @@ void setup(void) {
   Gain.Setup(Set.velocity_scale, Set.debug_level);
 
   // Setup sending damper, hammer, and pedal data over MIDI.
-  Midi.Setup(Set.midi_channel, &mi, Set.debug_level);
+  Midi.Setup(Set.midi_channel, &mi, Set.maximum_midi_velocity, Set.debug_level);
   Serial1.addMemoryForWrite(Midi_Buffer, sizeof(Midi_Buffer));
 
   // Common on hammer and pedal board: Ethernet, test points, TFT display, etc.
