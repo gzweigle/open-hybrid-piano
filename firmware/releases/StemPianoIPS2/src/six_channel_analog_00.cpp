@@ -45,10 +45,10 @@ bool using18bitadc, float sensor_v_max, float adc_reference, TestpointLed *Tpl) 
   using18bitadc_ = using18bitadc;
 
   if (using18bitadc_ == true) {
-    adc_max_value_ = 262143;
+    adc_max_value_ = 262143.0;
   }
   else {
-    adc_max_value_ = 65535;
+    adc_max_value_ = 65535.0;
   }
 
   // Pin numbers are set by board layout.
@@ -98,80 +98,106 @@ bool using18bitadc, float sensor_v_max, float adc_reference, TestpointLed *Tpl) 
 // The code is piplined, which gives extra settling time for
 // ADC input while the ADC is clocking out the previous value.
 // This pipelining speeds up the overall conversion time.
-void SixChannelAnalog00::GetNewAdcValues(unsigned int *adc_array) {
+void SixChannelAnalog00::GetNewAdcValues(unsigned int *adc_array, int test_index) {
   // ADC clocks data out on the falling edge. Therefore, using SPI Mode 1.
   SPI.beginTransaction(SPISettings(sclk_frequency_, MSBFIRST, SPI_MODE1));
-  int adc_ind = 0;
-  int mux8_next, mux16_next;
 
-  for (int mux8 = 0; mux8 < NUM_8_CHANNEL_INPUTS; mux8++) {
-    for (int mux16 = 0; mux16 < NUM_16_CHANNEL_INPUTS; mux16++) {
+  if (test_index < 0) {
+    int adc_ind = 0;
+    int mux8_next, mux16_next;
+    for (int mux8 = 0; mux8 < NUM_8_CHANNEL_INPUTS; mux8++) {
+      for (int mux16 = 0; mux16 < NUM_16_CHANNEL_INPUTS; mux16++) {
 
-      // Sample the analog inputs at ADC.
-      // First ADC sampling is for [mux8,mux16] = [0,0].
-      // They were left at [0,0] the last time SixChannelAnalog00 was run.
-      digitalWriteFast(convst_, HIGH);
+        // Sample the analog inputs at ADC.
+        // First ADC sampling is for [mux8,mux16] = [0,0].
+        // They were left at [0,0] the last time SixChannelAnalog00 was run.
+        digitalWriteFast(convst_, HIGH);
 
-      // Pipelined, so calculate next mux channel.
-      mux16_next = mux16 + 1;
-      if (mux16_next == NUM_16_CHANNEL_INPUTS) {
-        mux16_next = 0;
-        mux8_next = mux8 + 1;
-        if (mux8_next == NUM_8_CHANNEL_INPUTS) {
-          mux8_next = 0;
+        // Pipelined, so calculate next mux channel.
+        mux16_next = mux16 + 1;
+        if (mux16_next == NUM_16_CHANNEL_INPUTS) {
+          mux16_next = 0;
+          mux8_next = mux8 + 1;
+          if (mux8_next == NUM_8_CHANNEL_INPUTS) {
+            mux8_next = 0;
+          }
         }
+        else {
+          mux8_next = mux8;
+        }
+
+        // Test point so can trigger oscilloscope exactly when muxes switch.
+        // The specific mux value it triggers on is arbitrary.
+        // Use this test point to help validate signal settling time.
+        //if ( (mux16_next == 13 && mux8_next == 3)) {
+        //  Tpl_->SetTp11(true);
+        //}
+        //else {
+        //  Tpl_->SetTp11(false);
+        //}
+
+        // Switch all muxes to next analog input channel.
+        // Switch 16:1 first to give juuuust a little extra
+        // settling time, as ADC has to wait for 8:1 in any case.
+        // From the time of these mux changes until convst_ goes high
+        // must be long enough to allow the signal to settle under
+        // worst case conditions. Oscilloscope testing was used to
+        // verify that it is ok.
+        digitalWriteFast(mux16_1_pin_s0_, mux16_0_[mux16_next]);
+        digitalWriteFast(mux16_1_pin_s1_, mux16_1_[mux16_next]);
+        digitalWriteFast(mux16_1_pin_s2_, mux16_2_[mux16_next]);
+        digitalWriteFast(mux16_1_pin_s3_, mux16_3_[mux16_next]);
+        digitalWriteFast(mux8_1_pin_a_, mux8_a_[mux8_next]);
+        digitalWriteFast(mux8_1_pin_b_, mux8_b_[mux8_next]);
+        digitalWriteFast(mux8_1_pin_c_, mux8_c_[mux8_next]);
+
+        // Total time from convst_ HIGH to LOW must be at least
+        // ADC_CONVERSION_NANOSECONDS. The switching above takes some
+        // time so waiting the full ADC_CONVERSION_NANOSECONDS here
+        // is very conservative, which is good.
+        delayNanoseconds(ADC_CONVERSION_NANOSECONDS);
+        digitalWriteFast(convst_, LOW);   // End a conversion.
+
+        // Now, get the data from the conversion initiated above.
+        // Conversion is for [mux16,mux8] values not
+        // [mux16_next, mux8_next].
+        // Write 0xFF so that DIN stays high.
+        if (using18bitadc_ == true) {
+          // Not getting two lower bits. Force them to zero.
+          adc_array[adc_ind++] = (SPI.transfer16(0xFF) << 2);
+        }
+        else {
+          adc_array[adc_ind++] = SPI.transfer16(0xFF);
+        }
+
+        // Make sure DIN stays high. Probably not necessary.
+        digitalWrite(din_, HIGH);
       }
-      else {
-        mux8_next = mux8;
-      }
-
-      // Test point so can trigger oscilloscope exactly when muxes switch.
-      // The specific mux value it triggers on is arbitrary.
-      // Use this test point to help validate signal settling time.
-      //if ( (mux16_next == 13 && mux8_next == 3)) {
-      //  Tpl_->SetTp11(true);
-      //}
-      //else {
-      //  Tpl_->SetTp11(false);
-      //}
-
-      // Switch all muxes to next analog input channel.
-      // Switch 16:1 first to give juuuust a little extra
-      // settling time, as ADC has to wait for 8:1 in any case.
-      // From the time of these mux changes until convst_ goes high
-      // must be long enough to allow the signal to settle under
-      // worst case conditions. Oscilloscope testing was used to
-      // verify that it is ok.
-      digitalWriteFast(mux16_1_pin_s0_, mux16_0_[mux16_next]);
-      digitalWriteFast(mux16_1_pin_s1_, mux16_1_[mux16_next]);
-      digitalWriteFast(mux16_1_pin_s2_, mux16_2_[mux16_next]);
-      digitalWriteFast(mux16_1_pin_s3_, mux16_3_[mux16_next]);
-      digitalWriteFast(mux8_1_pin_a_, mux8_a_[mux8_next]);
-      digitalWriteFast(mux8_1_pin_b_, mux8_b_[mux8_next]);
-      digitalWriteFast(mux8_1_pin_c_, mux8_c_[mux8_next]);
-
-      // Total time from convst_ HIGH to LOW must be at least
-      // ADC_CONVERSION_NANOSECONDS. The switching above takes some
-      // time so waiting the full ADC_CONVERSION_NANOSECONDS here
-      // is very conservative, which is good.
-      delayNanoseconds(ADC_CONVERSION_NANOSECONDS);
-      digitalWriteFast(convst_, LOW);   // End a conversion.
-
-      // Now, get the data from the conversion initiated above.
-      // Conversion is for [mux16,mux8] values not
-      // [mux16_next, mux8_next].
-      // Write 0xFF so that DIN stays high.
-      if (using18bitadc_ == true) {
-        // Not getting two lower bits. Force them to zero.
-        adc_array[adc_ind++] = (SPI.transfer16(0xFF) << 2);
-      }
-      else {
-        adc_array[adc_ind++] = SPI.transfer16(0xFF);
-      }
-
-      // Make sure DIN stays high. Probably not necessary.
-      digitalWrite(din_, HIGH);
     }
+  }
+  else {
+    // Sample one channel. Use for very high speed sampling testing.
+    // Code replicates normal code because don't want extra if()
+    // checks in high-speed, normal operation, code above.
+    int mux8 = test_index >> 4;
+    int mux16 = test_index & 0x0F;
+    digitalWriteFast(convst_, HIGH);
+    digitalWriteFast(mux16_1_pin_s0_, mux16_0_[mux16]);
+    digitalWriteFast(mux16_1_pin_s1_, mux16_1_[mux16]);
+    digitalWriteFast(mux16_1_pin_s2_, mux16_2_[mux16]);
+    digitalWriteFast(mux16_1_pin_s3_, mux16_3_[mux16]);
+    digitalWriteFast(mux8_1_pin_a_, mux8_a_[mux8]);
+    digitalWriteFast(mux8_1_pin_b_, mux8_b_[mux8]);
+    digitalWriteFast(mux8_1_pin_c_, mux8_c_[mux8]);
+    delayNanoseconds(ADC_CONVERSION_NANOSECONDS);
+    digitalWriteFast(convst_, LOW);
+    if (using18bitadc_ == true) {
+      adc_array[test_index] = (SPI.transfer16(0xFF) << 2);
+    }
+    else {
+      adc_array[test_index] = SPI.transfer16(0xFF);
+    }
+    digitalWrite(din_, HIGH);
   }
   SPI.endTransaction();
 }
@@ -181,15 +207,15 @@ void SixChannelAnalog00::GetNewAdcValues(unsigned int *adc_array) {
 void SixChannelAnalog00::NormalizeAdcValues(int *diff_scale_raw,
 float *normalized_float, const unsigned int *adc_values) {
 
+  float scale = adc_reference_ / sensor_v_max_;
+
   for (int ind = 0; ind < NUM_CHANNELS; ind++) {
 
-    normalized_float[ind] = static_cast<float>(adc_values[ind]) /
-    static_cast<float>(adc_max_value_);
+    normalized_float[ind] = static_cast<float>(adc_values[ind]) / adc_max_value_;
 
     // Normally adc_reference_ == sensor_v_max_.
     // Allow other values in case mixing and matching front ends.
-    normalized_float[ind] *= adc_reference_ / sensor_v_max_;
-
+    normalized_float[ind] *= scale;
     diff_scale_raw[ind] = adc_values[ind];
 
     // Multiply by 2 because the SCA version 0.0 is single-ended and so if a

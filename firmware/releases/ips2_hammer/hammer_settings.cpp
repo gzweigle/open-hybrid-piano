@@ -53,10 +53,16 @@ void HammerSettings::SetAllSettingValues() {
   // Set at the lowest value needed to get all data clocked
   // out in time to meet the adc_sample_period_microseconds value.
   adc_spi_clock_frequency = 60000000;
+
+  // High sample rate data acquisition mode.
+  // If >= 0, all piano functions are disabled except test_index channel. 
+  // Because all functions are disabled, it is possible to set the sample
+  // rate approximately 10x faster than during normal operation.
+  test_index = -1;
   
   // Must be longer than the time to sample and collect all NUM_CHANNELS
   // data from the ADC plus the time for processing all of the data.
-  // WARNING - This value must match the value on damper board.
+  // WARNING - For normal operation, this value must match damper board value.
   adc_sample_period_microseconds = 300;
   
   if (debug_level >= DEBUG_STATS) {

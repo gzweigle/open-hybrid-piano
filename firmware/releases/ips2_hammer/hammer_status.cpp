@@ -54,7 +54,7 @@ float strike_threshold) {
   filter0_.Setup();
   filter1_.Setup();
 
-  statistics_interval_ = 5000;
+  statistics_interval_ = 15000;
   statistics_last_change_ = millis();
   for (int k = 0; k < NUM_NOTES; k++) {
     min_[k] = 1.0;
@@ -66,7 +66,7 @@ float strike_threshold) {
 
 // Control LED on front of board next to Teensy.
 void HammerStatus::FrontLed(const float *calibrated_floats,
-bool switch_high_damper_threshold) {
+bool switch_high_damper_threshold, int test_index) {
 
   float damper_threshold;
   if (switch_high_damper_threshold == true) {
@@ -102,15 +102,21 @@ bool switch_high_damper_threshold) {
   if (found == false)
     testp_->SetTp10(false);
 
-  // Turn on LED if any pedal input is above its threshold.
-  if (dspp_->GetSustainCrossedUpThreshold() || 
-  dspp_->GetSostenutoCrossedUpThreshold() ||
-  dspp_->GetUnaCordaCrossedUpThreshold()) {
-    testp_->SetTp11(false);
+  if (test_index < 0) {
+    // Turn on LED if any pedal input is above its threshold.
+    if (dspp_->GetSustainCrossedUpThreshold() || 
+    dspp_->GetSostenutoCrossedUpThreshold() ||
+    dspp_->GetUnaCordaCrossedUpThreshold()) {
+      testp_->SetTp11(false);
+    }
+    else if (dspp_->GetSustainCrossedDownThreshold() || 
+    dspp_->GetSostenutoCrossedDownThreshold() ||
+    dspp_->GetUnaCordaCrossedDownThreshold()) {
+      testp_->SetTp11(true);
+    }
   }
-  else if (dspp_->GetSustainCrossedDownThreshold() || 
-  dspp_->GetSostenutoCrossedDownThreshold() ||
-  dspp_->GetUnaCordaCrossedDownThreshold()) {
+  else {
+    // If in high-speed test mode, leave on.
     testp_->SetTp11(true);
   }
 }

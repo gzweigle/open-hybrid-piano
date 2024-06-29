@@ -35,7 +35,7 @@ class HammerStatus
   public:
     HammerStatus();
     void Setup(DspPedal *, TestpointLed *, int, float, float, float);
-    void FrontLed(const float *, bool);
+    void FrontLed(const float *, bool, int);
     void LowerRightLed(bool, bool);
     void SCALed();
     void EthernetLed();

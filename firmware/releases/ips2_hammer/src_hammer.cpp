@@ -154,6 +154,11 @@ void setup(void) {
   Tpl.Setup();
   Tmg.Setup(Set.adc_sample_period_microseconds);
 
+  if (Set.test_index >= 0) {
+    Serial.println("WARNING - In high-speed test mode.");
+    Serial.println("MIDI is disabled.");
+  }
+
   // Ready to be a piano.
   if (Set.debug_level >= DEBUG_STATS) {
     Serial.println("Finished hammer board initialization.");
@@ -233,7 +238,7 @@ void loop() {
     Tpl.SetTp8(true); // Front left test point asserts during processing.
 
     // Get hammer and pedal data from ADC.
-    Adc.GetNewAdcValues(raw_samples);
+    Adc.GetNewAdcValues(raw_samples, Set.test_index);
 
     // Reorder the back row.
     Adc.ReorderAdcValues(raw_samples);
@@ -254,38 +259,41 @@ void loop() {
       }
     }
 
-    // Select source for damper signals.
-    if (switch_external_damper_board == true) {
-      // There exists a damper board so use remote data from the damper board.
-      B2B.GetDamperData(damper_position);
-    }
-    else {
-      // No external damper board.
-      // Use the hammer position as an estimate of the damper position.
-      for (int k = 0; k < NUM_CHANNELS; k++)
-        damper_position[k] = calibrated_floats[k];
-    }
+    if (Set.test_index < 0) {
 
-    // Process hammer, damper, and pedal data.
-    // For hammer and damper get an event boolean flag and velocity.
-    // For pedal get the state of the pedal.
-    DspD.GetDamperEventData(damper_event, damper_velocity, damper_position,
-    switch_high_damper_threshold);
-    DspH.GetHammerEventData(hammer_event, hammer_velocity, calibrated_floats);
-    DspP.UpdatePedalState(calibrated_floats);
+      // Select source for damper signals.
+      if (switch_external_damper_board == true) {
+        // There exists a damper board so use remote data from the damper board.
+        B2B.GetDamperData(damper_position);
+      }
+      else {
+        // No external damper board.
+        // Use the hammer position as an estimate of the damper position.
+        for (int k = 0; k < NUM_CHANNELS; k++)
+          damper_position[k] = calibrated_floats[k];
+      }
 
-    // Adjust velocity. Probably not needed in the future.
-    Gain.DamperVelocityScale(damper_velocity, damper_event);
-    Gain.HammerVelocityScale(hammer_velocity, switch_set_peak_velocity, hammer_event);
+      // Process hammer, damper, and pedal data.
+      // For hammer and damper get an event boolean flag and velocity.
+      // For pedal get the state of the pedal.
+      DspD.GetDamperEventData(damper_event, damper_velocity, damper_position,
+      switch_high_damper_threshold);
+      DspH.GetHammerEventData(hammer_event, hammer_velocity, calibrated_floats);
+      DspP.UpdatePedalState(calibrated_floats);
 
-    // Sending data over MIDI.
-    if (startup_counter < Set.startup_counter_value) {
-      startup_counter++;
-    }
-    else {
-      Midi.SendNoteOn(&Mute, hammer_event, hammer_velocity);
-      Midi.SendNoteOff(&Mute, damper_event, damper_velocity);
-      Midi.SendPedal(&DspP);
+      // Adjust velocity. Probably not needed in the future.
+      Gain.DamperVelocityScale(damper_velocity, damper_event);
+      Gain.HammerVelocityScale(hammer_velocity, switch_set_peak_velocity, hammer_event);
+
+      // Sending data over MIDI.
+      if (startup_counter < Set.startup_counter_value) {
+        startup_counter++;
+      }
+      else {
+        Midi.SendNoteOn(&Mute, hammer_event, hammer_velocity);
+        Midi.SendNoteOff(&Mute, damper_event, damper_velocity);
+        Midi.SendPedal(&DspP);
+      }
     }
 
     // Send a packet of calibrated data.
@@ -296,18 +304,23 @@ void loop() {
     else
       key_on_threshold = Set.damper_threshold_low;
     Eth.SendPianoPacket(calibrated_floats, switch_enable_ethernet,
-    sustain_pressed, key_on_threshold);
+    sustain_pressed, key_on_threshold, Set.test_index);
 
-    // Run the TFT display.
-    Tft.Display(switch_tft_display, calibrated_floats, damper_position);
+    if (Set.test_index < 0) {
+      // Run the TFT display.
+      Tft.Display(switch_tft_display, calibrated_floats, damper_position);
+    }
 
     // Debug and display information.
-    HStat.FrontLed(calibrated_floats, switch_high_damper_threshold);
-    HStat.LowerRightLed(all_notes_using_cal, Nonv.NonvolatileWasWritten());
-    HStat.SCALed();
-    HStat.EthernetLed();
-    HStat.SerialMonitor(position_adc_counts, calibrated_floats, hammer_event,
-    Set.canbus_enable, switch_external_damper_board);
+    HStat.FrontLed(calibrated_floats, switch_high_damper_threshold, Set.test_index);
+
+    if (Set.test_index < 0) {
+      HStat.LowerRightLed(all_notes_using_cal, Nonv.NonvolatileWasWritten());
+      HStat.SCALed();
+      HStat.EthernetLed();
+      HStat.SerialMonitor(position_adc_counts, calibrated_floats, hammer_event,
+      Set.canbus_enable, switch_external_damper_board);
+    }
 
     Tpl.SetTp8(false);
   }

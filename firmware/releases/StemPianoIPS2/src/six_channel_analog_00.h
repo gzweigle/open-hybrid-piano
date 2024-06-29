@@ -51,7 +51,7 @@ class SixChannelAnalog00
   public:
     SixChannelAnalog00();
     void Setup(int, bool, bool, float, float, TestpointLed *);
-    void GetNewAdcValues(unsigned int *);
+    void GetNewAdcValues(unsigned int *, int);
     void NormalizeAdcValues(int *, float *, const unsigned int *);
     void ReorderAdcValues(unsigned int *);
  
@@ -59,7 +59,7 @@ class SixChannelAnalog00
     TestpointLed *Tpl_;
     int sclk_frequency_;
     bool adc_is_differential_;
-    int adc_max_value_;
+    float adc_max_value_;
     int using18bitadc_;
     float sensor_v_max_;
     float adc_reference_;

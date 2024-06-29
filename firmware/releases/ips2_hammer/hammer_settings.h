@@ -40,6 +40,7 @@ class HammerSettings
     int debug_level;
     int startup_counter_value;
     int adc_spi_clock_frequency;
+    int test_index;
     int adc_sample_period_microseconds;
     int adc_sample_period_microseconds_during_tft;
     bool adc_is_differential;

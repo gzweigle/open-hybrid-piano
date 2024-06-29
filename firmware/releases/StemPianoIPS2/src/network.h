@@ -40,7 +40,7 @@ class Network
   public:
     Network();
     void Setup(const char *, const char *, int, bool, int);
-    void SendPianoPacket(const float *, bool, bool, float);
+    void SendPianoPacket(const float *, bool, bool, float, int);
 
   private:
     int debug_level_;
@@ -62,7 +62,7 @@ class Network
     void GetMacAddress();
     void SetIpAddresses(const char *, const char *, int);
     void SetupNetwork(bool);
-    void BuildPacket(float *, const float *, bool, float);
+    void BuildPacket(float *, const float *, bool, float, int);
 };
 
 #else

@@ -62,34 +62,44 @@ bool switch_enable_ethernet, int debug_level) {
 // If sustain goes low to high and no note is pressed, default to the highest
 // index data (this enables sending pedal measurements).
 void Network::BuildPacket(float *data_out, const float *data_in,
-bool key_on_threshold, float damper_threshold) {
-  if (key_on_threshold == true) {
-    // Default if find no key that crossed the threshold.
-    ethernet_start_ind_ = NUM_CHANNELS - ETHERNET_PACKET_SIZE_FLOATS;
-    for (int key = 0; key < NUM_CHANNELS; key++) {
-      if (data_in[key] > damper_threshold) {
-        ethernet_start_ind_ = key;
-        if (debug_level_ >= DEBUG_STATS) {
-          Serial.print("New ethernet start index = ");
-          Serial.println(ethernet_start_ind_);
+bool key_on_threshold, float damper_threshold, int test_index) {
+
+  if (test_index < 0) {
+    if (key_on_threshold == true) {
+      // Default if find no key that crossed the threshold.
+      ethernet_start_ind_ = NUM_CHANNELS - ETHERNET_PACKET_SIZE_FLOATS;
+      for (int key = 0; key < NUM_CHANNELS; key++) {
+        if (data_in[key] > damper_threshold) {
+          ethernet_start_ind_ = key;
+          if (debug_level_ >= DEBUG_STATS) {
+            Serial.print("New ethernet start index = ");
+            Serial.println(ethernet_start_ind_);
+          }
+          break;
         }
-        break;
+      }
+    }
+    for (int key = 0; key < ETHERNET_PACKET_SIZE_FLOATS; key++) {
+      if (key + ethernet_start_ind_ < NUM_CHANNELS) {
+        data_out[key] = data_in[key + ethernet_start_ind_];
+      }
+      else {
+        // If try to go past max number of inputs, send zeros.
+        data_out[key] = 0.0;
       }
     }
   }
-  for (int key = 0; key < ETHERNET_PACKET_SIZE_FLOATS; key++) {
-    if (key + ethernet_start_ind_ < NUM_CHANNELS) {
-      data_out[key] = data_in[key + ethernet_start_ind_];
-    }
-    else {
-      // If try to go past max number of inputs, send zeros.
+  else {
+    // Send one value. Zero everything except the first value.
+    for (int key = 0; key < ETHERNET_PACKET_SIZE_FLOATS; key++) {
       data_out[key] = 0.0;
     }
+    data_out[0] = data_in[test_index];
   }
 }
 
 void Network::SendPianoPacket(const float *data_in, bool switch_enable_ethernet,
-bool sustain_pressed, float key_on_threshold) {
+bool sustain_pressed, float key_on_threshold, int test_index) {
 
   // If switch goes from low to high, setup the network.
   if (switch_enable_ethernet == true && switch_enable_ethernet_last_ == false) {
@@ -103,7 +113,7 @@ bool sustain_pressed, float key_on_threshold) {
   if (switch_enable_ethernet == true) {
 
     float data[ETHERNET_PACKET_SIZE_FLOATS];
-    BuildPacket(data, data_in, sustain_pressed, key_on_threshold);
+    BuildPacket(data, data_in, sustain_pressed, key_on_threshold, test_index);
 
     int data_int;
 
@@ -130,7 +140,15 @@ bool sustain_pressed, float key_on_threshold) {
       // Send the data via UDP.
       IPAddress ip(computer_ip_[0], computer_ip_[1], computer_ip_[2], computer_ip_[3]);
       Udp.beginPacket(ip, udp_port_);
-      Udp.write(ethernet_values_, 3*(ETHERNET_PACKET_SIZE_FLOATS));
+
+      if (test_index < 0) {
+        Udp.write(ethernet_values_, 3*(ETHERNET_PACKET_SIZE_FLOATS));
+      }
+      else {
+        // Send only the first sample.
+        Udp.write(ethernet_values_, 3);
+      }
+
       Udp.endPacket();
       Udp.flush();
     }
