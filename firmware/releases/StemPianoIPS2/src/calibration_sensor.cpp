@@ -39,6 +39,11 @@ float match_offset, int debug_level, Nonvolatile *Nv) {
   min_write_interval_millis_ = 3000;
   last_write_time_ = millis();
 
+  // Do not set max value to exactly 1.0.
+  // Otherwise, due to various nonideal conditions could
+  // get clipping. Use this value to give some margin.
+  gain_correction_ = 0.975;
+
   // These are temporary while evaluating performance.
   // Allows playing with both calibrated and uncalibrated keys.
   orig_gain_ = match_gain;
@@ -172,7 +177,7 @@ bool switch_disable_and_reset_calibration, const float *in) {
       // resting position. Otherwise, could get a bad note when gain and
       // offset change while the hammer/damper is moving toward the sensor.
       if (in[note] < staged_scaling_value_ * min_[note]) {
-        gain_[note] = gain_staged_[note];
+        gain_[note] = gain_correction_ * gain_staged_[note];
         offset_[note] = offset_staged_[note];
       }
     }

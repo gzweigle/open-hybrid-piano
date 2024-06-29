@@ -44,6 +44,7 @@ class CalibrationSensor
     float min_[NUM_NOTES];
 
     float gain_default_;
+    float gain_correction_;
 
     bool min_at_least_one_[NUM_NOTES], max_at_least_one_[NUM_NOTES];
 
