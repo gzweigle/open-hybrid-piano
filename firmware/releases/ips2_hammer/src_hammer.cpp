@@ -32,11 +32,11 @@
 #include "six_channel_analog_00.h"
 #include "auto_mute.h"
 #include "board2board.h"
-#include "calibration_sensor.h"
+#include "calibration_position.h"
+#include "calibration_velocity.h"
 #include "dsp_damper.h"
 #include "dsp_hammer.h"
 #include "dsp_pedal.h"
-#include "gain_control.h"
 #include "hammer_status.h"
 #include "midiout.h"
 #include "network.h"
@@ -50,11 +50,11 @@ HammerSettings Set;
 SixChannelAnalog00 Adc;
 AutoMute Mute;
 Board2Board B2B;
-CalibrationSensor Cal;
+CalibrationPosition CalP;
+CalibrationVelocity CalV;
 DspDamper DspD;
 DspHammer DspH;
 DspPedal DspP;
-GainControl Gain;
 HammerStatus HStat;
 MidiOut Midi;
 Network Eth;
@@ -139,15 +139,15 @@ void setup(void) {
   Set.sostenuto_connected_pin, Set.una_corda_pin, Set.una_corda_connected_pin,
   Set.debug_level);
 
-  // Dynamically adjust signal levels. Maybe removed in future.
-  Gain.Setup(Set.velocity_scale, Set.debug_level);
+  // Adjust velocity based on the physical structure.
+  CalV.Setup(Set.velocity_scale, Set.debug_level, &Nonv);
 
   // Setup sending damper, hammer, and pedal data over MIDI.
   Midi.Setup(Set.midi_channel, &mi, Set.maximum_midi_velocity, Set.debug_level);
   Serial1.addMemoryForWrite(Midi_Buffer, sizeof(Midi_Buffer));
 
   // Common on hammer and pedal board: Ethernet, test points, TFT display, etc.
-  Cal.Setup(Set.calibration_threshold, Set.calibration_match_gain,
+  CalP.Setup(Set.calibration_threshold, Set.calibration_match_gain,
   Set.calibration_match_offset, Set.debug_level, &Nonv);
   Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port,
   SwIPS2.direct_read_switch_2(), Set.debug_level);
@@ -177,7 +177,7 @@ bool switch_high_damper_threshold;
 bool switch_external_damper_board;
 bool switch_enable_ethernet;
 bool switch_tft_display;
-bool switch_set_peak_velocity;
+bool switch_enable_dynamic_velocity;
 bool switch_freeze_cal_values;
 bool switch_disable_and_reset_calibration;
 
@@ -208,7 +208,7 @@ void loop() {
   switch_enable_ethernet = SwIPS2.read_switch_2();
   switch_tft_display = SwIPS2.read_switch_1();
 
-  switch_set_peak_velocity = SwSCA2.read_switch_1();
+  switch_enable_dynamic_velocity = SwSCA2.read_switch_1();
   switch_freeze_cal_values = SwSCA1.read_switch_2();
   switch_disable_and_reset_calibration = SwSCA1.read_switch_1();
 
@@ -246,8 +246,8 @@ void loop() {
     // Normalize the ADC values.
     Adc.NormalizeAdcValues(position_adc_counts, position_floats, raw_samples);
 
-    // Undo the sensor nonlinearity.
-    bool all_notes_using_cal = Cal.Calibration(switch_freeze_cal_values,
+    // Undo the position errors due to physical tolerances.
+    bool all_notes_using_cal = CalP.Calibration(switch_freeze_cal_values,
     switch_disable_and_reset_calibration, calibrated_floats, position_floats);
 
     // Zero out the signal from any unconnected pins to avoid noise
@@ -281,9 +281,11 @@ void loop() {
       DspH.GetHammerEventData(hammer_event, hammer_velocity, calibrated_floats);
       DspP.UpdatePedalState(calibrated_floats);
 
-      // Adjust velocity. Probably not needed in the future.
-      Gain.DamperVelocityScale(damper_velocity, damper_event);
-      Gain.HammerVelocityScale(hammer_velocity, switch_set_peak_velocity, hammer_event);
+      // Adjust velocity because each physical setup is different.
+      CalV.DamperVelocityScale(damper_velocity, damper_event);
+      CalV.HammerVelocityScale(hammer_velocity, hammer_event,
+      switch_enable_dynamic_velocity, switch_freeze_cal_values,
+      switch_disable_and_reset_calibration, all_notes_using_cal); 
 
       // Sending data over MIDI.
       if (startup_counter < Set.startup_counter_value) {

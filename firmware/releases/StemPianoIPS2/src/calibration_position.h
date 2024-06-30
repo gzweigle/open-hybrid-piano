@@ -16,21 +16,21 @@
 // Location of documentation, code, and design:
 // https://github.com/gzweigle/DIY-Grand-Digital-Piano
 //
-// calibration_sensor.h
+// calibration_position.h
 //
 
-#ifndef CALIBRATION_SENSOR_H_
-#define CALIBRATION_SENSOR_H_
+#ifndef CALIBRATION_POSITION_H_
+#define CALIBRATION_POSITION_H_
 
 #define CALIBRATION_FILTER_SAMPLES 4
 
 #include "stem_piano_ips2.h"
 #include "nonvolatile.h"
 
-class CalibrationSensor
+class CalibrationPosition
 {
   public:
-    CalibrationSensor();
+    CalibrationPosition();
     void Setup(float, float, float, int, Nonvolatile *);
     bool Calibration(bool, bool, float *, const float *);
  

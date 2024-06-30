@@ -36,12 +36,17 @@ class Nonvolatile
     void Setup(int);
  
     // Index is from 0 to NUM_NOTES - 1
-    float ReadCalibrationSensorMin(int);
-    void WriteCalibrationSensorMin(int, float);
-    float ReadCalibrationSensorMax(int);
-    void WriteCalibrationSensorMax(int, float);
+    float ReadCalibrationPositionMin(int);
+    void WriteCalibrationPositionMin(int, float);
+    float ReadCalibrationPositionMax(int);
+    void WriteCalibrationPositionMax(int, float);
     bool ReadCalibrationDoneFlag();
     void WriteCalibrationDoneFlag(bool);
+
+    bool ReadMaxVelocityStoredFlag();
+    void WriteMaxVelocityStoredFlag(bool);
+    float ReadMaxVelocity();
+    void WriteMaxVelocity(float);
 
     void UpdateAndWriteTotalWrites();
     int ReadTotalWrites();
@@ -54,12 +59,15 @@ class Nonvolatile
     // Store as 24-bit integers.
     void WriteNormalizedFloat(int, float);
     float ReadNormalizedFloat(int);
+
+    float calibration_scale_value_;
     
+    // Each is based on the previous.
     int calibration_min_start_address_;
     int calibration_max_start_address_;
     int calibration_flag_address_;
-    float calibration_scale_value_;
-
+    int velocity_scale_flag_address_;
+    int velocity_scale_address_;
     int total_writes_address_;
 
     bool nonvolatile_was_written_;

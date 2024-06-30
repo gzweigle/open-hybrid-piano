@@ -16,31 +16,47 @@
 // Location of documentation, code, and design:
 // https://github.com/gzweigle/DIY-Grand-Digital-Piano
 //
-// gain_control.h
+// calibration_velocity.h
 //
 // For ips pcb version 2.X
 // For sca pcb version 0.0
 
-#ifndef GAIN_CONTROL_H_
-#define GAIN_CONTROL_H_
+#ifndef CALIBRATION_VELOCITY_H_
+#define CALIBRATION_VELOCITY_H_
 
 #include "stem_piano_ips2.h"
+#include "nonvolatile.h"
 
-class GainControl
+class CalibrationVelocity
 {
   public:
-    GainControl();
-    void Setup(float, int);
-    void HammerVelocityScale(float *, bool, const bool *);
+    CalibrationVelocity();
+    void Setup(float, int, Nonvolatile *);
+    void HammerVelocityScale(float *, const bool *, bool, bool, bool, bool);
     void DamperVelocityScale(float *, const bool *);
  
   private:
     float velocity_scale_;
-    bool last_switch_value_;
+    float fixed_velocity_scale_;
     float reciprocal_max_hammer_velocity_;
-    float max_hammer_velocity_working_;
-    bool found_at_least_one_new_max_;
+    float max_hammer_velocity_;
+    float min_max_hammer_velocity_;
+    float max_max_hammer_velocity_;
+    bool new_max_velocity_;
     int debug_level_;
+
+    Nonvolatile *Nv_;
+    unsigned long last_write_time_;
+    unsigned long min_write_interval_millis_;
+
+    bool switch_freeze_cal_values_last_;
+    bool switch_disable_and_reset_calibration_last_;
+
+    void FixedScale(float *, const bool *);
+    void BuildVelocityScale(const float *, const bool *);
+    void ApplyVelocityScale(float *, const bool *);
+    void InitializeState(Nonvolatile *);
+    void WriteEeprom(bool, bool);
 
 };
 

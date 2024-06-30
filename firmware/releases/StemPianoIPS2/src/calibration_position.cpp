@@ -16,15 +16,15 @@
 // Location of documentation, code, and design:
 // https://github.com/gzweigle/DIY-Grand-Digital-Piano
 //
-// calibration_sensor.h
+// calibration_position.h
 //
-// Undo the CNY70 nonlinearity.
+// Undo the position related errors due to mechanical tolerances.
 
-#include "calibration_sensor.h"
+#include "calibration_position.h"
 
-CalibrationSensor::CalibrationSensor() {}
+CalibrationPosition::CalibrationPosition() {}
 
-void CalibrationSensor::Setup(float threshold, float match_gain,
+void CalibrationPosition::Setup(float threshold, float match_gain,
 float match_offset, int debug_level, Nonvolatile *Nv) {
 
   // Setup the calibration state.
@@ -32,10 +32,10 @@ float match_offset, int debug_level, Nonvolatile *Nv) {
   
   // Only allow an EEPROM write every three seconds.
   // This is a safety feature in case of a software bug
-  // or in case of extreme configuration sensor noise.
-  // EEPROM is only good for approximately 100,000 writes.
+  // or in case of extreme configuration switch noise.
+  // EEPROM is good for approximately 100,000 writes.
   // Three seconds is assumed fastest time someone
-  // could configuration switch off then back on.
+  // would configuration switch off then back on.
   min_write_interval_millis_ = 3000;
   last_write_time_ = millis();
 
@@ -62,7 +62,7 @@ float match_offset, int debug_level, Nonvolatile *Nv) {
 }
 
 // Return true if all NUM_NOTES notes have a calibrated value.
-bool CalibrationSensor::Calibration(bool switch_freeze_cal_values,
+bool CalibrationPosition::Calibration(bool switch_freeze_cal_values,
 bool switch_disable_and_reset_calibration, float *out, const float *in) {
 
   ApplyCalibrationValues(switch_disable_and_reset_calibration, out, in);
@@ -83,7 +83,7 @@ bool switch_disable_and_reset_calibration, float *out, const float *in) {
 }
 
 // Applying the calibration correction to each received input.
-void CalibrationSensor::ApplyCalibrationValues(bool
+void CalibrationPosition::ApplyCalibrationValues(bool
 switch_disable_and_reset_calibration, float *out, const float *in) {
 
   for (int note = 0; note < NUM_NOTES; note++) {
@@ -109,7 +109,7 @@ switch_disable_and_reset_calibration, float *out, const float *in) {
 }
 
 // Construct the calibration correction values.
-bool CalibrationSensor::BuildCalibrationValues(bool switch_freeze_cal_values,
+bool CalibrationPosition::BuildCalibrationValues(bool switch_freeze_cal_values,
 bool switch_disable_and_reset_calibration, const float *in) {
 
   // If turn off calibration, force rebuilding next time turn on.
@@ -207,7 +207,7 @@ bool switch_disable_and_reset_calibration, const float *in) {
 // Expect +/- 1.0 but could get a slightly larger range
 // based on the CNY70 output voltage and the ADC reference
 // voltage. The spec is +/- 1.0.
-float CalibrationSensor::ClipLimit(float in) {
+float CalibrationPosition::ClipLimit(float in) {
   float out;
   if (in > 2.0) {
     out = 2.0;
@@ -222,15 +222,15 @@ float CalibrationSensor::ClipLimit(float in) {
 }
 
 // By the power of math, hereby nonlinear becomes linear
-float CalibrationSensor::GetGain(float min, float max) {
+float CalibrationPosition::GetGain(float min, float max) {
   return (1.0 / (log(max) - log(min)));
 }
-float CalibrationSensor::GetOffset(float min) {
+float CalibrationPosition::GetOffset(float min) {
   return log(min);
 }
 
 // Large initialization loop.
-void CalibrationSensor::InitializeState(Nonvolatile *Nv, int debug_level) {
+void CalibrationPosition::InitializeState(Nonvolatile *Nv, int debug_level) {
 
   // In function because function depends on them.
   Nv_ = Nv;
@@ -242,10 +242,10 @@ void CalibrationSensor::InitializeState(Nonvolatile *Nv, int debug_level) {
   unsigned long start_read_time = micros();
   if (debug_level_ >= DEBUG_STATS) {
     if (all_notes_calibrated == true) {
-      Serial.print("Reading initial calibration values from EEPROM, time = ");
+      Serial.print("Reading initial position calibration values from EEPROM, time = ");
     }
     else {
-      Serial.println("Not using initial calibration values from EEPROM.");
+      Serial.println("No initial position calibration were found in EEPROM.");
     }
   }
 
@@ -253,8 +253,8 @@ void CalibrationSensor::InitializeState(Nonvolatile *Nv, int debug_level) {
 
     if (all_notes_calibrated == true) {
       // If all notes have a calibration value in memory, apply all.
-      max_[note] = Nv_->ReadCalibrationSensorMax(note);
-      min_[note] = Nv_->ReadCalibrationSensorMin(note);
+      max_[note] = Nv_->ReadCalibrationPositionMax(note);
+      min_[note] = Nv_->ReadCalibrationPositionMin(note);
       gain_[note] = GetGain(min_[note], max_[note]);
       offset_[note] = GetOffset(min_[note]);
     }
@@ -300,7 +300,7 @@ void CalibrationSensor::InitializeState(Nonvolatile *Nv, int debug_level) {
 // A bug in this code that accidentally causes multiple writes
 // repeatedly could permanently damage the EEPROM.
 // So, be careful when editing code below.
-void CalibrationSensor::WriteEeprom(bool switch_freeze_cal_values,
+void CalibrationPosition::WriteEeprom(bool switch_freeze_cal_values,
 bool switch_disable_and_reset_calibration,
 bool all_notes_are_using_calibration_values) {
 
@@ -309,17 +309,14 @@ bool all_notes_are_using_calibration_values) {
     if (all_notes_are_using_calibration_values == true) {
       unsigned long start_write_time = micros();
       if (debug_level_ >= DEBUG_STATS) {
-        Serial.println("Writing sensor Max and Min to EEPROM.");
-      }
-      // If overwriting good values, no need to write true again.
-      if (Nv_->ReadCalibrationDoneFlag() == false) {
-        Nv_->WriteCalibrationDoneFlag(true);
-        Nv_->UpdateAndWriteTotalWrites();
+        Serial.println("Writing position max/min to EEPROM.");
       }
       for (int note = 0; note < NUM_NOTES; note++) {
-        Nv_->WriteCalibrationSensorMax(note, ClipLimit(max_[note]));
-        Nv_->WriteCalibrationSensorMin(note, ClipLimit(min_[note]));
+        Nv_->WriteCalibrationPositionMax(note, ClipLimit(max_[note]));
+        Nv_->WriteCalibrationPositionMin(note, ClipLimit(min_[note]));
       }
+      Nv_->WriteCalibrationDoneFlag(true);
+      Nv_->UpdateAndWriteTotalWrites();
       if (debug_level_ >= DEBUG_STATS) {
         Serial.print("Finished writing EEPROM, write time = ");
         Serial.print(micros() - start_write_time);
@@ -342,7 +339,7 @@ bool all_notes_are_using_calibration_values) {
     if (cal_done_flag == true) {
       unsigned long start_write_time = micros();
       if (debug_level_ >= DEBUG_STATS) {
-        Serial.println("Clearing sensor Max and Min from EEPROM.");
+        Serial.println("Clearing position max/min from EEPROM.");
       }
       Nv_->WriteCalibrationDoneFlag(false);
       Nv_->UpdateAndWriteTotalWrites();
@@ -354,7 +351,7 @@ bool all_notes_are_using_calibration_values) {
     }
     else {
       if (debug_level_ >= DEBUG_STATS) {
-        Serial.println("Sensor Max and Min in EEPROM was already clear.");
+        Serial.println("Position max/min values in EEPROM were already clear.");
       }
     }
   }
