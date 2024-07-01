@@ -66,3 +66,11 @@ These pin connectors are on the top side of ace A.
 ## Manufacturing
 
 To manufacture a board, send the files in [aceA00_gerber/](aceA00_gerber/) to a PCB manufacturer. The file [aceA00_bill_of_materials_0.txt](aceA00_bill_of_materials_0.txt) lists the parts required.
+
+### KiCad vs Gerbers
+
+Boards for Gerber files were fabricated and tested. Gerber files were generated from KiCad.
+
+KiCad files should be identical, but there is a small probability they do not match what was fabricated and tested. For example, a KiCad bug.
+
+See [../../kicad_general.md](../../kicad_general.md) for information on KiCad files.
