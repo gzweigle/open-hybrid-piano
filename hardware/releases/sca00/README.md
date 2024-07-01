@@ -69,6 +69,8 @@ Location of timing analysis: [../../../design/data_acquisition/eca0X_ips2X/eca0X
 
 To manufacture a board, send the files in [sca00_gerber/](sca00_gerber/) to a PCB manufacturer. The file [sca00_bill_of_materials_0.txt](sca00_bill_of_materials_0.txt) lists the parts required.
 
+For any discrepancy between schematic and bill of materials, use the bill of materials.
+
 ### KiCad vs Gerbers
 
 Boards for Gerber files were fabricated and tested.

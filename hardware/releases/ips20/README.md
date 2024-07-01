@@ -171,6 +171,8 @@ To manufacture a board, send the files in [ips20_gerber/](ips20_gerber/) to a PC
 
 The file [ips20_bill_of_materials_0.txt](ips20_bill_of_materials_0.txt) lists the parts required.
 
+For any discrepancy between schematic and bill of materials, use the bill of materials.
+
 ### KiCad vs Gerbers
 
 Boards for Gerber files were fabricated and tested.

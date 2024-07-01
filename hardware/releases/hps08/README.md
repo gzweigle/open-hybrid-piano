@@ -48,6 +48,8 @@ Use the bill of materials file that matches the mainboard connected to the HPS.
 
 R1 and R2 set the maximum output voltage. If the output voltage is too large, the analog-to-digital converter will clip. If the output voltage is smaller, it decreases the dynamic range. The piano will work with a lower dynamic range but may not work if the signal is clipping. Therefore, if the R2 value in bill of materials is unavailable, choose a smaller value. If the R1 value is unavailable, choose a larger value.
 
+For any discrepancy between schematic and bill of materials, use the bill of materials.
+
 ### KiCad vs Gerbers
 
 Boards for Gerber files were fabricated and tested.
