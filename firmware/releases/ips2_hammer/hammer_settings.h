@@ -61,8 +61,7 @@ class HammerSettings
     float calibration_threshold;
     float calibration_match_gain;
     float calibration_match_offset;
-    float damper_threshold_low;
-    float damper_threshold_high;
+    float damper_threshold;
     float damper_velocity_scaling;
     float strike_threshold;
     float release_threshold;

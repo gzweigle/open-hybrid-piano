@@ -135,8 +135,7 @@ void HammerSettings::SetAllSettingValues() {
 
   // When the damper position crosses this percentage of max-min
   // damper position, declare a damper event.
-  damper_threshold_low = 0.5;
-  damper_threshold_high = 0.6;
+  damper_threshold = 0.5;
 
   // Magic value to get velocity in range [0,1].
   damper_velocity_scaling = 0.025;

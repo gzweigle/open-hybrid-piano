@@ -23,17 +23,12 @@
 
 HammerStatus::HammerStatus() {}
 
-void HammerStatus::Setup(DspPedal *dspp, TestpointLed *testp,
-int debug_level, float damper_threshold_low, float damper_threshold_high,
-float strike_threshold) {
+void HammerStatus::Setup(DspPedal *dspp, TestpointLed *testp, int debug_level) {
 
   debug_level_ = debug_level;
 
   dspp_ = dspp;
   testp_ = testp;
-  damper_threshold_low_ = damper_threshold_low;
-  damper_threshold_high_ = damper_threshold_high;
-  strike_threshold_ = strike_threshold;
 
   lower_r_led_interval_when_all_notes_calibrated_ = 250;
   lower_r_led_last_change_ = millis();
@@ -66,15 +61,7 @@ float strike_threshold) {
 
 // Control LED on front of board next to Teensy.
 void HammerStatus::FrontLed(const float *calibrated_floats,
-bool switch_high_damper_threshold, int test_index) {
-
-  float damper_threshold;
-  if (switch_high_damper_threshold == true) {
-    damper_threshold = damper_threshold_high_;
-  }
-  else {
-    damper_threshold = damper_threshold_low_;
-  }
+float damper_threshold, float strike_threshold, int test_index) {
 
   bool found;
 
@@ -93,7 +80,7 @@ bool switch_high_damper_threshold, int test_index) {
   // Turn on LED if any key is above strike thresold threshold.
   found = false;
   for (int k = 0; k < NUM_NOTES; k++) {
-    if (calibrated_floats[k] > strike_threshold_) {
+    if (calibrated_floats[k] > strike_threshold) {
       testp_->SetTp10(true);
       found = true;
       break;

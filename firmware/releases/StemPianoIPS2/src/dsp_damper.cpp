@@ -26,8 +26,8 @@
 
 DspDamper::DspDamper() {}
 
-void DspDamper::Setup(float damper_threshold_low, float damper_threshold_high,
-float velocity_scaling, int adc_sample_period_microseconds, int debug_level) {
+void DspDamper::Setup(float damper_threshold, float velocity_scaling,
+int adc_sample_period_microseconds, int debug_level) {
 
   debug_level_ = debug_level;
 
@@ -45,8 +45,7 @@ float velocity_scaling, int adc_sample_period_microseconds, int debug_level) {
     }
   }
 
-  damper_threshold_low_ = damper_threshold_low;
-  damper_threshold_high_ = damper_threshold_high;
+  damper_threshold_ = damper_threshold;
   velocity_scaling_ = velocity_scaling;
   samples_per_second_ = 1000000.0 /static_cast<float>(adc_sample_period_microseconds);
   enable_ = true;
@@ -55,16 +54,7 @@ float velocity_scaling, int adc_sample_period_microseconds, int debug_level) {
 // When position[key] crosses a threshold, set event[key] true and store the 
 // associated damper velocity in velocity[key].
 // The velocity[key] value will be > 0 on damper rising and < 0 on damper falling.
-void DspDamper::GetDamperEventData(bool *event, float *velocity, const float *position,
-bool switch_high_damper_threshold) {
-
-  float damper_threshold;
-  if (switch_high_damper_threshold == true) {
-    damper_threshold = damper_threshold_high_;
-  }
-  else {
-    damper_threshold = damper_threshold_low_;
-  }
+void DspDamper::GetDamperEventData(bool *event, float *velocity, const float *position) {
 
   if (enable_ == true) {
 
@@ -81,9 +71,7 @@ bool switch_high_damper_threshold) {
         // If crossed a threshold going up, velocity will be positive.
         // If crossed a threshold going down, velocity will be negative.
         // In all cases, velocity is in range [-1, ..., 1].
-        if (position_now >= damper_threshold &&
-        position_then < damper_threshold)
-        {
+        if (position_now >= damper_threshold_ && position_then < damper_threshold_) {
           event[key] = false;
           velocity[key] = (position_now - position_then) *
           samples_per_second_ / static_cast<float>(NUM_DELAY_ELEMENTS);
@@ -100,13 +88,11 @@ bool switch_high_damper_threshold) {
             Serial.print(" velocity=");
             Serial.print(velocity[key]);
             Serial.print(" threshold=");
-            Serial.print(damper_threshold);
+            Serial.print(damper_threshold_);
             Serial.println("");
           }
         }
-        else if (position_now <= damper_threshold &&
-        position_then > damper_threshold)
-        {
+        else if (position_now <= damper_threshold_ && position_then > damper_threshold_) {
           event[key] = true;  // Damp the sound.
           velocity[key] = (position_now - position_then) *
           samples_per_second_ / static_cast<float>(NUM_DELAY_ELEMENTS);
@@ -123,7 +109,7 @@ bool switch_high_damper_threshold) {
             Serial.print(" velocity=");
             Serial.print(velocity[key]);
             Serial.print(" threshold=");
-            Serial.print(damper_threshold);
+            Serial.print(damper_threshold_);
             Serial.println("");
           }
         }

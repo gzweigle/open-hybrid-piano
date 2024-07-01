@@ -125,12 +125,11 @@ void setup(void) {
   B2B.Setup(Set.canbus_enable);
 
   // Diagnostics and status
-  HStat.Setup(&DspP, &Tpl, Set.debug_level, Set.damper_threshold_low,
-  Set.damper_threshold_high, Set.strike_threshold);
+  HStat.Setup(&DspP, &Tpl, Set.debug_level);
 
   // Setup the dampers, hammers, and pedals on hammer board.
-  DspD.Setup( Set.damper_threshold_low, Set.damper_threshold_high,
-  Set.damper_velocity_scaling, Set.adc_sample_period_microseconds, Set.debug_level);
+  DspD.Setup( Set.damper_threshold, Set.damper_velocity_scaling,
+  Set.adc_sample_period_microseconds, Set.debug_level);
   DspH.Setup(Set.adc_sample_period_microseconds, Set.strike_threshold,
   Set.release_threshold, Set.min_repetition_seconds, Set.min_strike_velocity,
   Set.hammer_travel_meters, Set.debug_level);
@@ -173,7 +172,6 @@ void setup(void) {
 int startup_counter = 0;
 
 // Switches.
-bool switch_high_damper_threshold;
 bool switch_external_damper_board;
 bool switch_enable_ethernet;
 bool switch_tft_display;
@@ -200,8 +198,6 @@ void loop() {
   SwIPS2.updatePuDoState("IPS21", "IPS22");
   SwSCA2.updatePuDoState("SCA21", "SCA22");
   SwSCA1.updatePuDoState("SCA11", "SCA12");
-
-  switch_high_damper_threshold = SwIPS1.read_switch_2();
 
   // Read all switch inputs.
   switch_external_damper_board = SwIPS1.read_switch_1();
@@ -276,8 +272,7 @@ void loop() {
       // Process hammer, damper, and pedal data.
       // For hammer and damper get an event boolean flag and velocity.
       // For pedal get the state of the pedal.
-      DspD.GetDamperEventData(damper_event, damper_velocity, damper_position,
-      switch_high_damper_threshold);
+      DspD.GetDamperEventData(damper_event, damper_velocity, damper_position);
       DspH.GetHammerEventData(hammer_event, hammer_velocity, calibrated_floats);
       DspP.UpdatePedalState(calibrated_floats);
 
@@ -300,13 +295,8 @@ void loop() {
 
     // Send a packet of calibrated data.
     bool sustain_pressed = DspP.GetSustainCrossedUpThreshold();
-    float key_on_threshold;
-    if (switch_high_damper_threshold == true)
-      key_on_threshold = Set.damper_threshold_high;
-    else
-      key_on_threshold = Set.damper_threshold_low;
     Eth.SendPianoPacket(calibrated_floats, switch_enable_ethernet,
-    sustain_pressed, key_on_threshold, Set.test_index);
+    sustain_pressed, Set.damper_threshold, Set.test_index);
 
     if (Set.test_index < 0) {
       // Run the TFT display.
@@ -314,7 +304,8 @@ void loop() {
     }
 
     // Debug and display information.
-    HStat.FrontLed(calibrated_floats, switch_high_damper_threshold, Set.test_index);
+    HStat.FrontLed(calibrated_floats, Set.damper_threshold,
+    Set.strike_threshold, Set.test_index);
 
     if (Set.test_index < 0) {
       HStat.LowerRightLed(all_notes_using_cal, Nonv.NonvolatileWasWritten());
