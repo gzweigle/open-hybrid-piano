@@ -1,0 +1,456 @@
+(footprint "Vishay_CNY70"
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(layer "F.Cu")
+	(descr "package for Vishay CNY70 refective photo coupler/interrupter, https://www.vishay.com/docs/83751/cny70.pdf")
+	(tags "Vishay CNY70 refective photo coupler")
+	(property "Reference" "REF**"
+		(at 1.4 -3.17 0)
+		(layer "F.SilkS")
+		(uuid "7da82dea-3d28-4824-a431-92fc71a470e1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Vishay_CNY70"
+		(at 1.4 5.8 0)
+		(layer "F.Fab")
+		(uuid "6fcae420-2fb8-4e69-bb19-acf92c934e23")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Footprint" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "16345666-85b5-4ba1-a6fc-3aed91f4c382")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "358ea98d-8d24-49d1-aa38-414d084868f7")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9ed04396-d2f7-4012-814d-861e92985d36")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_line
+		(start -2.48 -2.61)
+		(end -2.48 -1.11)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "27049c3f-92c0-43b4-8b07-8761837968c0")
+	)
+	(fp_line
+		(start -2.48 -2.61)
+		(end -0.98 -2.61)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "864bd1b6-68b8-4d61-9628-b4507024a994")
+	)
+	(fp_line
+		(start -2.22 -2.35)
+		(end -2.22 4.89)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "f21f63a7-c403-4ae0-9220-e4da9ce22fd5")
+	)
+	(fp_line
+		(start 1.02 -2.35)
+		(end -2.22 -2.35)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "0d8fbe4d-9070-4b8d-9e34-92fd2ec8d699")
+	)
+	(fp_line
+		(start 1.02 -2.35)
+		(end 1.02 -1.85)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "2231fbce-8407-4f81-a27b-d8e5c19dba46")
+	)
+	(fp_line
+		(start 1.02 -1.85)
+		(end 1.78 -1.85)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "2e9d526c-3241-4fe1-95d6-02d41a201dc3")
+	)
+	(fp_line
+		(start 1.02 4.39)
+		(end 1.02 4.89)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "e18015dc-0218-4cc1-b388-9ff7a0f3c949")
+	)
+	(fp_line
+		(start 1.02 4.89)
+		(end -2.22 4.89)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "eef8cf62-13cf-4dbd-aa03-fb3b5b8041a3")
+	)
+	(fp_line
+		(start 1.78 -2.35)
+		(end 5.02 -2.35)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "2de87bd3-edbe-444e-8003-8d7dfea1bdf8")
+	)
+	(fp_line
+		(start 1.78 -1.85)
+		(end 1.78 -2.35)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "0544a57a-221a-4049-a790-1d1b516ea6ab")
+	)
+	(fp_line
+		(start 1.78 4.39)
+		(end 1.02 4.39)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "667a0a25-f100-4cad-ae4a-8f24036e09cc")
+	)
+	(fp_line
+		(start 1.78 4.89)
+		(end 1.78 4.39)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "2a21a670-d5de-4f39-a0f3-1b6c92e86067")
+	)
+	(fp_line
+		(start 1.78 4.89)
+		(end 5.02 4.89)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "3d4f5cbb-65b2-4f92-8b73-d7db48ad2d8b")
+	)
+	(fp_line
+		(start 5.02 4.89)
+		(end 5.02 -2.35)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "2586f184-cc1b-48cc-8242-1717a26ae9c9")
+	)
+	(fp_line
+		(start 5.28 -2.03)
+		(end 5.28 4.57)
+		(stroke
+			(width 0.12)
+			(type dash)
+		)
+		(layer "F.SilkS")
+		(uuid "a7d83885-82ad-4842-ac00-eed99b717653")
+	)
+	(fp_line
+		(start -2.35 -2.48)
+		(end -2.35 5.02)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "f48d5fab-cf1e-4d4a-b06a-be5cdc9599dc")
+	)
+	(fp_line
+		(start -2.35 -2.48)
+		(end 5.15 -2.48)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "41456b1b-1209-416a-b8e5-15f0b701d731")
+	)
+	(fp_line
+		(start 5.15 5.02)
+		(end -2.35 5.02)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "ce6315a8-d61c-441e-a593-5c2a4a354321")
+	)
+	(fp_line
+		(start 5.15 5.02)
+		(end 5.15 -2.48)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "9f41124c-4c31-4f2f-9587-f52a36a93254")
+	)
+	(fp_line
+		(start -2.1 -1.23)
+		(end -1.1 -2.23)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "b236371c-2cc0-46a3-86b0-259801f2b5d5")
+	)
+	(fp_line
+		(start -2.1 4.77)
+		(end -2.1 -1.23)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "7f913e3c-768a-4fa4-999f-f779529478ec")
+	)
+	(fp_line
+		(start -1.1 -2.23)
+		(end 0.9 -2.23)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "5804548c-ba2a-41a9-9f2d-d0c2df6b63cd")
+	)
+	(fp_line
+		(start 0.9 -2.23)
+		(end 0.9 -1.73)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "c9619ea2-5280-4529-a9fa-0e9caedb1437")
+	)
+	(fp_line
+		(start 0.9 -1.73)
+		(end 1.9 -1.73)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "f961527d-1e2b-4b43-9340-82546c8e4937")
+	)
+	(fp_line
+		(start 0.9 4.27)
+		(end 0.9 4.77)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "53a2b2b8-47d0-4a66-bbaa-d8f88f39f723")
+	)
+	(fp_line
+		(start 0.9 4.77)
+		(end -2.1 4.77)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "24234b84-66d2-40a2-8f4c-58ac42cefa8e")
+	)
+	(fp_line
+		(start 1.9 -2.23)
+		(end 4.9 -2.23)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "b7d465cd-ddc6-47ef-8665-b8b7c9d64fb3")
+	)
+	(fp_line
+		(start 1.9 -1.73)
+		(end 1.9 -2.23)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "2db47f1f-1bf0-48f8-8e0c-9275f3bbb1ea")
+	)
+	(fp_line
+		(start 1.9 4.27)
+		(end 0.9 4.27)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "7b4e325b-29c5-4fd6-b450-6480e40b3356")
+	)
+	(fp_line
+		(start 1.9 4.77)
+		(end 1.9 4.27)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "73cd6571-5c92-4ac5-a5a4-5e984a1190c1")
+	)
+	(fp_line
+		(start 1.9 4.77)
+		(end 4.9 4.77)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "e0ba3cf0-240c-4cad-b755-1e79fe215ed9")
+	)
+	(fp_line
+		(start 4.9 -2.23)
+		(end 4.9 4.77)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "6976ab04-31a1-4699-beef-01e7ecf80c0f")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 1.5 1.27 0)
+		(layer "F.Fab")
+		(uuid "adbb5ba3-4de8-434d-9554-b68b2e9d5a31")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "Marking side"
+		(at 4.33 1.27 90)
+		(layer "F.Fab")
+		(uuid "e932240e-5db5-43f7-aa20-6f9edd31947d")
+		(effects
+			(font
+				(size 0.8 0.7)
+				(thickness 0.125)
+			)
+		)
+	)
+	(pad "1" thru_hole roundrect
+		(at 0 0)
+		(size 1.6 1.6)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(roundrect_rratio 0.156)
+		(uuid "1d2ad982-6698-4507-bb0f-04a63b5b86e4")
+	)
+	(pad "2" thru_hole circle
+		(at 0 2.54)
+		(size 1.6 1.6)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "fe21b199-84d9-461a-b8d0-a7d7ee8d9f9f")
+	)
+	(pad "3" thru_hole circle
+		(at 2.8 2.54)
+		(size 1.6 1.6)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "b7a0a3ff-b227-45b3-b52b-95a514274ff9")
+	)
+	(pad "4" thru_hole circle
+		(at 2.8 0)
+		(size 1.6 1.6)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "507afe37-8b67-40c6-a486-bafc08aecc0b")
+	)
+	(model "${KICAD8_3DMODEL_DIR}/OptoDevice.3dshapes/Vishay_CNY70.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

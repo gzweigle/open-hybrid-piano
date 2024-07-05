@@ -71,18 +71,5 @@ The trimmer RV0 is 200 ohms. The nominal value is 100 ohms. The nominal value is
 | - 1.0       | 126 | 10           | 1.90                   | 
 | - 1.5       | 135 | 10           | 1.50                   | 
 
-## Manufacturing
-
-To manufacture a board, send the files in [hps07_gerber/](hps07_gerber/) to a PCB manufacturer.
-
-Use the bill of materials file that matches the mainboard connected to the HPS.
 
 R2 sets the maximum output voltage. If the output voltage is too large, the analog-to-digital converter will clip. If the output voltage is smaller, it decreases the dynamic range. The piano will work with a lower dynamic range but may not work if the signal is clipping. Therefore, if the R2 value in bill of materials is unavailable, choose a smaller value.
-
-### KiCad vs Gerbers
-
-Boards for Gerber files were fabricated and tested.
-
-KiCad files should be identical, but there is a small probability they do not match what was fabricated and tested.
-
-See [../../kicad_general.md](../../kicad_general.md) for information on KiCad files.
