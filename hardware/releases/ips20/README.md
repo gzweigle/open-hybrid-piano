@@ -99,9 +99,6 @@ Yeah!!
 
 See black lines in figure below.
 
-The +5V power arrives simultaneously from one input:
-* An external power supply through the +5V power jack
-
 Cut the external computer power through the USB at Teensy 4.1 according to instructions on the PJRC website.
 
 https://www.pjrc.com/teensy/external_power.html
