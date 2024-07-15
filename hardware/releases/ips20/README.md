@@ -49,9 +49,10 @@ For connecting pedals.
 0.1 inch spaced connectors J46. Connect to six of the sensor connectors. See instructions in the *pianos/* directory for this board.
 
 ### +5V power
-External power connection. Do not connect external +5V power while Teensy 4.1 is connected to a USB cable that is supplying power from an external source. Cut the 5V pad on Teensy 4.1 per instructions at PJRC website.
 
-https://www.pjrc.com/teensy/external_power.html
+* Cut the 5V pad on Teensy 4.1 per instructions at PJRC website before installing the Teensy processor. https://www.pjrc.com/teensy/external_power.html
+
+* See: https://github.com/stem-piano/stem-piano-top/blob/main/WARNINGS.md
 
 ### Fuse
 Location for fuses. The +5V power and USB must must automatically protect from short circuits, overcurrent, thermal, and all other failure conditions. User to decide on PCB fuse design and strategy.
@@ -99,17 +100,13 @@ Yeah!!
 
 See black lines in figure below.
 
-Cut the external computer power through the USB at Teensy 4.1 according to instructions on the PJRC website.
+* Cut the 5V pad on Teensy 4.1 per instructions at PJRC website before installing the Teensy processor. https://www.pjrc.com/teensy/external_power.html
 
-https://www.pjrc.com/teensy/external_power.html
+* See: https://github.com/stem-piano/stem-piano-top/blob/main/WARNINGS.md
 
-Do not connect both external +5V power and USB power inputs at the same time. See the PJRC website for more information, including how to cut a Teensy 4.1 pad to avoid shorting the two power inputs together.
-
-The external power supplies must automatically protect from short circuits, overcurrent, thermal, and all other failure conditions.
+All external power supplies must automatically protect from short circuits, overcurrent, thermal, and all other failure conditions.
 
 The external power supplies must be able to deliver 1.75 amps. This value is calculated by summing all current values in sections below and by testing. See *stem piano* video at the approximate 2:20 time https://www.youtube.com/watch?v=TemXGmkoc-g
-
-A typical USB port on a computer may not be able to supply a full 1.75 A. Therefore, the board will not be able to run all 88 keys sensors unless the board is powered by an external +5V power supply, through the +5V power jack. In this case (and in all cases when using the +5V external power), see instructions on https://www.pjrc.com website for cutting the 5V pad on Teensy processor.
 
 ![ips20_5v_pcb](ips20_5v_power.png)
 
@@ -154,15 +151,13 @@ The Teensy 4.1 includes a 3.3V output (green).
 
 This output is connected to the SCA, the Can bus, the TFT display, the MIDI connector, and one of the optional SCA headers (J48).
 
-According to the PJRC website, the maximum output current that the Teensy's +3.3V pin can tolerate is 250 mA.
+According to the PJRC website, the maximum output current that the Teensy's +3.3V pin can supply is 250 mA.
 
 According to the display datasheet, the TFT display (far right connector) takes 80 mA.
 
 According to the Can bus datasheet, the Can bus integrated circuit (middle bottom) takes less than 60 mA normally but can take as much as 180 mA during a bus fault.
 
 When designing an SCA board that uses the +3.3V Digital input, the current draw of TFT display and Can bus must be considered.
-
-According to a Teensy 4.1 schematic on the PJRC website, there is an LDO on the Teensy 4.1 that drives the 3.3V digital power supply, from the +5V power input. Reading information from PJRC website, the LDO appears maybe can tolerate a shorted output indefinitely. However, for safety, do not accidentally short the +3.3 Volt Digital line to ground.
 
 ![ips20_33dv_pcb](ips20_33dv_power.png)
 
