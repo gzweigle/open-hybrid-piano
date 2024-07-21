@@ -45,6 +45,8 @@ The mainboard for hammer or damper sensor connections and Teensy 4.1 processing.
 ### Quarter inch pedal jacks
 For connecting pedals.
 
+See discussion in issue: https://github.com/gzweigle/DIY-Grand-Digital-Piano/issues/74
+
 ### Pedal connectors
 0.1 inch spaced connectors J46. Connect to six of the sensor connectors. See instructions in the *pianos/* directory for this board.
 
