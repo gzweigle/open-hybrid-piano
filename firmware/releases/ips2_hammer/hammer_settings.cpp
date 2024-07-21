@@ -126,9 +126,7 @@ void HammerSettings::SetAllSettingValues() {
 
   ////////
   // Calibration Settings.
-  calibration_threshold = 0.6;
-  calibration_match_gain = 0.75;
-  calibration_match_offset = 0.25;
+  calibration_threshold = 0.5;
 
   ////////
   // Damper Settings.
@@ -167,7 +165,7 @@ void HammerSettings::SetAllSettingValues() {
   // This setting creates the "undesirable" silent strike when
   // a pianist strikes a key for ppppp... too slowly.
   // Set to zero disables the functionality.
-  min_strike_velocity = 0.20;
+  min_strike_velocity = 0.15;
 
   // Swing distance at hammer. Measurement is in inches so
   // includes a conversion to meters (0.0254 meters / inch).

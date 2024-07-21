@@ -31,27 +31,25 @@ class CalibrationPosition
 {
   public:
     CalibrationPosition();
-    void Setup(float, float, float, int, Nonvolatile *);
+    void Setup(float, int, Nonvolatile *);
     bool Calibration(bool, bool, float *, const float *);
  
   private:
 
     int debug_level_;
 
-    float gain_staged_[NUM_NOTES], gain_[NUM_NOTES];
-    float offset_staged_[NUM_NOTES], offset_[NUM_NOTES];
-    float max_[NUM_NOTES];
-    float min_[NUM_NOTES];
+    double gain_staged_[NUM_NOTES], gain_[NUM_NOTES];
+    double offset_staged_[NUM_NOTES], offset_[NUM_NOTES];
+    double max_[NUM_NOTES];
+    double min_[NUM_NOTES];
 
-    float gain_default_;
-    float gain_correction_;
+    double gain_default_;
+    double gain_correction_;
 
     bool min_at_least_one_[NUM_NOTES], max_at_least_one_[NUM_NOTES];
 
-    float orig_gain_, orig_offset_;
-
-    float threshold_;
-    float staged_scaling_value_;
+    double threshold_;
+    double staged_scaling_value_;
 
     bool switch_freeze_cal_values_last_;
     bool switch_disable_and_reset_calibration_last_;
@@ -63,8 +61,8 @@ class CalibrationPosition
     unsigned long last_write_time_;
     unsigned long min_write_interval_millis_;
 
-    float GetGain(float, float);
-    float GetOffset(float);
+    double GetGain(double, double);
+    double GetOffset(double);
     void InitializeState(Nonvolatile *, int);
     float ClipLimit(float);
     void ApplyCalibrationValues(bool, float *, const float *);

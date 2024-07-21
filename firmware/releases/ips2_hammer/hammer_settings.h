@@ -59,8 +59,6 @@ class HammerSettings
     int switch21_sca_pin;
     int switch22_sca_pin;
     float calibration_threshold;
-    float calibration_match_gain;
-    float calibration_match_offset;
     float damper_threshold;
     float damper_velocity_scaling;
     float strike_threshold;

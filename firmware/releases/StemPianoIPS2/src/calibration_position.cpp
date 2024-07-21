@@ -24,8 +24,8 @@
 
 CalibrationPosition::CalibrationPosition() {}
 
-void CalibrationPosition::Setup(float threshold, float match_gain,
-float match_offset, int debug_level, Nonvolatile *Nv) {
+void CalibrationPosition::Setup(float threshold,
+int debug_level, Nonvolatile *Nv) {
 
   // Setup the calibration state.
   InitializeState(Nv, debug_level);
@@ -39,15 +39,9 @@ float match_offset, int debug_level, Nonvolatile *Nv) {
   min_write_interval_millis_ = 3000;
   last_write_time_ = millis();
 
-  // Do not set max value to exactly 1.0.
-  // Otherwise, due to various nonideal conditions could
+  // Due to various nonideal conditions could
   // get clipping. Use this value to give some margin.
-  gain_correction_ = 0.975;
-
-  // These are temporary while evaluating performance.
-  // Allows playing with both calibrated and uncalibrated keys.
-  orig_gain_ = match_gain;
-  orig_offset_ = match_offset;
+  gain_correction_ = 0.99;
 
   // Threshold scaling for when to apply staged_values.
   staged_scaling_value_ = 1.5;
@@ -59,6 +53,7 @@ float match_offset, int debug_level, Nonvolatile *Nv) {
   // Initialize freeze true to avoid a false write on startup.
   switch_freeze_cal_values_last_ = true;
   switch_disable_and_reset_calibration_last_ = false;
+
 }
 
 // Return true if all NUM_NOTES notes have a calibrated value.
@@ -90,8 +85,7 @@ switch_disable_and_reset_calibration, float *out, const float *in) {
     if (switch_disable_and_reset_calibration == false) {
       if (gain_[note] > 0.0) {
         // See design document for algorithm details.
-        out[note] = (log(in[note]) - offset_[note]) * gain_[note];
-        out[note] = out[note] * orig_gain_ + orig_offset_;
+        out[note] = static_cast<float>((static_cast<double>(log(in[note])) - offset_[note]) * gain_[note]);
       }
       else {
         out[note] = in[note];
@@ -129,20 +123,23 @@ bool switch_disable_and_reset_calibration, const float *in) {
   else if (switch_freeze_cal_values == false) {
 
     bool found_new_min_or_max;
+    double in_double;
 
     for (int note = 0; note < NUM_NOTES; note++) {
+
+      in_double = static_cast<double>(in[note]);
 
       // Create a buffer of recent values.
       filter_buffer_[note][buffer_index_] = in[note];
 
       // Keep track of largest and smallest.
-      if (in[note] > max_[note] && in[note] > threshold_) {
-        max_[note] = in[note];
+      if (in_double > max_[note] && in_double > threshold_) {
+        max_[note] = in_double;
         max_at_least_one_[note] = true;
         found_new_min_or_max = true;
       }
-      else if (in[note] < min_[note]) {
-        min_[note] = in[note];
+      else if (in_double < min_[note]) {
+        min_[note] = in_double;
         min_at_least_one_[note] = true;
         found_new_min_or_max = true;
       }
@@ -176,8 +173,9 @@ bool switch_disable_and_reset_calibration, const float *in) {
       // Don't change anything until the hammer/damper settled back to its
       // resting position. Otherwise, could get a bad note when gain and
       // offset change while the hammer/damper is moving toward the sensor.
-      if (in[note] < staged_scaling_value_ * min_[note]) {
+      if (in[note] < static_cast<float>(staged_scaling_value_ * min_[note])) {
         gain_[note] = gain_correction_ * gain_staged_[note];
+        gain_[note] = gain_staged_[note];
         offset_[note] = offset_staged_[note];
       }
     }
@@ -222,10 +220,10 @@ float CalibrationPosition::ClipLimit(float in) {
 }
 
 // By the power of math, hereby nonlinear becomes linear
-float CalibrationPosition::GetGain(float min, float max) {
+double CalibrationPosition::GetGain(double min, double max) {
   return (1.0 / (log(max) - log(min)));
 }
-float CalibrationPosition::GetOffset(float min) {
+double CalibrationPosition::GetOffset(double min) {
   return log(min);
 }
 
@@ -253,8 +251,8 @@ void CalibrationPosition::InitializeState(Nonvolatile *Nv, int debug_level) {
 
     if (all_notes_calibrated == true) {
       // If all notes have a calibration value in memory, apply all.
-      max_[note] = Nv_->ReadCalibrationPositionMax(note);
-      min_[note] = Nv_->ReadCalibrationPositionMin(note);
+      max_[note] = static_cast<double>(Nv_->ReadCalibrationPositionMax(note));
+      min_[note] = static_cast<double>(Nv_->ReadCalibrationPositionMin(note));
       gain_[note] = GetGain(min_[note], max_[note]);
       offset_[note] = GetOffset(min_[note]);
     }
@@ -312,8 +310,8 @@ bool all_notes_are_using_calibration_values) {
         Serial.println("Writing position max/min to EEPROM.");
       }
       for (int note = 0; note < NUM_NOTES; note++) {
-        Nv_->WriteCalibrationPositionMax(note, ClipLimit(max_[note]));
-        Nv_->WriteCalibrationPositionMin(note, ClipLimit(min_[note]));
+        Nv_->WriteCalibrationPositionMax(note, ClipLimit(static_cast<float>(max_[note])));
+        Nv_->WriteCalibrationPositionMin(note, ClipLimit(static_cast<float>(min_[note])));
       }
       Nv_->WriteCalibrationDoneFlag(true);
       Nv_->UpdateAndWriteTotalWrites();

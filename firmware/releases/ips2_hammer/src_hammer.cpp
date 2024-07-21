@@ -146,8 +146,7 @@ void setup(void) {
   Serial1.addMemoryForWrite(Midi_Buffer, sizeof(Midi_Buffer));
 
   // Common on hammer and pedal board: Ethernet, test points, TFT display, etc.
-  CalP.Setup(Set.calibration_threshold, Set.calibration_match_gain,
-  Set.calibration_match_offset, Set.debug_level, &Nonv);
+  CalP.Setup(Set.calibration_threshold, Set.debug_level, &Nonv);
   Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port,
   SwIPS2.direct_read_switch_2(), Set.debug_level);
   Tpl.Setup();
@@ -162,7 +161,7 @@ void setup(void) {
   if (Set.debug_level >= DEBUG_STATS) {
     Serial.println("Finished hammer board initialization.");
   }
-  delay(2000);
+  delay(1000);
   Tft.Clear();
 
 }
