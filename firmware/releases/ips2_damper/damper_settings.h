@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -38,14 +38,15 @@ class DamperSettings
     DamperSettings();
     void SetAllSettingValues();
     int debug_level;
-    bool board_bringup;
+    int startup_counter_value;
     int adc_spi_clock_frequency;
+    int test_index;
     int adc_sample_period_microseconds;
     int adc_sample_period_microseconds_during_tft;
     bool adc_is_differential;
-    float adc_scale_threshold;
-    int serial_baud_rate;
-    unsigned long serial_display_interval;
+    bool using18bitadc;
+    float sensor_v_max;
+    float adc_reference;
     int switch_debounce_micro;
     int switch11_ips_pin;
     int switch12_ips_pin;
@@ -55,16 +56,13 @@ class DamperSettings
     int switch12_sca_pin;
     int switch21_sca_pin;
     int switch22_sca_pin;
-    float damper_threshold;
-    float damper_velocity_scaling;
+    float calibration_threshold;
     char teensy_ip[IP_STRING_LENGTH];
     char computer_ip[IP_STRING_LENGTH];
     int upd_port;
     bool canbus_enable;
     bool using_display;
     bool connected_channel[NUM_CHANNELS];
-    int note_order[NUM_CHANNELS];
-
 };
 
 #endif

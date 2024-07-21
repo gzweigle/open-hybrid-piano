@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Greg C. Zweigle
+// Copyright (C) 2024 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,27 +21,32 @@
 // For ips pcb version 2.X
 // For sca pcb version 0.0
 //
-// Main code for damper board of Stem Piano.
+// Main code for damper board of stem piano.
 //
-// TODO - For more than 88 keys, could use local hammer for extra
-//        dampers, and remote for the normal 88.
+// stem piano is an open source hybrid digital piano.
+//
 
 #include "stem_piano_ips2.h"
 
 #include "damper_settings.h"
 #include "six_channel_analog_00.h"
 #include "board2board.h"
+#include "calibration_position.h"
+#include "damper_status.h"
 #include "network.h"
+#include "nonvolatile.h"
 #include "switches.h"
 #include "testpoint_led.h"
 #include "timing.h"
 #include "tft_display.h"
 
 DamperSettings Set;
-
 SixChannelAnalog00 Adc;
 Board2Board B2B;
+CalibrationPosition CalP;
+DamperStatus DStat;
 Network Eth;
+Nonvolatile Nonv;
 Switches SwIPS1;
 Switches SwIPS2;
 Switches SwSCA1;
@@ -52,10 +57,39 @@ TftDisplay Tft;
 
 void setup(void) {
 
-  // This must be placed first and in the setup() function.
+  // Serial port setup.
+  Serial.begin(9600);
+  Serial.println(".");
+  Serial.println(".");
+  Serial.println("welcome to stem piano by gcz");
+  Serial.println(".");
+  Serial.println(".");
+
+  // Important information.
+  Serial.println("Hardware required:");
+  Serial.println("  IPS2.X damper board.");
+  Serial.println("  SCA0.0 analog board.");
+  Serial.println("  HPS 0.8, 0.7, or 0.4 sensor board (any board meeting spec is also ok).");
+  Serial.println("License: GNU GPLv3 - for documentation, code, and design see:");
+  Serial.println("  https://github.com/gzweigle/DIY-Grand-Digital-Piano");
+  Serial.println(".");
+  Serial.println(".");
+
+  // Load the settings. Must be first in the setup() function.
   Set.SetAllSettingValues();
 
-  // These must be called second and in the setup() function.
+  // Notification messages.
+  if (Set.debug_level >= DEBUG_STATS) {
+    Serial.println("Beginning damper board initialization.");
+  }
+  Tft.Setup(Set.using_display, Set.debug_level);
+  Tft.HelloWorld();
+
+  // Initialize the nonvolatile memory.
+  // Initialize early in case any setup() uses storage.
+  Nonv.Setup(Set.debug_level);
+
+  // Setup reading the switches.
   SwIPS1.Setup(Set.switch_debounce_micro,
   Set.switch11_ips_pin, Set.switch12_ips_pin, Set.debug_level);
   SwIPS2.Setup(Set.switch_debounce_micro,
@@ -65,66 +99,86 @@ void setup(void) {
   SwSCA2.Setup(Set.switch_debounce_micro,
   Set.switch21_sca_pin, Set.switch22_sca_pin, Set.debug_level);
 
-  Serial.begin(Set.serial_baud_rate);
-
-  if (Set.debug_level >= 1) {
-    Serial.println("Beginning damper board initialization.");
-  }
-
-  // Setup everything.
-  Adc.Setup(Set.adc_spi_clock_frequency, Set.adc_is_differential, &Tpl);
+  // Setup the analog front-end and the board-to-board communication.
+  // Physically connecting the board-to-board link is optional and
+  // only required if using a separate set of sensors for the dampers.
+  // These two classes are common to hammer and pedal boards.
+  Adc.Setup(Set.adc_spi_clock_frequency, Set.adc_is_differential,
+  Set.using18bitadc, Set.sensor_v_max, Set.adc_reference, &Tpl);
   B2B.Setup(Set.canbus_enable);
-  Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port, Set.debug_level);
+
+  // Diagnostics and status
+  DStat.Setup(&Tpl, Set.debug_level);
+
+  // Common on hammer and pedal board: Ethernet, test points, TFT display, etc.
+  CalP.Setup(Set.calibration_threshold, Set.debug_level, &Nonv);
+  Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port,
+  SwIPS2.direct_read_switch_2(), Set.debug_level);
   Tpl.Setup();
   Tmg.Setup(Set.adc_sample_period_microseconds);
-  Tft.Setup(Set.using_display, Set.debug_level);
-  Tft.HelloWorld();
 
-  if (Set.debug_level >= 1) {
-    Serial.println("Finished damper board initialization.");
+  if (Set.test_index >= 0) {
+    Serial.println("WARNING - In high-speed test mode.");
+    Serial.println("MIDI is disabled.");
   }
 
-  Serial.println("GNU GPLv3 - for documentation, code, and design see:");
-  Serial.println("https://github.com/gzweigle/DIY-Grand-Digital-Piano");
-
-  Serial.println(".");
-  Serial.println("Welcome to Stem Piano, IPS2.X/SCA0.0 Damper Board, by GCZ.");
-  Serial.println(".");
+  // Ready to be a piano (damper).
+  if (Set.debug_level >= DEBUG_STATS) {
+    Serial.println("Finished damper board initialization.");
+  }
+  delay(1000);
+  Tft.Clear();
 
 }
 
-// Temporary debug and diagnostic stuff.
-unsigned long last_micros_ = micros();
-bool serial_display_toggle = false;
+// After startup, wait before sending anything to MIDI
+// in order to avoid any potential startup transients.
+int startup_counter = 0;
 
-// Place declaration of all variables for DIP switches here.
-bool switch_tft;
+// Switches.
+bool switch_select_key_for_ethernet;
+bool switch_enable_ethernet;
+bool switch_tft_display;
+bool switch_freeze_cal_values;
+bool switch_disable_and_reset_calibration;
 
 // Data from ADC.
-unsigned int raw_samples[NUM_CHANNELS], reordered_raw_samples[NUM_CHANNELS];
-int damper_position_adc_counts[NUM_CHANNELS];
-float damper_position[NUM_CHANNELS];
+unsigned int raw_samples[NUM_CHANNELS];
+unsigned int raw_samples_reversed[NUM_CHANNELS];
+int position_adc_counts[NUM_CHANNELS];
+
+// Damper, hammer, and pedal data.
+float damper_position[NUM_CHANNELS], calibrated_floats[NUM_CHANNELS],
+position_floats[NUM_CHANNELS];
+
+// Damper threshold for display
+float damper_threshold_low = 0.33;
+float damper_threshold_med = 0.50;
+float damper_threshold_high = 0.75;
 
 void loop() {
 
   // Measure every processing interval so the pickup and
-  // dropout timers update. In other places, when a switch
-  // is read, what is actually read is the internal state
-  // of timers.
+  // dropout timers update. Later, when a switch is read,
+  // what is actually read is the internal state of timers.
   SwIPS1.updatePuDoState("IPS11", "IPS12");
   SwIPS2.updatePuDoState("IPS21", "IPS22");
-  SwSCA1.updatePuDoState("SCA11", "SCA12");
   SwSCA2.updatePuDoState("SCA21", "SCA22");
+  SwSCA1.updatePuDoState("SCA11", "SCA12");
 
-  // Read all switch values in one place so can keep track of them.
-  switch_tft = SwIPS2.read_switch_1();  // TFT mode.
+  // Read switch inputs.
+  switch_select_key_for_ethernet = SwIPS1.read_switch_1();
+  switch_enable_ethernet = SwIPS2.read_switch_2();
+  switch_tft_display = SwIPS2.read_switch_1();
+  switch_freeze_cal_values = SwSCA1.read_switch_2();
+  switch_disable_and_reset_calibration = SwSCA1.read_switch_1();
 
-  // When the TFT is operational, turn off the alorithms that
-  // could generate MIDI output and slow down the sampling.
+  // When the TFT is operational.
   // Slow down sampling because the TFT takes a long time for
   // processing. But, do keep the sampling going so that the TFT
   // can display things like maximum and minimum hammer positions.
-  if (switch_tft == true) {
+  if (switch_tft_display == true) {
+    switch_freeze_cal_values = true; // Ignore switch value.
     Tmg.ResetInterval(Set.adc_sample_period_microseconds_during_tft);
   }
   else {
@@ -132,85 +186,62 @@ void loop() {
   }
 
   // This if statement determines the sample rate.
+  // Everything below in this file runs at the sample rate.
   if (Tmg.AllowProcessing() == true) {
-    Tpl.SetTp8(true);
-    
-    Adc.GetNewAdcValues(raw_samples);
 
-    // Reorder the inputs
-    for (int ind = 0; ind < NUM_CHANNELS; ind++) {
-        reordered_raw_samples[Set.note_order[ind]] = raw_samples[ind];
+    Tpl.SetTp8(true); // Front left test point asserts during processing.
+
+    // Get damper data from ADC.
+    Adc.GetNewAdcValues(raw_samples, Set.test_index);
+
+    // Reverse the back row since a damper board is
+    // rotated 180 degrees compared to a hammer board.
+    // Use NUM_CHANNELS - 8 because not reversing the
+    // eight inputs typically used for pedals.
+    for (int ind = 0; ind < NUM_CHANNELS - 8; ind++) {
+      raw_samples_reversed[ind] = raw_samples[NUM_CHANNELS - ind - 1 - 8];
     }
 
-    Adc.NormalizeAdcValues(damper_position_adc_counts, damper_position,
-    reordered_raw_samples);
+    // Reorder the back row.
+    Adc.ReorderAdcValues(raw_samples_reversed);
+
+    // Normalize the ADC values.
+    Adc.NormalizeAdcValues(position_adc_counts, position_floats, raw_samples_reversed);
+
+    // Undo the position errors due to physical tolerances.
+    bool all_notes_using_cal = CalP.Calibration(switch_freeze_cal_values,
+    switch_disable_and_reset_calibration, calibrated_floats, position_floats);
+
+    B2B.SendDamperData(calibrated_floats);
+
+    // Zero out the signal from any unconnected pins to avoid noise
+    // or anything else causing an unwanted piano note to play.
     for (int k = 0; k < NUM_CHANNELS; k++) {
       if (Set.connected_channel[k] == false) {
-        damper_position_adc_counts[k] = 0;
-        damper_position[k] = 0.0;
+        position_adc_counts[k] = 0;
+        calibrated_floats[k] = 0.0;
       }
     }
-    B2B.SendDamperData(damper_position);
 
-    Eth.SendPianoPacket(damper_position[32],
-                        damper_position[33],
-                        damper_position[34],
-                        damper_position[35],
-                        damper_position[36],
-                        damper_position[37],
-                        damper_position[38],
-                        damper_position[39]);
+    Eth.SendPianoPacket(calibrated_floats, switch_enable_ethernet,
+    switch_select_key_for_ethernet, damper_threshold_med, Set.test_index);
 
-    // Run the TFT display.
-    Tft.Display(switch_tft, damper_position, damper_position);
-
-    /////////////////
-    // Temporary debug and diagnostic stuff.
-    // Flash all the LED to make sure they are working.
-    // Except tp8 and tp9 as they are used elsewhere.
-    if (micros() - last_micros_ > Set.serial_display_interval) {
-      last_micros_ = micros();
-      if (serial_display_toggle == true) {
-        serial_display_toggle = false;
-        Tpl.SetTp10(false);
-        Tpl.SetTp11(true);
-        Tpl.SetLowerRightLED(false);
-        Tpl.SetScaLedL(false);
-        Tpl.SetScaLedR(false);
-        Tpl.SetEthernetLED(false);
-      }
-      else {
-        serial_display_toggle = true;
-        if (Set.debug_level >= 1) {
-          Serial.print("Damper Board ");
-          if (Set.board_bringup == true) {
-            Serial.print(" d24="); Serial.print(damper_position[24]);
-            Serial.print(" d25="); Serial.print(damper_position[25]);
-            Serial.print(" d26="); Serial.print(damper_position[26]);
-            Serial.print(" d27="); Serial.print(damper_position[27]);
-          }
-          else
-          {
-            Serial.print(" d32="); Serial.print(damper_position[32]);
-            Serial.print(" d33="); Serial.print(damper_position[33]);
-            Serial.print(" d34="); Serial.print(damper_position[34]);
-            Serial.print(" d35="); Serial.print(damper_position[35]);
-            Serial.print(" d36="); Serial.print(damper_position[36]);
-            Serial.print(" d37="); Serial.print(damper_position[37]);
-            Serial.print(" d38="); Serial.print(damper_position[38]);
-            Serial.print(" d39="); Serial.print(damper_position[39]);
-          }
-          Serial.println("");
-        }
-        Tpl.SetTp10(true);
-        Tpl.SetTp11(false);
-        Tpl.SetLowerRightLED(true);
-        Tpl.SetScaLedL(true);
-        Tpl.SetScaLedR(true);
-        Tpl.SetEthernetLED(true);
-      }
+    if (Set.test_index < 0) {
+      // Run the TFT display.
+      Tft.Display(switch_tft_display, calibrated_floats, damper_position);
     }
-    /////////////////
+
+    // Debug and display information.
+    DStat.FrontLed(calibrated_floats, damper_threshold_low, damper_threshold_med,
+    damper_threshold_high, Set.test_index);
+
+    if (Set.test_index < 0) {
+      DStat.LowerRightLed(all_notes_using_cal, Nonv.NonvolatileWasWritten());
+      DStat.SCALed();
+      DStat.EthernetLed();
+      DStat.SerialMonitor(position_adc_counts, calibrated_floats,
+      damper_threshold_med);
+    }
 
     Tpl.SetTp8(false);
   }
