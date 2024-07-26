@@ -2,8 +2,6 @@
 
 The mainboard for hammer or damper sensor connections and Teensy 4.1 processing.
 
-Please see [ips20_current_fuses.md](./ips20_current_fuses.md) for information about fuses on the IPS circuit board and Teensy 4.1 processing PCB.
-
 ## Features
 
 ### I/O
