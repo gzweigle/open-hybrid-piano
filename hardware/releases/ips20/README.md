@@ -2,6 +2,8 @@
 
 The mainboard for hammer or damper sensor connections and Teensy 4.1 processing.
 
+Please see [ips20_current_fuses.md](./ips20_current_fuses.md) for information about fuses on the IPS circuit board and Teensy 4.1 processing PCB.
+
 ## Features
 
 ### I/O
@@ -14,7 +16,7 @@ The mainboard for hammer or damper sensor connections and Teensy 4.1 processing.
   * With less piano key inputs, it is also possible to have more pedal inputs.
 * MIDI output.
 * Ethernet interface (optional).
-* 5 volt, 2.5 amp power input.
+* 5 volt, 1.75 amp power input.
 * CAN bus.
 
 ### Capabilities
@@ -98,70 +100,7 @@ Yeah!!
 
 ## Power Supplies and Connections
 
-### +5 Volt Input
-
-See black lines in figure below.
-
-* Cut the 5V pad on Teensy 4.1 per instructions at PJRC website before installing the Teensy processor. https://www.pjrc.com/teensy/external_power.html
-
-* See: https://github.com/stem-piano/stem-piano-top/blob/main/WARNINGS.md
-
-All external power supplies must automatically protect from short circuits, overcurrent, thermal, and all other failure conditions.
-
-The external power supplies must be able to deliver 1.75 amps. This value is calculated by summing all current values in sections below and by testing. See *stem piano* video at the approximate 2:20 time https://www.youtube.com/watch?v=TemXGmkoc-g
-
-![ips20_5v_pcb](ips20_5v_power.png)
-
-### +3.3 Volt Analog
-
-See blue lines in figure below.
-
-There are six Low Dropout (LDO) voltage regulators. Each converts +5V to +3.3V. Each LDO powers a single 16:1 analog multiplexer plus 16 remote sensors.
-
-If using an HPS board for remote sensor, then the total current out of an LDO for sensors is given by the following equation:
-
-16 * 14 mA = 224 mA.
-
-According to its data sheet, the 16:1 analog mux worst-case current draw is 16mA (use twice the (ICC + delta ICC) values).
-
-Some of the LDO integrated circuits power either the pedal circuit or (optionally) the SCA.
-* The pedal circuit draws approximately 5 mA.
-* The SCA current draw depends on the SCA circuit. Seems unlikely this would exceed 50mA absolute maximum.
-
-Summing all numbers above gives a worst-case current for an LDO:
-224 + 16 + 50 = 290 mA.
-
-The SCA also has a second +3.3V input (see later section below) which can be used instead.
-In this case the worst case current for an LDO:
-224 + 16 = 240 mA.
-
-Select the LDO based on above math. The LDO in [ips20_bill_of_materials_0.txt](ips20_bill_of_materials_0.txt) was selected based on the above math.
-
-![ips20_33av_pcb](ips20_33av_power.png)
-
-### +3.3 Volt Analog Ground
-
-Ground pins are labeled on the PCB.
-
-Be careful not to accidentally short a +3.3V pin with a ground pin.  For safety, select an LDO that tolerates a shorted output indefinitely. The LDO in [ips20_bill_of_materials_0.txt](ips20_bill_of_materials_0.txt) was selected based on this criteria.
-
-### +3.3 Volt Digital
-
-See green lines in figure below.
-
-The Teensy 4.1 includes a 3.3V output (green).
-
-This output is connected to the SCA, the Can bus, the TFT display, the MIDI connector, and one of the optional SCA headers (J48).
-
-According to the PJRC website, the maximum output current that the Teensy's +3.3V pin can supply is 250 mA.
-
-According to the display datasheet, the TFT display (far right connector) takes 80 mA.
-
-According to the Can bus datasheet, the Can bus integrated circuit (middle bottom) takes less than 60 mA normally but can take as much as 180 mA during a bus fault.
-
-When designing an SCA board that uses the +3.3V Digital input, the current draw of TFT display and Can bus must be considered.
-
-![ips20_33dv_pcb](ips20_33dv_power.png)
+[ips20_power.md](./ips20_power.md)
 
 ## Design
 Location of timing analysis: [../../../design/data_acquisition/eca0X_ips2X/eca0X_ips2X_timing_design.md](../../../design/data_acquisition/eca0X_ips2X/eca0X_ips2X_timing_design.md).
