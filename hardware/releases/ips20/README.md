@@ -62,7 +62,7 @@ Location for fuses. The +5V power and USB must must automatically protect from s
 
 User to decide on PCB fuse design and strategy.
 
-Short video on removing and replacing a surface mount fuse. Also see other resources on the internet.
+Here is a short video on the *stem piano* historical progress YouTube channel about removing and replacing a surface mount fuse. Also see other resources on the internet.
 https://www.youtube.com/watch?v=TsNTWSIT84I
 
 ### Power jumper
