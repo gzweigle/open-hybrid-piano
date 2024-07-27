@@ -57,7 +57,13 @@ See discussion in issue: https://github.com/gzweigle/DIY-Grand-Digital-Piano/iss
 * See: https://github.com/stem-piano/stem-piano-top/blob/main/WARNINGS.md
 
 ### Fuse
-Location for fuses. The +5V power and USB must must automatically protect from short circuits, overcurrent, thermal, and all other failure conditions. User to decide on PCB fuse design and strategy.
+
+Location for fuses. The +5V power and USB must must automatically protect from short circuits, overcurrent, thermal, and all other failure conditions
+
+User to decide on PCB fuse design and strategy.
+
+Short video on removing and replacing a surface mount fuse. Also see other resources on the internet.
+https://www.youtube.com/watch?v=TsNTWSIT84I
 
 ### Power jumper
 Install only after 5V pad on Teensy 4.1 is cut per instructions at PJRC website.
