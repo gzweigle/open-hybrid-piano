@@ -30,6 +30,8 @@ The mainboard for hammer or damper sensor connections and Teensy 4.1 processing.
 * Selected for availability.
 * Relatively large pitch, relatively easy to solder parts.
 * Requires a Six Channel Analog (SCA) card.
+* The parts list(s) includes an index number in the file name to support differences depending on application. Files:
+  * [./ips20_bill_of_materials_0.txt](./ips20_bill_of_materials_0.txt)
 
 ## Form
 * 8.5 inches by 4.0 inches.
@@ -60,7 +62,7 @@ See discussion in issue: https://github.com/gzweigle/DIY-Grand-Digital-Piano/iss
 
 Location for fuses. The +5V power and USB must must automatically protect from short circuits, overcurrent, thermal, and all other failure conditions
 
-User to decide on PCB fuse design and strategy.
+User to decide on PCB fuse design and strategy. See the bill of materials file(s) in this directory.
 
 Here is a short video on the *stem piano* historical progress YouTube channel about removing and replacing a surface mount fuse. Also see other resources on the internet.
 https://www.youtube.com/watch?v=TsNTWSIT84I
