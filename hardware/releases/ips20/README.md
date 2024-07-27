@@ -14,7 +14,7 @@ The mainboard for hammer or damper sensor connections and Teensy 4.1 processing.
   * With less piano key inputs, it is also possible to have more pedal inputs.
 * MIDI output.
 * Ethernet interface (optional).
-* 5 volt, 1.75 amp power input.
+* +5 volt, 1.75 amp power input. Current is when using with 88 HPS 0.4 or HPS 0.8 sensors. Current input could be different with alternate sensor.
 * CAN bus.
 
 ### Capabilities

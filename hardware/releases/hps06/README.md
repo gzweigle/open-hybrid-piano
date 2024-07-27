@@ -6,6 +6,8 @@ Originally, the HPS PCB was for hammers.  However, the sensor also works for dam
 
 This circuit board includes a trimming resistor. Unless needed for a specific use case, the circuit board with trimming resistor is not recommended.
 
+In repository for historical reasons.
+
 ## Features
 
 ### I/O

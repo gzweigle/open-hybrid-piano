@@ -88,4 +88,6 @@ Not installed:
 * Fuse F1.
 * J12 jumper.
 
-USB has an enumeration process that determines current. The IPS circuit board does not support. See USB standard. The USB power source must meet the same requirements as the "+5V power" source.
+Change F2.
+
+USB has an enumeration process that determines current. The IPS circuit board may not support. See USB standard. The USB power source must meet the same requirements as the "+5V power" source.
