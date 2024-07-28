@@ -102,7 +102,7 @@ R23,    4700 ohms,             0805,       ERA-6AED472V,         No,            
 R25,    4700 ohms,             0805,       ERA-6AED472V,         No,            0.50,        0.125W. 5% tolerance or better. For pedals. Install if using passive pedals.
 R28,    4700 ohms,             0805,       ERA-6AED472V,         No,            0.50,        0.125W. 5% tolerance or better. For pedals. Install if using passive pedals.
 F1,     Fuse,                  1206,       -,                    Yes,           1.50,        User to decide.
-F2,     Fuse,                  1206,       MFU1206FF00500P500,   Yes,           1.50,        User to validate.
+F2,     Fuse,                  1206,       MFU1206FF00500P500,   Yes,           1.50,        0.5 amp fuse. User to validate.
 SW1,    2 position switch,     -,          DS04-254-1-02BK-SMT,  No,            0.75,        Install if would like switch for configuration functions.
 SW2,    2 position switch,     -,          DS04-254-1-02BK-SMT,  No,            0.75,        Install if would like switch for configuration functions.
 TP5,    16:1 out,              -,          Keystone 500X,        No,            0.40,        Any breadboard header should work. This is a testpoint so optional.
