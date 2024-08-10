@@ -201,24 +201,6 @@ bool switch_disable_and_reset_calibration, const float *in) {
 
 }
 
-// Force floating point values from ADC in range +/- 2.0.
-// Expect +/- 1.0 but could get a slightly larger range
-// based on the CNY70 output voltage and the ADC reference
-// voltage. The spec is +/- 1.0.
-float CalibrationPosition::ClipLimit(float in) {
-  float out;
-  if (in > 2.0) {
-    out = 2.0;
-  }
-  else if (in < -2.0) {
-    out = -2.0;
-  }
-  else {
-    out = in;
-  }
-  return out;
-}
-
 // By the power of math, hereby nonlinear becomes linear
 double CalibrationPosition::GetGain(double min, double max) {
   return (1.0 / (log(max) - log(min)));
@@ -251,8 +233,8 @@ void CalibrationPosition::InitializeState(Nonvolatile *Nv, int debug_level) {
 
     if (all_notes_calibrated == true) {
       // If all notes have a calibration value in memory, apply all.
-      max_[note] = static_cast<double>(Nv_->ReadCalibrationPositionMax(note));
-      min_[note] = static_cast<double>(Nv_->ReadCalibrationPositionMin(note));
+      max_[note] = Nv_->ReadCalibrationPositionMax(note);
+      min_[note] = Nv_->ReadCalibrationPositionMin(note);
       gain_[note] = GetGain(min_[note], max_[note]);
       offset_[note] = GetOffset(min_[note]);
     }
@@ -310,8 +292,8 @@ bool all_notes_are_using_calibration_values) {
         Serial.println("Writing position max/min to EEPROM.");
       }
       for (int note = 0; note < NUM_NOTES; note++) {
-        Nv_->WriteCalibrationPositionMax(note, ClipLimit(static_cast<float>(max_[note])));
-        Nv_->WriteCalibrationPositionMin(note, ClipLimit(static_cast<float>(min_[note])));
+        Nv_->WriteCalibrationPositionMax(note, max_[note]);
+        Nv_->WriteCalibrationPositionMin(note, min_[note]);
       }
       Nv_->WriteCalibrationDoneFlag(true);
       Nv_->UpdateAndWriteTotalWrites();

@@ -199,7 +199,7 @@ void CalibrationVelocity::InitializeState(Nonvolatile *Nv) {
   Nv_ = Nv;
   new_max_velocity_ = Nv_->ReadMaxVelocityStoredFlag();
   if (new_max_velocity_ == true) {
-    max_hammer_velocity_ = Nv_->ReadMaxVelocity();
+    max_hammer_velocity_ = static_cast<float>(Nv_->ReadMaxVelocity());
     if (debug_level_ >= DEBUG_STATS) {
       Serial.print("Read initial velocity scale of ");
       Serial.print(max_hammer_velocity_);
@@ -245,7 +245,7 @@ bool switch_disable_and_reset_calibration) {
         Serial.print(max_hammer_velocity_);
         Serial.println(" to EEPROM.");
       }
-      Nv_->WriteMaxVelocity(max_hammer_velocity_);
+      Nv_->WriteMaxVelocity(static_cast<float>(max_hammer_velocity_));
       Nv_->WriteMaxVelocityStoredFlag(true);
       Nv_->UpdateAndWriteTotalWrites();
       if (debug_level_ >= DEBUG_STATS) {

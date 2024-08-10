@@ -28,7 +28,19 @@ Nonvolatile::Nonvolatile() {}
 
 void Nonvolatile::Setup(int debug_level) {
 
-  calibration_scale_value_ = 4194304.0;  // 2^22.
+  debug_level_ = debug_level;
+
+  if (sizeof(double) != SIZE_DOUBLE) {
+    if (debug_level_ >= DEBUG_STATS) {
+      Serial.printf("Nonvolatile::Setup() ERROR.\n");
+      Serial.printf("Size of double = %d, expected %d\n",
+      sizeof(double), SIZE_DOUBLE);
+    }
+    enable_memory_ = false;
+  }
+  else {
+    enable_memory_ = true;
+  }
 
   // If change this address, total EEPROM writes is lost.
   // Do not not changes this address.
@@ -43,8 +55,8 @@ void Nonvolatile::Setup(int debug_level) {
   // Nonvolatile memory for calibration values.
   // Stores values in range [-2.0, ..., 2.0].
   calibration_min_start_address_ = nonvolatile_user_start_address_;
-  calibration_max_start_address_ = calibration_min_start_address_ + 3*(NUM_NOTES);
-  calibration_flag_address_ = calibration_max_start_address_ + 3*(NUM_NOTES);
+  calibration_max_start_address_ = calibration_min_start_address_ + (SIZE_DOUBLE)*(NUM_NOTES);
+  calibration_flag_address_ = calibration_max_start_address_ + (SIZE_DOUBLE)*(NUM_NOTES);
   /////////////////////////////////////////////
 
   ////////////////////////////////////////////////
@@ -54,10 +66,10 @@ void Nonvolatile::Setup(int debug_level) {
   ////////////////////////////////////////////////
 
   // Set to true in code below anytime nonvolatile memory was written.
-  // Cleared by ReturnTrueIfNonvolatileWasWritten().
+  // Cleared by NonvolatileWasWritten().
   nonvolatile_was_written_ = false;
 
-  if (debug_level >= DEBUG_STATS) {
+  if (debug_level_ >= DEBUG_STATS) {
     Serial.print("Total EEPROM writes = ");
     Serial.print(ReadTotalWrites());
     Serial.print(". ");
@@ -75,24 +87,24 @@ bool Nonvolatile::NonvolatileWasWritten() {
 
 //////////////////////////////////////////////////////
 // Nonvolatile memory for position calibration values.
-float Nonvolatile::ReadCalibrationPositionMin(int index) {
-  int base_address = 3 * index + calibration_min_start_address_;
-  return ReadNormalizedFloat(base_address);
+double Nonvolatile::ReadCalibrationPositionMin(int index) {
+  int base_address = (SIZE_DOUBLE) * index + calibration_min_start_address_;
+  return ReadDouble(base_address);
 }
 
-void Nonvolatile::WriteCalibrationPositionMin(int index, float data) {
-  int base_address = 3 * index + calibration_min_start_address_;
-  WriteNormalizedFloat(base_address, data);
+void Nonvolatile::WriteCalibrationPositionMin(int index, double data) {
+  int base_address = (SIZE_DOUBLE) * index + calibration_min_start_address_;
+  WriteDouble(base_address, data);
 }
 
-float Nonvolatile::ReadCalibrationPositionMax(int index) {
-  int base_address = 3 * index + calibration_max_start_address_;
-  return ReadNormalizedFloat(base_address);
+double Nonvolatile::ReadCalibrationPositionMax(int index) {
+  int base_address = (SIZE_DOUBLE) * index + calibration_max_start_address_;
+  return ReadDouble(base_address);
 }
 
-void Nonvolatile::WriteCalibrationPositionMax(int index, float data) {
-  int base_address = 3 * index + calibration_max_start_address_;
-  WriteNormalizedFloat(base_address, data);
+void Nonvolatile::WriteCalibrationPositionMax(int index, double data) {
+  int base_address = (SIZE_DOUBLE) * index + calibration_max_start_address_;
+  WriteDouble(base_address, data);
 }
 
 // The EEPPROM defaults to 0xFF. Therefore, 0xFF is
@@ -122,11 +134,11 @@ void Nonvolatile::WriteCalibrationDoneFlag(bool data) {
 
 //////////////////////////////////////////////////////
 // Nonvolatile memory for velocity calibration values.
-float Nonvolatile::ReadMaxVelocity() {
-  return ReadNormalizedFloat(velocity_scale_address_);
+double Nonvolatile::ReadMaxVelocity() {
+  return ReadDouble(velocity_scale_address_);
 }
-void Nonvolatile::WriteMaxVelocity(float data) {
-  WriteNormalizedFloat(velocity_scale_address_, data);
+void Nonvolatile::WriteMaxVelocity(double data) {
+  WriteDouble(velocity_scale_address_, data);
 }
 bool Nonvolatile::ReadMaxVelocityStoredFlag() {
   int data = EEPROM.read(velocity_scale_flag_address_);
@@ -152,22 +164,59 @@ void Nonvolatile::WriteMaxVelocityStoredFlag(bool data) {
 
 /////////////////////////////////////////////
 // Read / write floating point values.
-float Nonvolatile::ReadNormalizedFloat(int address) {
-  int data_int = 0;
-  for (int shift = 0; shift < 3; shift++) {
-    data_int |= (EEPROM.read(address + shift) << (8*shift));
+double Nonvolatile::ReadDouble(int address) {
+  bool local_enable_memory;
+  if (address + SIZE_DOUBLE >= MAX_EEPROM_ADDRESS) {
+    if (debug_level_ >= DEBUG_STATS) {
+      Serial.printf("Nonvolatile::ReadDouble() ERROR.\n");
+      Serial.printf("Size of EEPROM = %d but tried to read from %d\n",
+      MAX_EEPROM_ADDRESS, address + SIZE_DOUBLE);
+    }
+    local_enable_memory = false;
   }
-  return static_cast<float>(data_int) / calibration_scale_value_;
+  else {
+    local_enable_memory = true;
+  }
+  if (local_enable_memory == true && enable_memory_ == true) {
+    union DoubleBytes {
+      double d;
+      unsigned char b[SIZE_DOUBLE];
+    } db;
+    for (int byte = 0; byte < SIZE_DOUBLE; byte++) {
+      db.b[byte] = EEPROM.read(address + byte);
+    }
+    return db.d;
+  }
+  else {
+    return 1.0; // Anything but 0.0.
+  }
 }
-void Nonvolatile::WriteNormalizedFloat(int address, float data) {
-  int data_int = static_cast<int>(data * calibration_scale_value_);
-  for (int shift = 0; shift < 3; shift++) {
-    EEPROM.write(address + shift, (data_int >> (8*shift)) & 0x0FF);
+void Nonvolatile::WriteDouble(int address, double d) {
+  bool local_enable_memory;
+  if (address + SIZE_DOUBLE >= MAX_EEPROM_ADDRESS) {
+    if (debug_level_ >= DEBUG_STATS) {
+      Serial.printf("Nonvolatile::WriteDouble() ERROR.\n");
+      Serial.printf("Size of EEPROM = %d but tried to write to %d\n",
+      MAX_EEPROM_ADDRESS, address + SIZE_DOUBLE);
+    }
+    local_enable_memory = false;
   }
-  nonvolatile_was_written_ = true;
+  else {
+    local_enable_memory = true;
+  }
+  if (local_enable_memory == true && enable_memory_ == true) {
+    union DoubleBytes {
+      double d;
+      unsigned char b[SIZE_DOUBLE];
+    } db;
+    db.d = d;
+    for (int byte = 0; byte < SIZE_DOUBLE; byte++) {
+      EEPROM.write(address + byte, db.b[byte]);
+    }
+    nonvolatile_was_written_ = true;
+  }
 }
 /////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////
 // Nonvolatile memory for counting total writes

@@ -64,7 +64,6 @@ class CalibrationPosition
     double GetGain(double, double);
     double GetOffset(double);
     void InitializeState(Nonvolatile *, int);
-    float ClipLimit(float);
     void ApplyCalibrationValues(bool, float *, const float *);
     bool BuildCalibrationValues(bool, bool, const float *);
     void WriteEeprom(bool, bool, bool);

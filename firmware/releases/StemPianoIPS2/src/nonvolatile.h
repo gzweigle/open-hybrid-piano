@@ -34,6 +34,10 @@
 // program that clears state from EEPROM.
 #define NONVOLATILE_USER_START_ADDRESS 128
 
+// Use a fixed value instead of sizeof(double) because need to
+// enfore EEPROM size limits. A check is run at compile time.
+#define SIZE_DOUBLE 8
+
 class Nonvolatile
 {
   public:
@@ -41,17 +45,17 @@ class Nonvolatile
     void Setup(int);
  
     // Index is from 0 to NUM_NOTES - 1
-    float ReadCalibrationPositionMin(int);
-    void WriteCalibrationPositionMin(int, float);
-    float ReadCalibrationPositionMax(int);
-    void WriteCalibrationPositionMax(int, float);
+    double ReadCalibrationPositionMin(int);
+    void WriteCalibrationPositionMin(int, double);
+    double ReadCalibrationPositionMax(int);
+    void WriteCalibrationPositionMax(int, double);
     bool ReadCalibrationDoneFlag();
     void WriteCalibrationDoneFlag(bool);
 
     bool ReadMaxVelocityStoredFlag();
     void WriteMaxVelocityStoredFlag(bool);
-    float ReadMaxVelocity();
-    void WriteMaxVelocity(float);
+    double ReadMaxVelocity();
+    void WriteMaxVelocity(double);
 
     void UpdateAndWriteTotalWrites();
     int ReadTotalWrites();
@@ -60,14 +64,16 @@ class Nonvolatile
     
   private:
 
-    // For values in range [-2.0, ..., 2.0].
-    // Store as 24-bit integers.
-    void WriteNormalizedFloat(int, float);
-    float ReadNormalizedFloat(int);
+    int debug_level_;
 
-    float calibration_scale_value_;
+    double ReadDouble(int);
+    void WriteDouble(int, double);
+
+    bool enable_memory_;
     
     // Each is based on the previous.
+    // Min and max mean the min and max hammer position
+    // values, not the min and max memory addresses.
     int nonvolatile_user_start_address_;
     int calibration_min_start_address_;
     int calibration_max_start_address_;
