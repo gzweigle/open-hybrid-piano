@@ -25,26 +25,18 @@
 //
 // Computation is over all channels. It is up to the MIDI function
 // to determine which correspond to actual keys vs. pedals.
-//
-// TODO - Use of maximum velocity the hammer shank obtained during travel
-//        toward string is an approximation of the velocity when hit the
-//        string. Playability tests indicate this approxiation works ok.
-//        However, more sophisticated algorithms are under consideration.
-// TODO - The effect of repetition_counter_ and released_ overlap.
-//        Need both?
-// TODO - The line: velocity_[key] *= hammer_travel_meters_; isn't quite
-//        correct if the min position > 0 and/or max < 1. Should scale
-//        this by a dynamically updated min/max hammer position.
 
 #include "dsp_hammer.h"
 
 DspHammer::DspHammer() {}
 
-void DspHammer::Setup(int sample_period, float strike_threshold,
+void DspHammer::Setup(int hammer_strike_algorithm, int sample_period, float strike_threshold,
 float release_threshold, float min_repetition_seconds, float min_strike_velocity, 
 float hammer_travel_meters, int debug_level) {
 
   debug_level_ = debug_level;
+
+  hammer_strike_algorithm_ = hammer_strike_algorithm;
   
   samples_per_second_ = static_cast<int>(1.0/(sample_period*1e-6));
 
@@ -89,7 +81,6 @@ void DspHammer::ComputeDerivative(const float *position) {
   for (int key = 0; key < NUM_CHANNELS; key++) {
     // This is the high-pass + boxcar filter.
     velocity_[key] = position[key] - velocity_buffer_[key][buffer_pointer_];
-    debug_pos_[key] = velocity_buffer_[key][buffer_pointer_];
     // Convert denominator of velocity to seconds.
     velocity_[key] *= static_cast<float>(samples_per_second_);
     velocity_[key] *= hammer_travel_meters_;
@@ -139,7 +130,7 @@ void DspHammer::DetectHammerStrike(bool *event, float *velocity, const float *po
     // To avoid noise while near rest, check if hammer is close to string...
     position[key] >= strike_threshold_ &&
     // and check if the hammer just bounced off something...
-    velocity_[key] <= 0 &&
+    (velocity_[key] <= 0 || hammer_strike_algorithm_ == 1) &&
     // and its not noise from recent strike (as hammer stop deforms when hit)...
     repetition_counter_[key] >= min_repetition_samples_ &&
     // and velocity was fast enough that hammer actually flew off the jack and
@@ -153,28 +144,19 @@ void DspHammer::DetectHammerStrike(bool *event, float *velocity, const float *po
     released_[key] == true)
     {
       if (debug_level_ >= DEBUG_ALL) {
-        Serial.println("DetectHammerStrike()");
-        Serial.print("  key=");
-        Serial.print(key);
-        Serial.print(" pos=");
-        Serial.print(1000.0*position[key]);
-        Serial.print(" vpos=");
-        Serial.print(1000.0*debug_pos_[key]);
-        Serial.print(" thresh=");
-        Serial.print(1000.0*strike_threshold_);
-        Serial.print(" maxv=");
-        Serial.print(1000.0*max_velocity_[key]);
-        Serial.print(" instv=");
-        Serial.print(1000.0*velocity_[key]);
-        Serial.print(" repc=");
-        Serial.print(repetition_counter_[key]);
-        Serial.print(" buff ptr=");
-        Serial.print(buffer_pointer_);
-        Serial.println("");
+        Serial.printf("DetectHammerStrike()");
+        Serial.printf("  key=%d pos=%f v_max=%f v_inst=%f repc=%d bufp=%d\n",
+        key, position[key], max_velocity_[key], velocity_[key],
+        repetition_counter_[key], buffer_pointer_);
       }
 
       // Hooray, we got a hammer strike on virtual string!
-      velocity[key] = max_velocity_[key];   // Velocity of strike = max when rising.
+      if (hammer_strike_algorithm_ == 0) {
+        velocity[key] = max_velocity_[key];// Velocity of strike = max when rising.
+      }
+      else {
+        velocity[key] = velocity_[key];
+      }
       max_velocity_[key] = 0.0;             // Reset max velocity.
       repetition_counter_[key] = 0;         // Start check for double bounce.
       released_[key] = false;               // Must wait for a release.

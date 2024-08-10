@@ -61,6 +61,7 @@ class HammerSettings
     float calibration_threshold;
     float damper_threshold;
     float damper_velocity_scaling;
+    int hammer_strike_algorithm;
     float strike_threshold;
     float release_threshold;
     float min_repetition_seconds;

@@ -34,13 +34,11 @@ class DspHammer
 {
   public:
     DspHammer();
-    void Setup(int, float, float, float, float, float, int);
+    void Setup(int, int, float, float, float, float, float, int);
     void GetHammerEventData(bool *, float *, const float *);
     void Enable(bool);
 
   private:
-
-    float debug_pos_[NUM_CHANNELS];
 
     void ComputeDerivative(const float *);
     void UpdateMaxHammerVelocity();
@@ -51,6 +49,7 @@ class DspHammer
     int debug_level_;
 
     // Variables related to determining when the hammer hit the string.
+    int hammer_strike_algorithm_;
     int samples_per_second_;
     float strike_threshold_;
     float release_threshold_;

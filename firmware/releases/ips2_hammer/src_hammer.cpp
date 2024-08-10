@@ -130,9 +130,9 @@ void setup(void) {
   // Setup the dampers, hammers, and pedals on hammer board.
   DspD.Setup( Set.damper_threshold, Set.damper_velocity_scaling,
   Set.adc_sample_period_microseconds, Set.debug_level);
-  DspH.Setup(Set.adc_sample_period_microseconds, Set.strike_threshold,
-  Set.release_threshold, Set.min_repetition_seconds, Set.min_strike_velocity,
-  Set.hammer_travel_meters, Set.debug_level);
+  DspH.Setup(Set.hammer_strike_algorithm, Set.adc_sample_period_microseconds,
+  Set.strike_threshold, Set.release_threshold, Set.min_repetition_seconds,
+  Set.min_strike_velocity, Set.hammer_travel_meters, Set.debug_level);
   DspP.Setup(Set.pedal_sample_interval_microseconds, Set.pedal_threshold,
   Set.sustain_pin, Set.sustain_connected_pin, Set.sostenuto_pin,
   Set.sostenuto_connected_pin, Set.una_corda_pin, Set.una_corda_connected_pin,

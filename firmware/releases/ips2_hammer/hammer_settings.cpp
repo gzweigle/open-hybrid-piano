@@ -141,11 +141,34 @@ void HammerSettings::SetAllSettingValues() {
   ////////
   // Hammer Settings.
 
-  // At this fraction of the position, start checking for a string hit.
-  // Value does not need to be precise.
-  // Just needs to be large enough to avoid checking when the hammer
-  // is near its rest position and could have noisy data.
-  strike_threshold = 0.8;
+  // Select the algorithm for playing a piano note.
+  // Algorithm 0:
+  //    Detect hammer shank hitting hammer stop bar by velocity = 0.
+  //    MIDI velocity = maximum velocity during hammer shank travel.
+  //    Advantage: No thresholds. It is reliable even if mechanical
+  //      system tolerances are large.
+  //    Disadvantages: Longer delay, less accurate (due to shank oscillations).
+  // Algorithm 1:
+  //    Detect hammer shank hitting hammer stop bar by a position threshold.
+  //    MIDI velocity = velocity at position threshold.
+  //    Advantage: Less delay, more accurate (immune to shank oscillations).
+  //    Disadvantage: Use of threshold makes it less reliable.
+  //    Use this algorithm only after mechanical system is precisely setup.
+  hammer_strike_algorithm = 1;
+
+  if (hammer_strike_algorithm == 0) {
+    // At this fraction of the position, start checking for a string hit.
+    // Value does not need to be precise.
+    // Just needs to be large enough to avoid noisy data when hammer
+    // is near its rest or check position.
+    strike_threshold = 0.8;
+  }
+  else {
+    // When the hammer shank position crosses this threshold
+    // declare that the hammer shank hit the hammer stop bar.
+    // Ideally this position is at the letoff point.
+    strike_threshold = 0.96;
+  }
 
   // After a strike, do not allow another until the hammer has dropped
   // below this threshold. Set higher if signal is less noisy.
