@@ -36,9 +36,13 @@ void Nonvolatile::Setup(int debug_level) {
   total_writes_address_ = 0;
 
   /////////////////////////////////////////////
+  // All memory from 0 to this location is reserved for Nonvolatile() use.
+  nonvolatile_user_start_address_ = NONVOLATILE_USER_START_ADDRESS;
+
+  /////////////////////////////////////////////
   // Nonvolatile memory for calibration values.
   // Stores values in range [-2.0, ..., 2.0].
-  calibration_min_start_address_ = total_writes_address_ + 3;
+  calibration_min_start_address_ = nonvolatile_user_start_address_;
   calibration_max_start_address_ = calibration_min_start_address_ + 3*(NUM_NOTES);
   calibration_flag_address_ = calibration_max_start_address_ + 3*(NUM_NOTES);
   /////////////////////////////////////////////

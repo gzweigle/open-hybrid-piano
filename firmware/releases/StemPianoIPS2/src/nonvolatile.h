@@ -29,6 +29,11 @@
 // Per the Teensy 4.1 documentation.
 #define MAX_EEPROM_ADDRESS 4283
 
+// All memory from 0 to 127 is reserved.
+// If change then may need to write a utility
+// program that clears state from EEPROM.
+#define NONVOLATILE_USER_START_ADDRESS 128
+
 class Nonvolatile
 {
   public:
@@ -63,6 +68,7 @@ class Nonvolatile
     float calibration_scale_value_;
     
     // Each is based on the previous.
+    int nonvolatile_user_start_address_;
     int calibration_min_start_address_;
     int calibration_max_start_address_;
     int calibration_flag_address_;
