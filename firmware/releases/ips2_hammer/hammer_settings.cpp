@@ -154,7 +154,7 @@ void HammerSettings::SetAllSettingValues() {
   //    Advantage: Less delay, more accurate (immune to shank oscillations).
   //    Disadvantage: Use of threshold makes it less reliable.
   //    Use this algorithm only after mechanical system is precisely setup.
-  hammer_strike_algorithm = 1;
+  hammer_strike_algorithm = 0;
 
   if (hammer_strike_algorithm == 0) {
     // At this fraction of the position, start checking for a string hit.
