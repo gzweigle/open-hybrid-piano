@@ -35,12 +35,14 @@
 SixChannelAnalog00::SixChannelAnalog00() {}
 
 void SixChannelAnalog00::Setup(int sclk_frequency, bool adc_is_differential,
-bool using18bitadc, float sensor_v_max, float adc_reference, TestpointLed *Tpl) {
+bool using18bitadc, float sensor_v_max, float adc_reference, 
+float adc_global, TestpointLed *Tpl) {
 
   sclk_frequency_ = sclk_frequency;
   adc_is_differential_ = adc_is_differential;
   sensor_v_max_ = sensor_v_max;
   adc_reference_ = adc_reference;
+  adc_global_ = adc_global;
   Tpl_ = Tpl;
   using18bitadc_ = using18bitadc;
 
@@ -216,6 +218,10 @@ float *normalized_float, const unsigned int *adc_values) {
     // Normally adc_reference_ == sensor_v_max_.
     // Allow other values in case mixing and matching front ends.
     normalized_float[ind] *= scale;
+
+    // Global scaling.
+    normalized_float[ind] *= adc_global_;
+
     diff_scale_raw[ind] = adc_values[ind];
 
     // Multiply by 2 because the SCA version 0.0 is single-ended and so if a

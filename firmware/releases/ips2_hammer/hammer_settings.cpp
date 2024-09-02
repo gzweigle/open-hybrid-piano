@@ -97,13 +97,17 @@ void HammerSettings::SetAllSettingValues() {
   // the ADC outputs its maximum value.
   adc_reference = 2.5;
 
+  // A global scaling applied to all ADC inputs.
+  // Normally set to 1.0.
+  adc_global_scale = 0.5;
+
   ////////
   // Gain control.
   // The combination of piano action plus mechanical structure
   // built for a stem piano could result in a different velocity
   // minimum and maximum values per piano. Use this scaling factor
   // when converting velocity in meters per second to MIDI values.
-  velocity_scale = 0.45;
+  velocity_scale = 0.35;
 
   // Any MIDI velocity equal to this value or larger is muted.
   // Typically set to 127. But is user configurable. Assumption

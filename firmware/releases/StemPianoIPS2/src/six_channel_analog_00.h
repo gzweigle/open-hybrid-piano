@@ -50,7 +50,7 @@ class SixChannelAnalog00
 {
   public:
     SixChannelAnalog00();
-    void Setup(int, bool, bool, float, float, TestpointLed *);
+    void Setup(int, bool, bool, float, float, float, TestpointLed *);
     void GetNewAdcValues(unsigned int *, int);
     void NormalizeAdcValues(int *, float *, const unsigned int *);
     void ReorderAdcValues(unsigned int *);
@@ -63,6 +63,7 @@ class SixChannelAnalog00
     int using18bitadc_;
     float sensor_v_max_;
     float adc_reference_;
+    float adc_global_;
     // These arrays were an attempt to speed up the
     // code and make the overall analog-to-digital conversion
     // of all channels faster.  It didn't help the speed much.

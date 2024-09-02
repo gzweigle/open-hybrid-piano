@@ -47,6 +47,7 @@ class HammerSettings
     bool using18bitadc;
     float sensor_v_max;
     float adc_reference;
+    float adc_global_scale;
     float velocity_scale;
     int maximum_midi_velocity;
     int switch_debounce_micro;

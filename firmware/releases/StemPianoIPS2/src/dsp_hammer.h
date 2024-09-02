@@ -28,7 +28,7 @@
 #include "stem_piano_ips2.h"
 
 // Using a #define because this is used for statically allocated arrays.
-#define DERIVATIVE_AVERAGE_SAMPLES 8
+#define DERIVATIVE_AVERAGE_SAMPLES 11
 
 class DspHammer
 {

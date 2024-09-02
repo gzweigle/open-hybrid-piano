@@ -121,7 +121,8 @@ void setup(void) {
   // only required if using a separate set of sensors for the dampers.
   // These two classes are common to hammer and pedal boards.
   Adc.Setup(Set.adc_spi_clock_frequency, Set.adc_is_differential,
-  Set.using18bitadc, Set.sensor_v_max, Set.adc_reference, &Tpl);
+  Set.using18bitadc, Set.sensor_v_max, Set.adc_reference,
+  Set.adc_global_scale, &Tpl);
   B2B.Setup(Set.canbus_enable);
 
   // Diagnostics and status
