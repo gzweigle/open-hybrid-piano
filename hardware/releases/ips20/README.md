@@ -67,7 +67,7 @@ User to decide on PCB fuse design and strategy. See the bill of materials file(s
 Here is a short video on the *stem piano* historical progress YouTube channel about removing and replacing a surface mount fuse. Also see other resources on the internet.
 https://www.youtube.com/watch?v=TsNTWSIT84I
 
-### Power jumper
+### Power jumper (J12)
 Install only after 5V pad on Teensy 4.1 is cut per instructions at PJRC website.
 
 https://www.pjrc.com/teensy/external_power.html
