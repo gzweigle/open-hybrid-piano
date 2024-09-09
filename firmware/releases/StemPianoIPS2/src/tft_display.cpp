@@ -401,6 +401,8 @@ void TftDisplay::Setup(bool not_used, int debug_level) {
 
 void TftDisplay::HelloWorld() {}
 
+void TftDisplay::Clear() {}
+
 void TftDisplay::Display(bool a, const float *b, const float *c) {}
 
 #endif

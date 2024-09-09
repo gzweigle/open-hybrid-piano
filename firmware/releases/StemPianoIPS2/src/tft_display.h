@@ -99,6 +99,7 @@ class TftDisplay
     void Setup(bool, int);
     void HelloWorld();
     void Display(bool, const float *, const float *);
+    void Clear();
 
 };
 
