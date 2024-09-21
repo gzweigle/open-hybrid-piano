@@ -34,6 +34,8 @@
 #define MY_SERIAL_MIDI MIDI_NAMESPACE::SerialMIDI<HardwareSerial>
 #define MY_MIDI_INTERFACE MIDI_NAMESPACE::MidiInterface<MY_SERIAL_MIDI>
 
+#define ENABLE_USB_MIDI
+
 class MidiOut
 {
   public:
