@@ -51,36 +51,42 @@ void MidiOut::SendNoteOff(AutoMute *mute, const bool *event, const float *veloci
 void MidiOut::SendPedal(DspPedal *DspP) {
   if (DspP->GetSustainCrossedDownThreshold() == true) {
     mi_->sendControlChange(64, pedal_midi_value_, midi_channel_);
+    usbMIDI.sendControlChange(64, pedal_midi_value_, midi_channel_);
     if (debug_level_ >= DEBUG_STATS) {
       Serial.println("MIDI sustain is now ON.");
     }
   }
   else if (DspP->GetSustainCrossedUpThreshold() == true) {
     mi_->sendControlChange(64, 0, midi_channel_);
+    usbMIDI.sendControlChange(64, 0, midi_channel_);
     if (debug_level_ >= DEBUG_STATS) {
       Serial.println("MIDI sustain is now OFF.");
     }
   }
   if (DspP->GetSostenutoCrossedDownThreshold() == true) {
     mi_->sendControlChange(66, pedal_midi_value_, midi_channel_);
+    usbMIDI.sendControlChange(66, pedal_midi_value_, midi_channel_);
     if (debug_level_ >= DEBUG_STATS) {
       Serial.println("MIDI sostenuto is now ON.");
     }
   }
   else if (DspP->GetSostenutoCrossedUpThreshold() == true) {
     mi_->sendControlChange(66, 0, midi_channel_);
+    usbMIDI.sendControlChange(66, 0, midi_channel_);
     if (debug_level_ >= DEBUG_STATS) {
       Serial.println("MIDI sostenuto is now OFF.");
     }
   }
   if (DspP->GetUnaCordaCrossedDownThreshold() == true) {
     mi_->sendControlChange(67, pedal_midi_value_, midi_channel_);
+    usbMIDI.sendControlChange(67, pedal_midi_value_, midi_channel_);
     if (debug_level_ >= DEBUG_STATS) {
       Serial.println("MIDI una corda is now ON.");
     }
   }
   else if (DspP->GetUnaCordaCrossedUpThreshold() == true) {
     mi_->sendControlChange(67, 0, midi_channel_);
+    usbMIDI.sendControlChange(67, 0, midi_channel_);
     if (debug_level_ >= DEBUG_STATS) {
       Serial.println("MIDI una corda is now OFF.");
     }
@@ -123,9 +129,11 @@ const bool *event, const float *velocity, bool send_on) {
       mute->AutomaticallyDecreaseVolume(velocity_int, debug_level_);
       if (send_on == true) {
         mi_->sendNoteOn(midi_note, velocity_potentially_muted, midi_channel_);
+	usbMIDI.sendNoteOn(midi_note, velocity_potentially_muted, midi_channel_);
       }
       else {
         mi_->sendNoteOff(midi_note, velocity_potentially_muted, midi_channel_);
+	usbMIDI.sendNoteOff(midi_note, velocity_potentially_muted, midi_channel_);
       }
     }
   }
