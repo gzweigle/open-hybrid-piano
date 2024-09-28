@@ -139,7 +139,7 @@ void HammerSettings::SetAllSettingValues() {
   // damper position, declare a damper event.
   damper_threshold = 0.5;
 
-  // Magic value to get velocity in range [0,1].
+  // Magic value to get velocity in range [-1,0].
   damper_velocity_scaling = 0.025;
 
   ////////
