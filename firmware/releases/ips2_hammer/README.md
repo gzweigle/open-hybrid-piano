@@ -4,7 +4,7 @@ Hammer processing code running on a Teensy 4.1 processor and the IPS 2.X mainboa
 
 Place this code in the same directory location as the main Arduino project for the hammer board.
 
-May need to change the extension of *src_hammer.cpp* to *src_hammer.ino* before compiling.
+May need to change the extension of *src_hammer.ino* to *src_hammer.cpp* before compiling.
 
 In hammer_settings.cpp is the following code:
 

@@ -294,9 +294,8 @@ void loop() {
     }
 
     // Send a packet of calibrated data.
-    bool sustain_pressed = DspP.GetSustainCrossedUpThreshold();
     Eth.SendPianoPacket(calibrated_floats, switch_enable_ethernet,
-    sustain_pressed, Set.damper_threshold, Set.test_index);
+    Set.test_index);
 
     if (Set.test_index < 0) {
       // Run the TFT display.

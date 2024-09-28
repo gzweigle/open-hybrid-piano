@@ -19,8 +19,6 @@
 // netwwork.h
 //
 // This class is not hardware dependent.
-//
-// Super simple send measurements over UDP Ethernet. 
 
 #ifndef NETWORK_H_
 #define NETWORK_H_
@@ -32,15 +30,12 @@
 #include <NativeEthernet.h>
 #include <NativeEthernetUdp.h>
 
-#define MAX_ETHERNET_BYTES (2*(NUM_CHANNELS))
-#define ETHERNET_PACKET_SIZE_FLOATS 12
-
 class Network
 {
   public:
     Network();
     void Setup(const char *, const char *, int, bool, int);
-    void SendPianoPacket(const float *, bool, bool, float, int);
+    void SendPianoPacket(const float *, bool, int);
 
   private:
     int debug_level_;
@@ -49,20 +44,16 @@ class Network
     int computer_ip_[4];
     int udp_port_;
     bool network_ok_;
-    bool disable_network_;
-    uint8_t ethernet_values_[3*(MAX_ETHERNET_BYTES)];
+    uint8_t ethernet_values_[2*(NUM_CHANNELS)];
 
     bool network_has_been_setup_;
     bool switch_enable_ethernet_last_;
-
-    int ethernet_start_ind_;
 
     EthernetUDP Udp;
 
     void GetMacAddress();
     void SetIpAddresses(const char *, const char *, int);
     void SetupNetwork(bool);
-    void BuildPacket(float *, const float *, bool, float, int);
 };
 
 #else
@@ -71,8 +62,8 @@ class Network
 {
   public:
     Network();
-    void Setup(int, int, int);
-    void SendPianoPacket(int, int, float, float);
+    void Setup(const char *, const char *, int, bool, int);
+    void SendPianoPacket(const float *, bool, int);
 };
 
 #endif

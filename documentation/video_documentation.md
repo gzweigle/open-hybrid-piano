@@ -267,3 +267,7 @@ Step 29 - Fixing Sources of Inaccuracy https://www.youtube.com/watch?v=yqkRKSGX6
 9. Analog front end.
 10. Reflective material.
 11. Ambient light.
+
+Step 30 - Testing boards from a new manufacturer https://www.youtube.com/watch?v=tyN7v7L9VIQ
+
+Step 31 - Web application displaying all 96 streaming measurements https://www.youtube.com/watch?v=AWMlzoCq9G0

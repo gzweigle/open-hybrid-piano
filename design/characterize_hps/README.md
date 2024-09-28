@@ -14,8 +14,6 @@ Data is useful for understanding nonlinearities, noise, distortion, and toleranc
 ### stem piano
 Code running on piano must include streaming raw analog-to-digital (ADC) counts over Ethernet. The *Stem Piano G* release supports this.
 
-Edit the data placed in Ethernet frame by *stem piano* so that the raw ADC counts for the hammer sensor under test are in the first 24-bits of Ethernet data.
-
 ### Hammer Crane
 Linear actuator and controller with an Arduino Nano. Actuator is attached by a thread to a hammer shank. Pulls shank up in a controlled manner.
 
