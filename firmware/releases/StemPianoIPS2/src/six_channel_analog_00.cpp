@@ -36,7 +36,7 @@ SixChannelAnalog00::SixChannelAnalog00() {}
 
 void SixChannelAnalog00::Setup(int sclk_frequency, bool adc_is_differential,
 bool using18bitadc, float sensor_v_max, float adc_reference, 
-float adc_global, TestpointLed *Tpl) {
+float adc_global, const int *reorder_list, TestpointLed *Tpl) {
 
   sclk_frequency_ = sclk_frequency;
   adc_is_differential_ = adc_is_differential;
@@ -51,6 +51,11 @@ float adc_global, TestpointLed *Tpl) {
   }
   else {
     adc_max_value_ = 65535.0;
+  }
+
+  // Custom reordering.
+  for (int ind = 0; ind < NUM_CHANNELS; ind++) {
+    reorder_list_[ind] = reorder_list[ind];
   }
 
   // Pin numbers are set by board layout.
@@ -236,13 +241,27 @@ float *normalized_float, const unsigned int *adc_values) {
 
 // Connections to back row of 16:1 multiplexers is reversed
 // on PCB compared to the piano key order. Fix that here.
-void SixChannelAnalog00::ReorderAdcValues(unsigned int *data) {
-  unsigned int tmp;
-  for (int ind = 0; ind < 4; ind++) {
-    for (int grp = 0; grp < NUM_CHANNELS; grp += 16) {
-      tmp = data[ind + grp];
-      data[ind + grp] = data[7-ind + grp];
-      data[7-ind + grp] = tmp;
+void SixChannelAnalog00::ReorderAdcValues(unsigned int *data,
+const unsigned int *data_in) {
+  // Swap the back row.
+  for (int grp = 0; grp < NUM_CHANNELS; grp += 16) {
+    for (int ind = 0; ind < 4; ind++) {
+      data[ind + grp] = data_in[7-ind + grp];
+      data[7-ind + grp] = data_in[ind + grp];
     }
+  }
+  // Keep the front row as-is.
+  for (int grp = 8; grp < NUM_CHANNELS; grp += 16) {
+    for (int ind = 0; ind < 8; ind++) {
+      data[ind + grp] = data_in[ind + grp];
+    }
+  }
+  // Custom reordering.
+  unsigned int data_tmp[NUM_CHANNELS];
+  for (int ind = 0; ind < NUM_CHANNELS; ind++) {
+    data_tmp[ind] = data[ind];
+  }
+  for (int ind = 0; ind < NUM_CHANNELS; ind++) {
+    data[ind] = data_tmp[reorder_list_[ind]];
   }
 }

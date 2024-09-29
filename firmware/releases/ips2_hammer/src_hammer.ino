@@ -122,7 +122,7 @@ void setup(void) {
   // These two classes are common to hammer and pedal boards.
   Adc.Setup(Set.adc_spi_clock_frequency, Set.adc_is_differential,
   Set.using18bitadc, Set.sensor_v_max, Set.adc_reference,
-  Set.adc_global_scale, &Tpl);
+  Set.adc_global_scale, Set.reorder_list, &Tpl);
   B2B.Setup(Set.canbus_enable);
 
   // Diagnostics and status
@@ -181,6 +181,7 @@ bool switch_disable_and_reset_calibration;
 
 // Data from ADC.
 unsigned int raw_samples[NUM_CHANNELS];
+unsigned int raw_samples_reordered[NUM_CHANNELS];
 int position_adc_counts[NUM_CHANNELS];
 
 // Damper, hammer, and pedal data.
@@ -248,10 +249,10 @@ void loop() {
     Adc.GetNewAdcValues(raw_samples, Set.test_index);
 
     // Reorder the back row.
-    Adc.ReorderAdcValues(raw_samples);
+    Adc.ReorderAdcValues(raw_samples_reordered, raw_samples);
 
     // Normalize the ADC values.
-    Adc.NormalizeAdcValues(position_adc_counts, position_floats, raw_samples);
+    Adc.NormalizeAdcValues(position_adc_counts, position_floats, raw_samples_reordered);
 
     // Undo the position errors due to physical tolerances.
     bool all_notes_using_cal = CalP.Calibration(switch_freeze_cal_values,

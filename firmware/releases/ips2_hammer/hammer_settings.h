@@ -83,6 +83,7 @@ class HammerSettings
     bool canbus_enable;
     bool using_display;
     bool connected_channel[NUM_CHANNELS];
+    int reorder_list[NUM_CHANNELS];
 };
 
 #endif

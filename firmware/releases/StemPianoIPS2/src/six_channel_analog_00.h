@@ -50,10 +50,10 @@ class SixChannelAnalog00
 {
   public:
     SixChannelAnalog00();
-    void Setup(int, bool, bool, float, float, float, TestpointLed *);
+    void Setup(int, bool, bool, float, float, float, const int *, TestpointLed *);
     void GetNewAdcValues(unsigned int *, int);
     void NormalizeAdcValues(int *, float *, const unsigned int *);
-    void ReorderAdcValues(unsigned int *);
+    void ReorderAdcValues(unsigned int *, const unsigned int *);
  
   private:
     TestpointLed *Tpl_;
@@ -76,6 +76,9 @@ class SixChannelAnalog00
     const int mux8_a_[6] = {0,1,0,1,1,1};
     const int mux8_b_[6] = {1,0,0,1,1,0};
     const int mux8_c_[6] = {0,0,0,0,1,1};
+
+    // For custom reordering.
+    int reorder_list_[NUM_CHANNELS];
 
     // Keep track of pin names.
     int convst_;

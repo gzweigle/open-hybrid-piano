@@ -168,9 +168,17 @@ void loop() {
 
   // Read switch inputs.
   switch_select_key_for_ethernet = SwIPS1.read_switch_1();
+
+  // ips_sw2_position2 (ENABLE_ETHERNET).
   switch_enable_ethernet = SwIPS2.read_switch_2();
+
+  // ips_sw2_position1 (ENABLE_TFT).
   switch_tft_display = SwIPS2.read_switch_1();
+
+  // sca_sw1_position2 (FREEZE_CAL_VALUES).
   switch_freeze_cal_values = SwSCA1.read_switch_2();
+
+  // sca_sw1_positon1 (DELETE_CAL_VALUES).
   switch_disable_and_reset_calibration = SwSCA1.read_switch_1();
 
   // When the TFT is operational.

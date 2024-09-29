@@ -356,7 +356,7 @@ void TftDisplay::LiveDraw() {
     }
     // Takes approximately 20 microseconds.
     Tft_->drawFastHLine(live_draw_x_, live_draw_y_, live_draw_l_, ILI9341_WHITE);
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_MINOR) {
       Serial.print("TFT drawing time = ");
       Serial.print(micros() - live_last_time_);
       Serial.println(" microseconds.");
@@ -371,7 +371,7 @@ void TftDisplay::LiveDraw() {
     }
     // Takes approximately 7 microseconds.
     Tft_->drawFastHLine(live_draw_x_, live_draw_y_, live_draw_l_, ILI9341_BLACK);
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_MINOR) {
       Serial.print("TFT drawing time = ");
       Serial.print(micros() - live_last_time_);
       Serial.println(" microseconds.");
