@@ -21,25 +21,30 @@
 # Type: python get_hammer_data.py
 #
 # The data is stored in a text file, one column per key.
-# 
-# num_received_values must match number of sent values from the piano.
+#
+# To view data, install Octave.
+# Type: x=load("hammer_position.txt");plot(x);
 
 # Convert encoded integers into original value.
-def convert_to_float(a, b, c):
+def convert_to_float(a, b):
     x  =  int(a)&255
     x |= (int(b)&255)<<8
-    x |= (int(c)&255)<<16
-    y = float(x) / 8388608.0
-    if y > 1:
-        y -= 2
+    if x & (1 << 15):
+        x -= (1 << 16)
+    y = float(x) / 32768.0
     return y
 
 import socket
 import time
 
-file_length = 20000
-max_packet_size = 100
-num_received_values = 12
+# Settings values.
+file_length = 10000     # Total number of values to receive.
+note_number_min = 2     # First note is B0 (index 2).
+note_number_max = 3     # Last note is C1 (index 3).
+
+# Fixed values.
+num_received_values = note_number_max - note_number_min + 1
+max_packet_size = 2*96
 
 # This computer's IP address. Must match value in Teensy.
 UDP_IP = FILL IN BEFORE RUNNING
@@ -58,12 +63,12 @@ for ind in range(0,file_length):
     try:
         data, addr = client.recvfrom(max_packet_size)
     except socket.timeout as e:
-        data = [0] * num_received_values
+        data = [0] * max_packet_size
 
-    # Data is sent as three 8-bit integers. Convert to [-1, ..., 1].
+    # Data is sent as two 8-bit integers. Convert to [-1, ..., 1].
     data_float = []
-    for k in range(0,num_received_values):
-      data_float.append(convert_to_float(data[3*k+0], data[3*k+1], data[3*k+2]))
+    for k in range(note_number_min,note_number_max+1):
+      data_float.append(convert_to_float(data[2*k+0], data[2*k+1]))
 
     # Write to file as a row of floats.
     # Write only the single note tested.
