@@ -8,6 +8,10 @@ Depending on pianist skill, the piano accuracy may need further improvement. For
 
 ## Major Historical Milestones
 
+### November 29, 2024 - First Independent Build
+
+A second open-hybrid-piano / stem-piano has been independently built and is working.
+
 ### April 21, 2024 - Accuracy Improvement
 
 Improve note-to-note consistency. Eliminate trimming resistors.
