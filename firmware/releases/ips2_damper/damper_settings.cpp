@@ -97,6 +97,10 @@ void DamperSettings::SetAllSettingValues() {
   // the ADC outputs its maximum value.
   adc_reference = 2.5;
 
+  // A global scaling applied to all ADC inputs.
+  // Normally set to 1.0.
+  adc_global_scale = 0.5;
+
   ////////
   // Switch settings.
   switch_debounce_micro = 500000; // Read DIP switches at this interval, microseconds.
@@ -147,5 +151,25 @@ void DamperSettings::SetAllSettingValues() {
   // Turn off unused pedal inputs.
   for (int channel = NUM_NOTES; channel < NUM_CHANNELS; channel++) {
     connected_channel[channel] = false;
+  }
+
+  ////////
+  // Optional custom reordering.
+  // To customize reordering, place the new source index into reorder_list.
+  //
+  // For example, assume that a sensor at C4 is connected to the lowest
+  // input on IPS 2.0. When starting to number with index 0, C4 is index 39.
+  // So, set reorder_list[39] = 0.
+  // Without reordering, the lowest input on IPS 2.0 is for B0.
+  //
+  // If the sensor at C4 is connected to the 34th input on IPS 2.0, then set
+  // reorder_list[39] = 34.
+  // Without reordering, the 34th input on IPS 2.0 is for G3.
+  //
+  // Use the assembly_manual.md document for IPS 2.0 numbers.
+  //
+  // The default is no custom reordering.
+  for (int channel = 0; channel < NUM_CHANNELS; channel++) {
+    reorder_list[channel] = channel;
   }
 }

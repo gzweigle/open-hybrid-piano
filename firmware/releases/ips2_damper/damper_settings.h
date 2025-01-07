@@ -47,6 +47,7 @@ class DamperSettings
     bool using18bitadc;
     float sensor_v_max;
     float adc_reference;
+    float adc_global_scale;
     int switch_debounce_micro;
     int switch11_ips_pin;
     int switch12_ips_pin;
@@ -63,6 +64,7 @@ class DamperSettings
     bool canbus_enable;
     bool using_display;
     bool connected_channel[NUM_CHANNELS];
+    int reorder_list[NUM_CHANNELS];
 };
 
 #endif

@@ -104,7 +104,8 @@ void setup(void) {
   // only required if using a separate set of sensors for the dampers.
   // These two classes are common to hammer and pedal boards.
   Adc.Setup(Set.adc_spi_clock_frequency, Set.adc_is_differential,
-  Set.using18bitadc, Set.sensor_v_max, Set.adc_reference, &Tpl);
+  Set.using18bitadc, Set.sensor_v_max, Set.adc_reference,
+  Set.adc_global_scale, Set.reorder_list, &Tpl);
   B2B.Setup(Set.canbus_enable);
 
   // Diagnostics and status
@@ -136,7 +137,6 @@ void setup(void) {
 int startup_counter = 0;
 
 // Switches.
-bool switch_select_key_for_ethernet;
 bool switch_enable_ethernet;
 bool switch_tft_display;
 bool switch_freeze_cal_values;
@@ -145,6 +145,7 @@ bool switch_disable_and_reset_calibration;
 // Data from ADC.
 unsigned int raw_samples[NUM_CHANNELS];
 unsigned int raw_samples_reversed[NUM_CHANNELS];
+unsigned int raw_samples_reordered[NUM_CHANNELS];
 int position_adc_counts[NUM_CHANNELS];
 
 // Damper, hammer, and pedal data.
@@ -165,9 +166,6 @@ void loop() {
   SwIPS2.updatePuDoState("IPS21", "IPS22");
   SwSCA2.updatePuDoState("SCA21", "SCA22");
   SwSCA1.updatePuDoState("SCA11", "SCA12");
-
-  // Read switch inputs.
-  switch_select_key_for_ethernet = SwIPS1.read_switch_1();
 
   // ips_sw2_position2 (ENABLE_ETHERNET).
   switch_enable_ethernet = SwIPS2.read_switch_2();
@@ -211,16 +209,14 @@ void loop() {
     }
 
     // Reorder the back row.
-    Adc.ReorderAdcValues(raw_samples_reversed);
+    Adc.ReorderAdcValues(raw_samples_reordered, raw_samples_reversed);
 
     // Normalize the ADC values.
-    Adc.NormalizeAdcValues(position_adc_counts, position_floats, raw_samples_reversed);
+    Adc.NormalizeAdcValues(position_adc_counts, position_floats, raw_samples_reordered);
 
     // Undo the position errors due to physical tolerances.
     bool all_notes_using_cal = CalP.Calibration(switch_freeze_cal_values,
     switch_disable_and_reset_calibration, calibrated_floats, position_floats);
-
-    B2B.SendDamperData(calibrated_floats);
 
     // Zero out the signal from any unconnected pins to avoid noise
     // or anything else causing an unwanted piano note to play.
@@ -231,8 +227,9 @@ void loop() {
       }
     }
 
+    B2B.SendDamperData(calibrated_floats);
     Eth.SendPianoPacket(calibrated_floats, switch_enable_ethernet,
-    switch_select_key_for_ethernet, damper_threshold_med, Set.test_index);
+    Set.test_index);
 
     if (Set.test_index < 0) {
       // Run the TFT display.
