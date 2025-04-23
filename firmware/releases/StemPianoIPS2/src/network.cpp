@@ -19,6 +19,18 @@
 // network.cpp
 //
 // This class is not hardware dependent.
+//
+// How to use UDP (server):
+// - Connect an Ethernet cable then power on stem_piano.
+// - Data automatically starts transmitting immediately.
+// - Setup a UDP client on another computer to receive the data.
+//
+// How to use TCP (client):
+// - Connect an Ethernet cable then power on stem_piano.
+// - Data does not start transmitting.
+// - Setup a TCP server on another computer, set it to begin listening for a client connection.
+// - If not require_tcp_connection, switch the Ethernet DIP off then on.
+// - If require_tcp_connection, it will continuously try to connect (Ethernet DIP must also be on). Piano won't be playable unless Ethernet data is streaming.
 
 #include "network.h"
 
@@ -33,35 +45,41 @@
 
 Network::Network() {}
 
-void Network::Setup(const char *computer_ip, const char *teensy_ip, int udp_port, bool switch_enable_ethernet, int debug_level) {
+void Network::Setup(bool true_for_tcp_else_udp, const char *computer_ip,
+  const char *teensy_ip, int port, bool switch_enable_ethernet, int debug_level) {
 
   debug_level_ = debug_level;
-  network_ok_ = false;
+  send_data_ok_ = false;
 
-  // For checking configuration switch ane Ethernet enable.
-  network_has_been_setup_ = false;
+  // If this is true, TCP client connection.
+  // If false, UDP server broadcast.
+  true_for_tcp_else_udp_ = true_for_tcp_else_udp;
+
+  // For checking configuration switch and Ethernet enable.
+  network_has_been_initialized_ = false;
   switch_enable_ethernet_last_ = true;
 
+  // Lower the power-up delay (default is 1000 ms).
+  Client.setConnectionTimeout(100);
+
   GetMacAddress();
-  SetIpAddresses(computer_ip, teensy_ip, udp_port);
-  SetupNetwork(switch_enable_ethernet);
+  SetIpAddresses(computer_ip, teensy_ip, port);
+  SetupNetwork(false, switch_enable_ethernet, false); // Force connect.
 }
 
 void Network::SendPianoPacket(const float *data_in, bool switch_enable_ethernet,
-int test_index) {
+bool switch_require_tcp_connection, int test_index) {
 
-  // If switch goes from low to high, setup the network.
-  if (switch_enable_ethernet == true && switch_enable_ethernet_last_ == false) {
-    if (debug_level_ >= DEBUG_STATS) {
-      Serial.println("Detected switch to enable Ethernet, setting up the network...");
-    }
-    SetupNetwork(true);
+  SetupNetwork(switch_require_tcp_connection,
+    switch_enable_ethernet, switch_enable_ethernet_last_);
+  if (true_for_tcp_else_udp_ == true) {
+    EndNetwork(switch_enable_ethernet, switch_enable_ethernet_last_);
   }
   switch_enable_ethernet_last_ = switch_enable_ethernet;
 
   if (switch_enable_ethernet == true) {
 
-    if (network_ok_ == true) {
+    if (send_data_ok_ == true) {
 
       int data_int;
       for (int ind = 0; ind < NUM_CHANNELS; ind++) {
@@ -81,22 +99,41 @@ int test_index) {
         ethernet_values_[2*ind+1] = (data_int>>8)&255;
       }
 
-      // Send the data via UDP.
-      IPAddress ip(computer_ip_[0], computer_ip_[1], computer_ip_[2], computer_ip_[3]);
-      Udp.beginPacket(ip, udp_port_);
-
-      if (test_index < 0) {
-        Udp.write(ethernet_values_, sizeof(ethernet_values_));
-      }
-      else {
-        // Send only the first sample.
-        Udp.write(ethernet_values_, 3);
+      // Setup for UDP each time.
+      if (true_for_tcp_else_udp_ == false) {
+        IPAddress ip(computer_ip_[0], computer_ip_[1], computer_ip_[2], computer_ip_[3]);
+        Udp.beginPacket(ip, port_);
       }
 
-      Udp.endPacket();
-      Udp.flush();
+      if (test_index < 0) {  // Normal case.
+        if (true_for_tcp_else_udp_ == true) {
+          if (Client.connected()) {
+            Client.write(ethernet_values_, sizeof(ethernet_values_));
+          }
+        }
+        else {
+          Udp.write(ethernet_values_, sizeof(ethernet_values_));
+        }
+      }
+      else { // Send only the first sample.
+        if (true_for_tcp_else_udp_ == true) {
+          if (Client.connected()) {
+            Client.write(ethernet_values_, 3);
+          }
+        }
+        else {
+          Udp.write(ethernet_values_, 3);
+        }
+      }
+
+      // Finish UDP each time.
+      if (true_for_tcp_else_udp_ == false) {
+        Udp.endPacket();
+        Udp.flush();
+      }
     }
   }
+
 }
 
 void Network::GetMacAddress() {
@@ -108,9 +145,9 @@ void Network::GetMacAddress() {
   }
 }
 
-// Teensy and Computer must be on same default gateway.
+// Teensy and Computer must be on same gateway.
 void Network::SetIpAddresses(const char *computer_ip, const char *teensy_ip,
-int udp_port) {
+int port) {
 
   sscanf(computer_ip, "%d.%d.%d.%d",
   computer_ip_, computer_ip_ + 1, computer_ip_ + 2, computer_ip_ + 3);
@@ -118,7 +155,7 @@ int udp_port) {
   sscanf(teensy_ip, "%d.%d.%d.%d",
   teensy_ip_, teensy_ip_ + 1, teensy_ip_ + 2, teensy_ip_ + 3);
 
-  udp_port_ = udp_port;
+  port_ = port;
 
   if (debug_level_ >= DEBUG_STATS) {
     Serial.println("If using Ethernet:");
@@ -126,31 +163,27 @@ int udp_port) {
     Serial.println("  must match for the program running on computer and");
     Serial.println("  attempting to communicate with the IPS 2.X board.");
     Serial.println("  (Ethernet values are set in the settings C++ file).");
-    Serial.print("  The assigned Computer IP address is: ");
-    Serial.print(computer_ip_[0]);
-    Serial.print(".");
-    Serial.print(computer_ip_[1]);
-    Serial.print(".");
-    Serial.print(computer_ip_[2]);
-    Serial.print(".");
-    Serial.println(computer_ip_[3]);
-    Serial.print("  The assigned Teensy IP address is: ");
-    Serial.print(teensy_ip_[0]);
-    Serial.print(".");
-    Serial.print(teensy_ip_[1]);
-    Serial.print(".");
-    Serial.print(teensy_ip_[2]);
-    Serial.print(".");
-    Serial.println(teensy_ip_[3]);
-    Serial.print("  The assigned UDP port is: ");
-    Serial.println(udp_port_);
+    Serial.print("  The Computer IP address is: ");
+    Serial.printf(" %d.%d.%d.%d:%d\n",computer_ip_[0], Serial.print(computer_ip_[1]),
+    computer_ip_[2],computer_ip_[3], port_);
+    Serial.print("  The Teensy IP address is: ");
+    Serial.printf(" %d.%d.%d.%d:%d\n",teensy_ip_[0], teensy_ip_[1],teensy_ip_[2],
+    teensy_ip_[3], port_);
+    if (true_for_tcp_else_udp_ == true) {
+      Serial.println("  Connection is TCP client.");
+    }
+    else {
+      Serial.println("  Connection is UDP server broadcast.");
+    }
   }
 
 }
 
-void Network::SetupNetwork(bool switch_enable_ethernet) {
+void Network::SetupNetwork(bool switch_require_tcp_connection,
+  bool switch_enable_ethernet, bool switch_enable_ethernet_last) {
 
-  if (switch_enable_ethernet == true && network_has_been_setup_ == false) {
+  if ((switch_enable_ethernet == true && switch_enable_ethernet_last == false) || 
+  switch_require_tcp_connection == true) {
 
     // If here and Ethernet is not connected, code hangs until
     // Ethernet is connected. With Ethernet disconnected, changing
@@ -158,8 +191,10 @@ void Network::SetupNetwork(bool switch_enable_ethernet) {
     // Must restart with configuration switch set for no Ethernet
     // or connect an Ethernet cable.
 
-    IPAddress ip(teensy_ip_[0], teensy_ip_[1], teensy_ip_[2], teensy_ip_[3]);
-    Ethernet.begin(mac_address_, ip);
+    if (network_has_been_initialized_ == false) {
+      IPAddress ip(teensy_ip_[0], teensy_ip_[1], teensy_ip_[2], teensy_ip_[3]);
+      Ethernet.begin(mac_address_, ip);
+    }
 
     if (Ethernet.hardwareStatus() == EthernetNoHardware) {
       if (debug_level_ >= DEBUG_STATS) {
@@ -172,18 +207,57 @@ void Network::SetupNetwork(bool switch_enable_ethernet) {
       }
     }
     else {
-      Udp.begin(udp_port_);
-      network_ok_ = true;
+      if (true_for_tcp_else_udp_ == true) {
+        if (Client.connected() == false) {
+          IPAddress ip(computer_ip_[0], computer_ip_[1], computer_ip_[2], computer_ip_[3]);
+          Serial.printf("Attempting TCP connection to %d.%d.%d.%d:%d\n",
+            computer_ip_[0], computer_ip_[1], computer_ip_[2], computer_ip_[3], port_);
+          if (Client.connect(ip, port_)) {
+            Serial.println("TCP connection established.");
+            send_data_ok_ = true;
+          }
+          else {
+            Serial.println("No TCP connection established.");
+            send_data_ok_ = false;
+          }
+        }
+      }
+      else if (network_has_been_initialized_ == false) {
+        Udp.begin(port_);
+        send_data_ok_ = true;
+      }
     }
 
-    network_has_been_setup_ = true;
+    network_has_been_initialized_ = true;
 
-    if (debug_level_ >= DEBUG_STATS) {
+    if (send_data_ok_ == true && debug_level_ >= DEBUG_STATS &&
+      switch_require_tcp_connection == false) {
       Serial.println("Ethernet is setup.");
     }
 
   }
 
+}
+
+// Get here either on startup or if switch goes high to low.
+void Network::EndNetwork(bool switch_enable_ethernet, bool switch_enable_ethernet_last) {
+  if (switch_enable_ethernet == false && switch_enable_ethernet_last == true) {
+    if (true_for_tcp_else_udp_ == true) {
+      if (Client.connected()) {
+        if (debug_level_ >= DEBUG_STATS) {
+          Serial.println("Flushing the TCP connection.");
+        }
+        Client.flush();
+        if (debug_level_ >= DEBUG_STATS) {
+          Serial.println("Stopping the TCP connection.");
+        }
+        Client.stop();
+        if (debug_level_ >= DEBUG_STATS) {
+          Serial.println("Stopped the TCP connection.");
+        }
+      }
+    }
+  }
 }
 
 #else

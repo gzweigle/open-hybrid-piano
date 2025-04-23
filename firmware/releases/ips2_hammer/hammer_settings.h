@@ -77,9 +77,10 @@ class HammerSettings
     int una_corda_pin;
     int una_corda_connected_pin;
     int midi_channel;
+    bool true_for_tcp_else_udp;
     char teensy_ip[IP_STRING_LENGTH];
     char computer_ip[IP_STRING_LENGTH];
-    int upd_port;
+    int network_port;
     bool canbus_enable;
     bool using_display;
     bool connected_channel[NUM_CHANNELS];

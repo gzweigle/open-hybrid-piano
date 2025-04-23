@@ -34,26 +34,29 @@ class Network
 {
   public:
     Network();
-    void Setup(const char *, const char *, int, bool, int);
-    void SendPianoPacket(const float *, bool, int);
+    void Setup(bool, const char *, const char *, int, bool, int);
+    void SendPianoPacket(const float *, bool, bool, int);
 
   private:
     int debug_level_;
+    bool true_for_tcp_else_udp_;
     uint8_t mac_address_[6];
     int teensy_ip_[4];
     int computer_ip_[4];
-    int udp_port_;
-    bool network_ok_;
+    int port_;
+    bool send_data_ok_;
     uint8_t ethernet_values_[2*(NUM_CHANNELS)];
 
-    bool network_has_been_setup_;
+    bool network_has_been_initialized_;
     bool switch_enable_ethernet_last_;
 
-    EthernetUDP Udp;
+    EthernetUDP Udp;        // For UDP.
+    EthernetClient Client;  // For TCP.
 
     void GetMacAddress();
     void SetIpAddresses(const char *, const char *, int);
-    void SetupNetwork(bool);
+    void SetupNetwork(bool, bool, bool);
+    void EndNetwork(bool, bool);
 };
 
 #else

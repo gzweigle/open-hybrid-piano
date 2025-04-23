@@ -220,10 +220,11 @@ void HammerSettings::SetAllSettingValues() {
   ////////
   // Ethernet data.
   //
+  true_for_tcp_else_udp = true;
   MUST EDIT TO ADD VALUES BEFORE RUNNING.
   snprintf(teensy_ip, 16, "X.X.X.X");   // Arbitrary assigned Teensy IP
   snprintf(computer_ip,16, "X.X.X.X");  // Get from ipconfig command on local computer
-  upd_port = X;  // Must match UDP port in receiver code
+  network_port = X;  // Must match UDP port in receiver code
   //
 
   ////////

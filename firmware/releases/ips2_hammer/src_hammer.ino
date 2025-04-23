@@ -148,7 +148,7 @@ void setup(void) {
 
   // Common on hammer and pedal board: Ethernet, test points, TFT display, etc.
   CalP.Setup(Set.calibration_threshold, Set.debug_level, &Nonv);
-  Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port,
+  Eth.Setup(Set.true_for_tcp_else_udp, Set.computer_ip, Set.teensy_ip, Set.network_port,
   SwIPS2.direct_read_switch_2(), Set.debug_level);
   Tpl.Setup();
   Tmg.Setup(Set.adc_sample_period_microseconds);
@@ -172,9 +172,10 @@ void setup(void) {
 int startup_counter = 0;
 
 // Switches.
+bool switch_tft_display;
 bool switch_external_damper_board;
 bool switch_enable_ethernet;
-bool switch_tft_display;
+bool switch_require_tcp_connection;
 bool switch_enable_dynamic_velocity;
 bool switch_freeze_cal_values;
 bool switch_disable_and_reset_calibration;
@@ -202,14 +203,17 @@ void loop() {
 
   // Read all switch inputs.
 
+  // ips_sw1_position2 (ENABLE_TFT).
+  switch_tft_display = SwIPS1.read_switch_2();
+
   // ips_sw1_position1 (EXTERNAL_DAMPER_BOARD).
   switch_external_damper_board = SwIPS1.read_switch_1();
 
   // ips_sw2_position2 (ENABLE_ETHERNET).
   switch_enable_ethernet = SwIPS2.read_switch_2();
 
-  // ips_sw2_position1 (ENABLE_TFT).
-  switch_tft_display = SwIPS2.read_switch_1();
+  // ips_sw2_position1 (REQUIRE_TCP).
+  switch_require_tcp_connection = SwIPS2.read_switch_1();
 
   // sca_sw2_position1 (DYNAMIC_VELOCITY_SCALING).
   switch_enable_dynamic_velocity = SwSCA2.read_switch_1();
@@ -307,7 +311,7 @@ void loop() {
 
     // Send a packet of calibrated data.
     Eth.SendPianoPacket(calibrated_floats, switch_enable_ethernet,
-    Set.test_index);
+      switch_require_tcp_connection, Set.test_index);
 
     if (Set.test_index < 0) {
       // Run the TFT display.
