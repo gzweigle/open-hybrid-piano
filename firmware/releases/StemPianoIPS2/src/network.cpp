@@ -82,6 +82,7 @@ bool switch_require_tcp_connection, int test_index) {
     if (send_data_ok_ == true) {
 
       int data_int;
+
       for (int ind = 0; ind < NUM_CHANNELS; ind++) {
 
         // Input data is in range -1.0, ... 1.0 as floats.
@@ -118,11 +119,11 @@ bool switch_require_tcp_connection, int test_index) {
       else { // Send only the first sample.
         if (true_for_tcp_else_udp_ == true) {
           if (Client.connected()) {
-            Client.write(ethernet_values_, 3);
+            Client.write(ethernet_values_, 2);
           }
         }
         else {
-          Udp.write(ethernet_values_, 3);
+          Udp.write(ethernet_values_, 2);
         }
       }
 
