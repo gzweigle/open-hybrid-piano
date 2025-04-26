@@ -1,12 +1,12 @@
-# Ethernet Data Acquisition
+# UDP Ethernet Data Acquisition and Display
 
 ## To get data from hammer board
 
-Edit get_hammer_data.py and add IP address and port number.
+Edit *get_hammer_data.py* and add IP address and port number.
 
 These must match the values in the board's settings .cpp file.
 
-From a command line type: python get_hammer_data.py.
+From a command line type: *python get_hammer_data.py*.
 
 ## Settings
 
@@ -24,6 +24,6 @@ Run Octave or Matlab run.
 
 Type in command line:
 
-clear; x = load("hammer_position.txt"); plot(x); grid;
+*clear; x = load("hammer_position.txt"); plot(x); grid;*
 
 In this directory is an example hammer_position.txt output. The example output was generated using the get_hammer_data.py with settings in the file.
