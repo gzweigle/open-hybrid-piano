@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // damper_settings.cpp
 //
@@ -34,11 +35,12 @@ DamperSettings::DamperSettings() {}
 void DamperSettings::SetAllSettingValues() {
 
   // Debug. See stem_piano_ips2.h for information.
-  // DEBUG_NONE
-  // DEBUG_STATS
-  // DEBUG_MINOR
-  // DEBUG_ALL
-  debug_level = DEBUG_STATS;
+  // DEBUG_NONE = Nothing displayed except startup info.
+  // DEBUG_INFO = Occasional code state information.
+  // DEBUG_NOTES = Above plus info about note changes.
+  // DEBUG_ALG = Above plus algorithm details.
+  // DEBUG_ALL = Above plus useless stuff.
+  debug_level = DEBUG_INFO;
   Serial.print("Debug level is set to ");
   Serial.println(debug_level);
 
@@ -65,7 +67,7 @@ void DamperSettings::SetAllSettingValues() {
   // WARNING - For normal operation, this value must match damper board value.
   adc_sample_period_microseconds = 300;
   
-  if (debug_level >= DEBUG_STATS) {
+  if (debug_level >= DEBUG_INFO) {
     Serial.print("The sample period is set to ");
     Serial.print(adc_sample_period_microseconds);
     Serial.println(" microseconds.");
@@ -122,10 +124,11 @@ void DamperSettings::SetAllSettingValues() {
   // Ethernet data.
   //
   MUST EDIT TO ADD VALUES BEFORE RUNNING.
+  true_for_tcp_else_udp = true;
   snprintf(teensy_ip, 16, "X.X.X.X");   // Arbitrary assigned Teensy IP
   snprintf(computer_ip,16, "X.X.X.X");  // Get from ipconfig command on local computer
   // Recommend different UDP port for hammer and damper boards.
-  upd_port = X;  // Must match UDP port in receiver code
+  network_port = X;  // Must match UDP port in receiver code
   //
   ////////
 
