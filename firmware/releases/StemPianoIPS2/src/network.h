@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,9 +14,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
-// netwwork.h
+// network.h
 //
 // This class is not hardware dependent.
 
@@ -27,8 +28,21 @@
 
 #ifdef ETHERNET_INSTALLED
 
+// Can either use QNEthernet or NativeEthernet.
+// May need to load the library into Arduino software.
+// QNEthernet supports Client.setNoDelay(true);
+// No delay is needed for TCP to avoid rare
+// cases of Client.write() taking > 10 microseconds.
+// Therefore, QNEthernet is preferred for TCP connections.
+// For UDP, only NativeEthernet was tested.
+#define QNETHERNET
+#ifdef QNETHERNET
+#include <QNEthernet.h>
+using namespace qindesign::network;
+#else
 #include <NativeEthernet.h>
 #include <NativeEthernetUdp.h>
+#endif
 
 class Network
 {
@@ -45,8 +59,8 @@ class Network
     int computer_ip_[4];
     int port_;
     bool send_data_ok_;
-    uint8_t ethernet_values_[2*(NUM_CHANNELS)];
 
+    uint8_t ethernet_values_[2*(NUM_CHANNELS)];
     bool network_has_been_initialized_;
     bool switch_enable_ethernet_last_;
 
