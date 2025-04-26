@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // tft_display.cpp
 //
@@ -90,7 +91,7 @@ void TftDisplay::Setup(bool using_display, int debug_level) {
     bool ts_status = Ts_->begin(FT62XX_DEFAULT_THRESHOLD, &Wire2);
     if (ts_status == false) {
       using_display_ = false;
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.println("TFT display failed, do not know why.");
         Serial.println("TFT display will not be used.");
       }
@@ -100,21 +101,21 @@ void TftDisplay::Setup(bool using_display, int debug_level) {
         sd_card_detected_ = true;
         if (!SD_.begin(sd_cs_, SD_SCK_MHZ(10))) {
           sd_card_started_ = false;
-          if (debug_level_ >= DEBUG_STATS) {
-            Serial.println("Could not start SD card.");
+          if (debug_level_ >= DEBUG_INFO) {
+            Serial.println("Could not start the SD card.");
           }
         }
         else {
           sd_card_started_ = true;
-          if (debug_level_ >= DEBUG_STATS) {
-            Serial.println("Successfully started SD card.");
+          if (debug_level_ >= DEBUG_INFO) {
+            Serial.println("Successfully started the SD card.");
           }
         }
       }
       else {
         sd_card_detected_ = false;
         sd_card_started_ = false;
-        if (debug_level_ >= DEBUG_STATS) {
+        if (debug_level_ >= DEBUG_INFO) {
           Serial.println("No card detected for displaying images.");
         }
       }
@@ -276,7 +277,7 @@ void TftDisplay::GetTouchPosition(int *x, int *y) {
       touch_point = Ts_->getPoint();
       *x = width_ - touch_point.y;
       *y = height_ - touch_point.x;
-      if (debug_level_ >= DEBUG_MINOR) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.print("Touchscreen position (x=");
         Serial.print(*x);
         Serial.print(",y=");
@@ -303,20 +304,20 @@ void TftDisplay::Picture() {
       SD_.end();
       if (!SD_.begin(sd_cs_, SD_SCK_MHZ(10))) {
         sd_card_started_ = false;
-        if (debug_level_ >= DEBUG_STATS) {
+        if (debug_level_ >= DEBUG_INFO) {
           Serial.println("Continue to cannot start SD card.");
         }
       }
       else {
         sd_card_started_ = true;
-        if (debug_level_ >= DEBUG_STATS) {
+        if (debug_level_ >= DEBUG_INFO) {
           Serial.println("Started SD card after multiple tries.");
         }
       }
     }
     if (sd_card_started_ == true) {
       ImageReturnCode stat;
-      if (debug_level_ >= DEBUG_MINOR) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.println("New TFT picture.");
       }
       if (picture_number == 0) {
@@ -339,7 +340,7 @@ void TftDisplay::Picture() {
         stat = Reader_.drawBMP("/diy_24_thumbnail.bmp", *Tft_, 0, 0);
         picture_number = 0;
       }
-      if (debug_level_ >= DEBUG_MINOR) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.println("TftDisplay::Picture()");
         Serial.println(stat);
       }
@@ -348,15 +349,14 @@ void TftDisplay::Picture() {
 }
 
 void TftDisplay::LiveDraw() {
-  #if 1
   if (live_draw_state_ == false) {
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_INFO) {
       // Ok to borrow this as not used next time through.
       live_last_time_ = micros();
     }
     // Takes approximately 20 microseconds.
     Tft_->drawFastHLine(live_draw_x_, live_draw_y_, live_draw_l_, ILI9341_WHITE);
-    if (debug_level_ >= DEBUG_MINOR) {
+    if (debug_level_ >= DEBUG_ALL) {
       Serial.print("TFT drawing time = ");
       Serial.print(micros() - live_last_time_);
       Serial.println(" microseconds.");
@@ -365,13 +365,13 @@ void TftDisplay::LiveDraw() {
     live_draw_state_ = true;
   }
   else if (micros() - live_last_time_ > live_wait_time_) {
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_INFO) {
       // Ok to borrow this as not used next time through.
       live_last_time_ = micros();
     }
     // Takes approximately 7 microseconds.
     Tft_->drawFastHLine(live_draw_x_, live_draw_y_, live_draw_l_, ILI9341_BLACK);
-    if (debug_level_ >= DEBUG_MINOR) {
+    if (debug_level_ >= DEBUG_ALL) {
       Serial.print("TFT drawing time = ");
       Serial.print(micros() - live_last_time_);
       Serial.println(" microseconds.");
@@ -386,7 +386,6 @@ void TftDisplay::LiveDraw() {
     }
     live_draw_state_ = false;
   }
-  #endif
 }
 
 #else
@@ -394,7 +393,7 @@ void TftDisplay::LiveDraw() {
 TftDisplay::TftDisplay() {}
 
 void TftDisplay::Setup(bool not_used, int debug_level) {
-  if (debug_level >= DEBUG_STATS) {
+  if (debug_level >= DEBUG_INFO) {
     Serial.println("TFT Display is not in build and is not used.");
   }
 }

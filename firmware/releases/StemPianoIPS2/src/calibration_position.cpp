@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // calibration_position.h
 //
@@ -156,7 +157,7 @@ bool switch_disable_and_reset_calibration, const float *in) {
         gain_staged_[note] = GetGain(min_[note], max_[note]);
         offset_staged_[note] = GetOffset(min_[note]);
 
-        if (debug_level_ >= DEBUG_MINOR) {
+        if (debug_level_ >= DEBUG_ALG) {
           Serial.print("==>Index: ");
           Serial.print(note);
           Serial.print(" Max: ");
@@ -220,7 +221,7 @@ void CalibrationPosition::InitializeState(Nonvolatile *Nv, int debug_level) {
   // Display if reading initial values from EEPROM.
   bool all_notes_calibrated = Nv_->ReadCalibrationDoneFlag();
   unsigned long start_read_time = micros();
-  if (debug_level_ >= DEBUG_STATS) {
+  if (debug_level_ >= DEBUG_INFO) {
     if (all_notes_calibrated == true) {
       Serial.print("Reading initial position calibration values from EEPROM, time = ");
     }
@@ -262,7 +263,7 @@ void CalibrationPosition::InitializeState(Nonvolatile *Nv, int debug_level) {
       filter_buffer_[note][sample] = 0.5;  // Default to middle.
     }
   }
-  if (debug_level_ >= DEBUG_STATS) {
+  if (debug_level_ >= DEBUG_INFO) {
     if (all_notes_calibrated == true) {
       Serial.print(micros() - start_read_time);
       Serial.println(" microseconds.");
@@ -288,7 +289,7 @@ bool all_notes_are_using_calibration_values) {
   switch_freeze_cal_values_last_ == false) {
     if (all_notes_are_using_calibration_values == true) {
       unsigned long start_write_time = micros();
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.println("Writing position max/min to EEPROM.");
       }
       for (int note = 0; note < NUM_NOTES; note++) {
@@ -297,13 +298,13 @@ bool all_notes_are_using_calibration_values) {
       }
       Nv_->WriteCalibrationDoneFlag(true);
       Nv_->UpdateAndWriteTotalWrites();
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.print("Finished writing EEPROM, write time = ");
         Serial.print(micros() - start_write_time);
         Serial.println(" microseconds.");
       }
     }
-    else if (debug_level_ >= DEBUG_STATS) {
+    else if (debug_level_ >= DEBUG_INFO) {
       Serial.println("All notes do not have calibration values.");
       Serial.println("Therefore, calibration values not written to EEPROM.");
     }
@@ -318,19 +319,19 @@ bool all_notes_are_using_calibration_values) {
     // To avoid unnecessary writes, only write a false if previous was true.
     if (cal_done_flag == true) {
       unsigned long start_write_time = micros();
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.println("Clearing position max/min from EEPROM.");
       }
       Nv_->WriteCalibrationDoneFlag(false);
       Nv_->UpdateAndWriteTotalWrites();
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.print("Finished writing EEPROM, write time = ");
         Serial.print(micros() - start_write_time);
         Serial.println(" microseconds.");
       }
     }
     else {
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.println("Position max/min values in EEPROM were already clear.");
       }
     }

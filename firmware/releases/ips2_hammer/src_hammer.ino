@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // src_hammer.cpp
 //
@@ -77,6 +78,7 @@ void setup(void) {
   Serial.println(".");
   Serial.println(".");
   Serial.println("welcome to stem piano by gcz");
+  Serial.println("an open source, hybrid piano");
   Serial.println(".");
   Serial.println(".");
 
@@ -86,7 +88,8 @@ void setup(void) {
   Serial.println("  SCA0.0 analog board.");
   Serial.println("  HPS 0.8, 0.7, or 0.4 sensor board (any board meeting spec is also ok).");
   Serial.println("License: GNU GPLv3 - for documentation, code, and design see:");
-  Serial.println("  https://github.com/gzweigle/DIY-Grand-Digital-Piano");
+  Serial.println("https://github.com/gzweigle/open-hybrid-piano");
+  Serial.println("https://github.com/stem-piano");
   Serial.println(".");
   Serial.println(".");
 
@@ -94,7 +97,7 @@ void setup(void) {
   Set.SetAllSettingValues();
 
   // Notification messages.
-  if (Set.debug_level >= DEBUG_STATS) {
+  if (Set.debug_level >= DEBUG_INFO) {
     Serial.println("Beginning hammer board initialization.");
   }
   Tft.Setup(Set.using_display, Set.debug_level);
@@ -151,7 +154,7 @@ void setup(void) {
   Eth.Setup(Set.true_for_tcp_else_udp, Set.computer_ip, Set.teensy_ip, Set.network_port,
   SwIPS2.direct_read_switch_2(), Set.debug_level);
   Tpl.Setup();
-  Tmg.Setup(Set.adc_sample_period_microseconds);
+  Tmg.Setup(Set.adc_sample_period_microseconds, Set.debug_level);
 
   if (Set.test_index >= 0) {
     Serial.println("WARNING - In high-speed test mode.");
@@ -159,7 +162,7 @@ void setup(void) {
   }
 
   // Ready to be a piano.
-  if (Set.debug_level >= DEBUG_STATS) {
+  if (Set.debug_level >= DEBUG_INFO) {
     Serial.println("Finished hammer board initialization.");
   }
   delay(1000);
@@ -192,6 +195,9 @@ position_floats[NUM_CHANNELS];
 float damper_velocity[NUM_CHANNELS], hammer_velocity[NUM_CHANNELS];
 
 void loop() {
+
+  Tmg.WarnOnProcessingInterval();
+  HStat.DisplayProcessingIntervalStart();
 
   // Measure every processing interval so the pickup and
   // dropout timers update. Later, when a switch is read,
@@ -332,4 +338,6 @@ void loop() {
 
     Tpl.SetTp8(false);
   }
+
+  HStat.DisplayProcessingIntervalEnd();
 }

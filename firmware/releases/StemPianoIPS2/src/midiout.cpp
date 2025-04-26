@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // midiout.cpp
 //
@@ -54,7 +55,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     #ifdef ENABLE_USB_MIDI
     usbMIDI.sendControlChange(64, pedal_midi_value_, midi_channel_);
     #endif
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_NOTES) {
       Serial.println("MIDI sustain is now ON.");
     }
   }
@@ -63,7 +64,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     #ifdef ENABLE_USB_MIDI
     usbMIDI.sendControlChange(64, 0, midi_channel_);
     #endif
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_NOTES) {
       Serial.println("MIDI sustain is now OFF.");
     }
   }
@@ -72,7 +73,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     #ifdef ENABLE_USB_MIDI
     usbMIDI.sendControlChange(66, pedal_midi_value_, midi_channel_);
     #endif
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_NOTES) {
       Serial.println("MIDI sostenuto is now ON.");
     }
   }
@@ -81,7 +82,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     #ifdef ENABLE_USB_MIDI
     usbMIDI.sendControlChange(66, 0, midi_channel_);
     #endif
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_NOTES) {
       Serial.println("MIDI sostenuto is now OFF.");
     }
   }
@@ -90,7 +91,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     #ifdef ENABLE_USB_MIDI
     usbMIDI.sendControlChange(67, pedal_midi_value_, midi_channel_);
     #endif
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_NOTES) {
       Serial.println("MIDI una corda is now ON.");
     }
   }
@@ -99,7 +100,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     #ifdef ENABLE_USB_MIDI
     usbMIDI.sendControlChange(67, 0, midi_channel_);
     #endif
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_NOTES) {
       Serial.println("MIDI una corda is now OFF.");
     }
   }
@@ -120,7 +121,7 @@ const bool *event, const float *velocity, bool send_on) {
       if (velocity_int > maximum_midi_value_) {
         velocity_int = maximum_midi_value_;
       }
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_NOTES) {
         Serial.print("MIDI note (");
         Serial.print(midi_note);
         Serial.print(") index (");

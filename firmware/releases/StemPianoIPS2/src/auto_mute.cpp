@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // auto_mute.cpp
 //
@@ -83,7 +84,7 @@ int AutoMute::AutomaticallyDecreaseVolume(int velocity, int debug_level) {
   // it could be due to a problem. So, mute the volume.
   if (velocity > max_simultaneous_volume_) {
 
-    if (debug_level >= DEBUG_ALL) {
+    if (debug_level >= DEBUG_ALG) {
       Serial.print("AutoMute: simultaneous = ");
       Serial.print(simultaneous_note_count_);
       Serial.print(" interval = ");
@@ -93,7 +94,7 @@ int AutoMute::AutomaticallyDecreaseVolume(int velocity, int debug_level) {
     if (millis() - last_loud_note_time_ < loud_note_interval_) {
       if (simultaneous_note_count_ >= max_simultaneous_notes_) {
         return_velocity = mute_velocity_;
-        if (debug_level >= DEBUG_STATS) {
+        if (debug_level >= DEBUG_INFO) {
           Serial.println("AutoMute Activated - piano volume reduced for this note.");
         }
       }
@@ -117,7 +118,7 @@ int AutoMute::AutomaticallyDecreaseVolume(int velocity, int debug_level) {
   // All max MIDI volume are muted.
   if (velocity >= maximum_midi_velocity_) {
     return_velocity = mute_velocity_;
-    if (debug_level >= DEBUG_STATS) {
+    if (debug_level >= DEBUG_INFO) {
       Serial.println("AutoMute Activated - piano volume reduced for this note.");
     }
   }

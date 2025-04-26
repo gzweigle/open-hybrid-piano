@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // dsp_damper.cpp
 //
@@ -77,7 +78,7 @@ void DspDamper::GetDamperEventData(bool *event, float *velocity, const float *po
           samples_per_second_ / static_cast<float>(NUM_DELAY_ELEMENTS);
           velocity[key] *= velocity_scaling_;
           event_block_counter_[key] = 2*(NUM_DELAY_ELEMENTS);
-          if (debug_level_ >= DEBUG_ALL) {
+          if (debug_level_ >= DEBUG_ALG) {
             Serial.println("GetDamperEventData() - damper up");
             Serial.print("  key=");
             Serial.print(key);
@@ -98,7 +99,7 @@ void DspDamper::GetDamperEventData(bool *event, float *velocity, const float *po
           samples_per_second_ / static_cast<float>(NUM_DELAY_ELEMENTS);
           velocity[key] *= velocity_scaling_;
           event_block_counter_[key] = 2*(NUM_DELAY_ELEMENTS);
-          if (debug_level_ >= DEBUG_ALL) {
+          if (debug_level_ >= DEBUG_ALG) {
             Serial.println("GetDamperEventData() - damper down");
             Serial.print("  key=");
             Serial.print(key);
