@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // hammer_status.cpp
 //
@@ -44,7 +45,7 @@ void HammerStatus::Setup(DspPedal *dspp, TestpointLed *testp, int debug_level) {
   ethernet_led_last_change_ = millis();
   ethernet_led_state_ = false;
 
-  serial_interval_ = 2000;
+  serial_interval_ = 10000;
   serial_last_change_ = millis();
   filter0_.Setup();
   filter1_.Setup();
@@ -56,6 +57,10 @@ void HammerStatus::Setup(DspPedal *dspp, TestpointLed *testp, int debug_level) {
     max_[k] = 0.0;
     played_count_[k] = 0;
   }
+
+  interval_interval_ = 30000;
+  interval_max_ = 0;
+  interval_start_millis_ = millis();
 
 }
 
@@ -173,7 +178,7 @@ void HammerStatus::EthernetLed() {
 void HammerStatus::SerialMonitor(const int *adc, const float *position,
 const bool *event, bool canbus_enable, bool switch_external_damper_board) {
 
-  if (debug_level_ >= DEBUG_MINOR) {
+  if (debug_level_ >= DEBUG_NOTES) {
     // Filter displayed data.
     unsigned int rs0, rs1;
     rs0 = filter0_.boxcarFilterUInts(adc[39]);  // Middle C.
@@ -194,7 +199,7 @@ const bool *event, bool canbus_enable, bool switch_external_damper_board) {
     }
   }
 
-  if (debug_level_ >= DEBUG_STATS) {
+  if (debug_level_ >= DEBUG_NOTES) {
     if (millis() - statistics_last_change_ > statistics_interval_) {
 
       statistics_last_change_ = millis();
@@ -265,6 +270,24 @@ const bool *event, bool canbus_enable, bool switch_external_damper_board) {
         if (event[k] == true)
           played_count_[k]++;
       }
+    }
+  }
+}
+
+// Display the maximum processing interval
+void HammerStatus::DisplayProcessingIntervalStart() {
+  interval_start_micros_ = micros();
+}
+void HammerStatus::DisplayProcessingIntervalEnd() {
+  if (debug_level_ >= DEBUG_INFO) {
+    unsigned long interval = micros() - interval_start_micros_;
+    if (interval > interval_max_) {
+      interval_max_ = interval;
+    }
+    if (millis() - interval_start_millis_ > interval_interval_) {
+      interval_start_millis_ = millis();
+      Serial.printf("Max processing interval = %d microseconds.\n", interval_max_);
+      interval_max_ = 0;
     }
   }
 }

@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // hammer_status.h
 //
@@ -40,6 +41,8 @@ class HammerStatus
     void SCALed();
     void EthernetLed();
     void SerialMonitor(const int *, const float *, const bool *, bool, bool);
+    void DisplayProcessingIntervalStart();
+    void DisplayProcessingIntervalEnd();
  
   private:
 
@@ -72,6 +75,11 @@ class HammerStatus
     float min_[NUM_NOTES];
     float max_[NUM_NOTES];
     int played_count_[NUM_NOTES];
+
+    unsigned long interval_start_micros_;
+    unsigned long interval_start_millis_;
+    unsigned long interval_max_;
+    unsigned long interval_interval_;
 
 };
 
