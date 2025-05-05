@@ -65,7 +65,7 @@ void HammerSettings::SetAllSettingValues() {
   // Must be longer than the time to sample and collect all NUM_CHANNELS
   // data from the ADC plus the time for processing all of the data.
   // WARNING - For normal operation, this value must match damper board value.
-  adc_sample_period_microseconds = 300;
+  adc_sample_period_microseconds = 250;
   
   if (debug_level >= DEBUG_INFO) {
     Serial.print("The sample period is set to ");
