@@ -75,11 +75,15 @@ class HammerStatus
     float min_[NUM_NOTES];
     float max_[NUM_NOTES];
     int played_count_[NUM_NOTES];
+    int smallest_ind_, largest_ind_;
+    int print_stats_count_ = 0;
 
     unsigned long interval_start_micros_;
     unsigned long interval_start_millis_;
     unsigned long interval_max_;
     unsigned long interval_interval_;
+
+    void IncrementalPrint(bool);
 
 };
 

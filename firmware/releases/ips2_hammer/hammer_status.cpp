@@ -57,6 +57,7 @@ void HammerStatus::Setup(DspPedal *dspp, TestpointLed *testp, int debug_level) {
     max_[k] = 0.0;
     played_count_[k] = 0;
   }
+  print_stats_count_ = -1;
 
   interval_interval_ = 30000;
   interval_max_ = 0;
@@ -200,67 +201,22 @@ const bool *event, bool canbus_enable, bool switch_external_damper_board) {
   }
 
   if (debug_level_ >= DEBUG_NOTES) {
-    if (millis() - statistics_last_change_ > statistics_interval_) {
 
+    bool print_now;
+
+    if (millis() - statistics_last_change_ > statistics_interval_) {
       statistics_last_change_ = millis();
 
-      // Find largest and smallest values, of all the values,
-      // and highlight when display with all capital letters.
-      int smallest_ind = 0;
-      int largest_ind = 0;
-      float smallest_value = 1.0;
-      float largest_value = 0.0;
-      for (int k = 0; k < NUM_NOTES; k++) {
-        if (min_[k] < smallest_value) {
-          smallest_value = min_[k];
-          smallest_ind = k;
-        }
-        if (max_[k] > largest_value) {
-          largest_value = max_[k];
-          largest_ind = k;
-        }
-      }
-
-      // For each note, display statistics since last time.
-      for (int k = 0; k < NUM_NOTES; k++) {
-        if (k < 10)
-          Serial.print("index=0");  // Insert 0 to keep vertical alignment.
-        else
-          Serial.print("index=");
-        Serial.print(k);
-        if (played_count_[k] < 10)
-          Serial.print(" count=0");  // Insert 0 to keep vertical alignment.
-        else
-          Serial.print(" count=");
-        Serial.print(played_count_[k]);
-        if (k == smallest_ind)
-          Serial.print("  v  ");
-        else
-          Serial.print(" min=");
-        Serial.print(min_[k]);
-        if (k == largest_ind)
-          Serial.print("  ^  ");
-        else
-          Serial.print(" max=");
-        Serial.print(max_[k]);
-        if (k%4 == 3)
-          Serial.println();
-        else
-          Serial.print(" ");
-        
-        // Start over for the next display.
-        played_count_[k] = 0;
-        min_[k] = 1.0;
-        max_[k] = 0.0;
-      }
-      Serial.println();
+      print_now = true;
 
       if (canbus_enable == false && switch_external_damper_board == true) {
         Serial.print("Warning - ");
         Serial.println("  Trying to use remote board without Can bus enabled.");
       }
+
     }
     else {
+      print_now = false;
       // In between display updates, keep track of statistics.
       for (int k = 0; k < NUM_NOTES; k++) {
         if (position[k] < min_[k])
@@ -271,7 +227,9 @@ const bool *event, bool canbus_enable, bool switch_external_damper_board) {
           played_count_[k]++;
       }
     }
+    IncrementalPrint(print_now);
   }
+
 }
 
 // Display the maximum processing interval
@@ -289,5 +247,79 @@ void HammerStatus::DisplayProcessingIntervalEnd() {
       Serial.printf("Max processing interval = %d microseconds.\n", interval_max_);
       interval_max_ = 0;
     }
+  }
+}
+
+void HammerStatus::IncrementalPrint(bool print_now) {
+  if (print_now == true) {
+    print_stats_count_ = 0;
+  }
+
+  if (print_stats_count_ == 0) {
+    // Find largest and smallest values, of all the values,
+    // and highlight when display with all capital letters.
+    smallest_ind_ = 0;
+    largest_ind_ = 0;
+    float smallest_value = 1.0;
+    float largest_value = 0.0;
+    for (int k = 0; k < NUM_NOTES; k++) {
+      if (min_[k] < smallest_value) {
+        smallest_value = min_[k];
+        smallest_ind_ = k;
+      }
+      if (max_[k] > largest_value) {
+        largest_value = max_[k];
+        largest_ind_ = k;
+      }
+    }
+  }
+
+  // For each note, display statistics since last time.
+
+  // Print one note each pass at the sample rate.
+  // This keeps the serial print from taking too much of processor.
+  // The check against < NUM_NOTES is not necessary but is an
+  // extra safety to avoid overrunning arrays in case of a bug.
+  if (print_stats_count_ >= 0 && print_stats_count_ < NUM_NOTES) {
+    int k = print_stats_count_;  // Make code easier to read.
+    if (k < 10)
+      Serial.print("index=0");  // Insert 0 to keep vertical alignment.
+    else
+      Serial.print("index=");
+    Serial.print(k);
+    if (played_count_[k] < 10)
+      Serial.print(" count=0");  // Insert 0 to keep vertical alignment.
+    else
+      Serial.print(" count=");
+    Serial.print(played_count_[k]);
+    if (k == smallest_ind_)
+      Serial.print("  v  ");
+    else
+      Serial.print(" min=");
+    if (min_[k] >= 0)
+      Serial.print(" ");
+    else
+      Serial.print("-");
+    Serial.print(abs(min_[k]));
+    if (k == largest_ind_)
+      Serial.print("  ^  ");
+    else
+      Serial.print(" max=");
+    Serial.print(max_[k]);
+    if (k%4 == 3)
+      Serial.println();
+    else
+      Serial.print(" ");
+    min_[k] = 1.0;
+    max_[k] = 0.0;
+    played_count_[k] = 0;
+  }
+
+  if (print_stats_count_ == NUM_NOTES - 1) {
+    print_stats_count_ = -1;
+    Serial.println();
+  }
+  else if (print_stats_count_ >= 0) {
+    print_stats_count_++;
   }
 }
