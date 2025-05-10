@@ -57,6 +57,10 @@ void DamperStatus::Setup(TestpointLed *testp, int debug_level) {
     played_count_[k] = 0;
   }
 
+  interval_interval_ = 30000;
+  interval_max_ = 0;
+  interval_start_millis_ = millis();
+
 }
 
 // Control LED on front of board next to Teensy.

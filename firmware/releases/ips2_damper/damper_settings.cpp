@@ -65,7 +65,7 @@ void DamperSettings::SetAllSettingValues() {
   // Must be longer than the time to sample and collect all NUM_CHANNELS
   // data from the ADC plus the time for processing all of the data.
   // WARNING - For normal operation, this value must match damper board value.
-  adc_sample_period_microseconds = 300;
+  adc_sample_period_microseconds = 250;
   
   if (debug_level >= DEBUG_INFO) {
     Serial.print("The sample period is set to ");
@@ -101,7 +101,7 @@ void DamperSettings::SetAllSettingValues() {
 
   // A global scaling applied to all ADC inputs.
   // Normally set to 1.0.
-  adc_global_scale = 0.5;
+  adc_global_scale = 1.0;
 
   ////////
   // Switch settings.
