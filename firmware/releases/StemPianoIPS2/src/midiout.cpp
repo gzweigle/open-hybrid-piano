@@ -138,8 +138,14 @@ const bool *event, const float *velocity, bool send_on) {
       }
       // Immediately before sending MIDI command, check for certain values and if
       // detected, automatically reduce the volume level.
-      velocity_potentially_muted = 
-      mute->AutomaticallyDecreaseVolume(velocity_int, debug_level_);
+      if (send_on == true) {
+        velocity_potentially_muted = 
+        mute->AutomaticallyDecreaseVolume(velocity_int, debug_level_);
+      }
+      else {
+        // Do not mute for the note off (damper) velocity.
+        velocity_potentially_muted = velocity_int;
+      }
       if (send_on == true) {
         mi_->sendNoteOn(midi_note, velocity_potentially_muted, midi_channel_);
         #ifdef ENABLE_USB_MIDI
