@@ -173,7 +173,7 @@ void DamperStatus::EthernetLed() {
 void DamperStatus::SerialMonitor(const int *adc, const float *position,
 float damper_threshold) {
 
-  if (debug_level_ >= DEBUG_NOTES) {
+  if (debug_level_ >= DEBUG_STATS) {
     // Filter displayed data.
     unsigned int rs0, rs1;
     rs0 = filter0_.boxcarFilterUInts(adc[39]);  // Middle C.
@@ -194,7 +194,7 @@ float damper_threshold) {
     }
   }
 
-  if (debug_level_ >= DEBUG_NOTES) {
+  if (debug_level_ >= DEBUG_STATS) {
     if (millis() - statistics_last_change_ > statistics_interval_) {
 
       statistics_last_change_ = millis();
@@ -275,7 +275,7 @@ void DamperStatus::DisplayProcessingIntervalStart() {
   interval_start_micros_ = micros();
 }
 void DamperStatus::DisplayProcessingIntervalEnd() {
-  if (debug_level_ >= DEBUG_INFO) {
+  if (debug_level_ >= DEBUG_STATS) {
     unsigned long interval = micros() - interval_start_micros_;
     if (interval > interval_max_) {
       interval_max_ = interval;

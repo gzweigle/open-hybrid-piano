@@ -56,7 +56,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     usbMIDI.sendControlChange(64, pedal_midi_value_, midi_channel_);
     #endif
     if (debug_level_ >= DEBUG_NOTES) {
-      Serial.println("MIDI sustain is now ON.");
+      Serial.println("MIDI sustain ON.");
     }
   }
   else if (DspP->GetSustainCrossedUpThreshold() == true) {
@@ -65,7 +65,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     usbMIDI.sendControlChange(64, 0, midi_channel_);
     #endif
     if (debug_level_ >= DEBUG_NOTES) {
-      Serial.println("MIDI sustain is now OFF.");
+      Serial.println("MIDI sustain OFF.");
     }
   }
   if (DspP->GetSostenutoCrossedDownThreshold() == true) {
@@ -74,7 +74,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     usbMIDI.sendControlChange(66, pedal_midi_value_, midi_channel_);
     #endif
     if (debug_level_ >= DEBUG_NOTES) {
-      Serial.println("MIDI sostenuto is now ON.");
+      Serial.println("MIDI sostenuto ON.");
     }
   }
   else if (DspP->GetSostenutoCrossedUpThreshold() == true) {
@@ -83,7 +83,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     usbMIDI.sendControlChange(66, 0, midi_channel_);
     #endif
     if (debug_level_ >= DEBUG_NOTES) {
-      Serial.println("MIDI sostenuto is now OFF.");
+      Serial.println("MIDI sostenuto OFF.");
     }
   }
   if (DspP->GetUnaCordaCrossedDownThreshold() == true) {
@@ -92,7 +92,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     usbMIDI.sendControlChange(67, pedal_midi_value_, midi_channel_);
     #endif
     if (debug_level_ >= DEBUG_NOTES) {
-      Serial.println("MIDI una corda is now ON.");
+      Serial.println("MIDI una corda ON.");
     }
   }
   else if (DspP->GetUnaCordaCrossedUpThreshold() == true) {
@@ -101,7 +101,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     usbMIDI.sendControlChange(67, 0, midi_channel_);
     #endif
     if (debug_level_ >= DEBUG_NOTES) {
-      Serial.println("MIDI una corda is now OFF.");
+      Serial.println("MIDI una corda OFF.");
     }
   }
 }
@@ -130,10 +130,10 @@ const bool *event, const float *velocity, bool send_on) {
         Serial.print(velocity_int);
         Serial.print(")");
         if (send_on == true) {
-          Serial.println(" is now ON.");
+          Serial.println(" ON.");
         }
         else {
-          Serial.println(" is now OFF.");
+          Serial.println(" OFF.");
         }
       }
       // Immediately before sending MIDI command, check for certain values and if

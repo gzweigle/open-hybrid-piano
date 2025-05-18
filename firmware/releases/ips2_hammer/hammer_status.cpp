@@ -50,7 +50,7 @@ void HammerStatus::Setup(DspPedal *dspp, TestpointLed *testp, int debug_level) {
   filter0_.Setup();
   filter1_.Setup();
 
-  statistics_interval_ = 15000;
+  statistics_interval_ = 30000;
   statistics_last_change_ = millis();
   for (int k = 0; k < NUM_NOTES; k++) {
     min_[k] = 1.0;
@@ -59,7 +59,7 @@ void HammerStatus::Setup(DspPedal *dspp, TestpointLed *testp, int debug_level) {
   }
   print_stats_count_ = -1;
 
-  interval_interval_ = 30000;
+  interval_interval_ = 15000;
   interval_max_ = 0;
   interval_start_millis_ = millis();
 
@@ -179,7 +179,7 @@ void HammerStatus::EthernetLed() {
 void HammerStatus::SerialMonitor(const int *adc, const float *position,
 const bool *event, bool canbus_enable, bool switch_external_damper_board) {
 
-  if (debug_level_ >= DEBUG_NOTES) {
+  if (debug_level_ >= DEBUG_STATS) {
     // Filter displayed data.
     unsigned int rs0, rs1;
     rs0 = filter0_.boxcarFilterUInts(adc[39]);  // Middle C.
@@ -200,7 +200,7 @@ const bool *event, bool canbus_enable, bool switch_external_damper_board) {
     }
   }
 
-  if (debug_level_ >= DEBUG_NOTES) {
+  if (debug_level_ >= DEBUG_STATS) {
 
     bool print_now;
 
@@ -237,7 +237,7 @@ void HammerStatus::DisplayProcessingIntervalStart() {
   interval_start_micros_ = micros();
 }
 void HammerStatus::DisplayProcessingIntervalEnd() {
-  if (debug_level_ >= DEBUG_INFO) {
+  if (debug_level_ >= DEBUG_STATS) {
     unsigned long interval = micros() - interval_start_micros_;
     if (interval > interval_max_) {
       interval_max_ = interval;

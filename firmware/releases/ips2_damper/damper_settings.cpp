@@ -38,9 +38,10 @@ void DamperSettings::SetAllSettingValues() {
   // DEBUG_NONE = Nothing displayed except startup info.
   // DEBUG_INFO = Occasional code state information.
   // DEBUG_NOTES = Above plus info about note changes.
+  // DEBUG_STATS = Above plus occasional statistics.
   // DEBUG_ALG = Above plus algorithm details.
   // DEBUG_ALL = Above plus useless stuff.
-  debug_level = DEBUG_INFO;
+  debug_level = DEBUG_NOTES;
   Serial.print("Debug level is set to ");
   Serial.println(debug_level);
 
@@ -117,7 +118,7 @@ void DamperSettings::SetAllSettingValues() {
 
   ////////
   // Calibration Settings.
-  calibration_threshold = 0.6;
+  calibration_threshold = 0.4;
 
   
   ////////

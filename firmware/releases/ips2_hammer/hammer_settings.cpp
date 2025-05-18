@@ -38,9 +38,10 @@ void HammerSettings::SetAllSettingValues() {
   // DEBUG_NONE = Nothing displayed except startup info.
   // DEBUG_INFO = Occasional code state information.
   // DEBUG_NOTES = Above plus info about note changes.
+  // DEBUG_STATS = Above plus occasional statistics.
   // DEBUG_ALG = Above plus algorithm details.
   // DEBUG_ALL = Above plus useless stuff.
-  debug_level = DEBUG_INFO;
+  debug_level = DEBUG_NOTES;
   Serial.print("Debug level is set to ");
   Serial.println(debug_level);
 
@@ -167,7 +168,7 @@ void HammerSettings::SetAllSettingValues() {
     // Value does not need to be precise.
     // Just needs to be large enough to avoid noisy data when hammer
     // is near its rest or check position.
-    strike_threshold = 0.8;
+    strike_threshold = 0.96;
   }
   else {
     // When the hammer shank position crosses this threshold

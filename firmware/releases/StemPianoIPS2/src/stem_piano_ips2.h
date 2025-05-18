@@ -76,7 +76,8 @@
 #define DEBUG_NONE  0   // Nothing displayed except startup info.
 #define DEBUG_INFO  1   // Occasional code state information.
 #define DEBUG_NOTES 2   // Above plus info about note changes.
-#define DEBUG_ALG   3   // Above plus algorithm details.
-#define DEBUG_ALL   4   // Above plus useless stuff.
+#define DEBUG_STATS 3   // Above plus occasional statistics.
+#define DEBUG_ALG   4   // Above plus algorithm details.
+#define DEBUG_ALL   5   // Above plus useless stuff.
 
 #endif

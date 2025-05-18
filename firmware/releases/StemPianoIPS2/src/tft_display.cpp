@@ -127,11 +127,11 @@ void TftDisplay::HelloWorld() {
   if (using_display_ == true) {
     Clear();
     Tft_->setTextColor(ILI9341_WHITE);
-    Tft_->setCursor(15, 64);
-    Tft_->print("hello world of");
-    Tft_->setCursor(15, 64+28);
-    Tft_->print("stem piano");
-    Tft_->setCursor(15, 64+56);
+    Tft_->setCursor(15, 64-6);
+    Tft_->print("hello open source");
+    Tft_->setCursor(15, 64+28+7);
+    Tft_->print("hybrid piano");
+    Tft_->setCursor(15, 64+56+14);
     Tft_->print("by greg zweigle");
   }
 }
