@@ -65,11 +65,6 @@ class HammerStatus
     unsigned long ethernet_led_last_change_;
     bool ethernet_led_state_;
 
-    unsigned long serial_interval_;
-    unsigned long serial_last_change_;
-    Utilities filter0_;
-    Utilities filter1_;
-
     unsigned long statistics_interval_;
     unsigned long statistics_last_change_;
     float min_[NUM_NOTES];

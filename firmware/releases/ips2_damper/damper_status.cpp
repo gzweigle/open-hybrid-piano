@@ -44,20 +44,19 @@ void DamperStatus::Setup(TestpointLed *testp, int debug_level) {
   ethernet_led_last_change_ = millis();
   ethernet_led_state_ = false;
 
-  serial_interval_ = 2000;
+  serial_interval_ = 4900;
   serial_last_change_ = millis();
-  filter0_.Setup();
-  filter1_.Setup();
 
-  statistics_interval_ = 15000;
+  statistics_interval_ = 30000;
   statistics_last_change_ = millis();
   for (int k = 0; k < NUM_NOTES; k++) {
     min_[k] = 1.0;
     max_[k] = 0.0;
     played_count_[k] = 0;
   }
+  print_stats_count_ = -1;
 
-  interval_interval_ = 30000;
+  interval_interval_ = 63000;
   interval_max_ = 0;
   interval_start_millis_ = millis();
 
@@ -171,102 +170,40 @@ void DamperStatus::EthernetLed() {
 
 // General information sent to the serial monitor.
 void DamperStatus::SerialMonitor(const int *adc, const float *position,
-float damper_threshold) {
+float cal0, float uncal0, float cal1, float uncal1, float cal2, float uncal2,
+float cal3, float uncal3, float cal4, float uncal4, float cal5, float uncal5,
+float cal6, float uncal6, float cal7, float uncal7)
+{
 
   if (debug_level_ >= DEBUG_STATS) {
-    // Filter displayed data.
-    unsigned int rs0, rs1;
-    rs0 = filter0_.boxcarFilterUInts(adc[39]);  // Middle C.
-    rs1 = filter1_.boxcarFilterUInts(adc[53]);  // D5.
-    // Display the raw ADC counts and the fully calibrated floats for two notes.
     if (millis() - serial_last_change_ > serial_interval_) {
-      Serial.print("Damper Board");
-      Serial.print("    position=(");
-      Serial.print(rs0);
-      Serial.print(")(");
-      Serial.print(position[39]);
-      Serial.print(")    position=(");
-      Serial.print(rs1);
-      Serial.print(")(");
-      Serial.print(position[53]);
-      Serial.println(")");
       serial_last_change_ = millis();
+      Serial.printf("%0.3f(%0.3f) %0.3f(%0.3f) %0.3f(%0.3f) %0.3f(%0.3f) %0.3f(%0.3f) %0.3f(%0.3f) %0.3f(%0.3f) %0.3f(%0.3f)\n",
+      cal0, uncal0, cal1, uncal1, cal2, uncal2, cal3, uncal3,
+      cal4, uncal4, cal5, uncal5, cal6, uncal6, cal7, uncal7);
     }
   }
 
   if (debug_level_ >= DEBUG_STATS) {
+
+    bool print_now;
+
     if (millis() - statistics_last_change_ > statistics_interval_) {
-
       statistics_last_change_ = millis();
-
-      // Find largest and smallest values, of all the values,
-      // and highlight when display with all capital letters.
-      int smallest_ind = 0;
-      int largest_ind = 0;
-      float smallest_value = 1.0;
-      float largest_value = 0.0;
-      for (int k = 0; k < NUM_NOTES; k++) {
-        if (min_[k] < smallest_value) {
-          smallest_value = min_[k];
-          smallest_ind = k;
-        }
-        if (max_[k] > largest_value) {
-          largest_value = max_[k];
-          largest_ind = k;
-        }
-      }
-
-      // For each note, display statistics since last time.
-
-      for (int k = 0; k < NUM_NOTES; k++) {
-        if (k < 10)
-          Serial.print("index=0");  // Insert 0 to keep vertical alignment.
-        else
-          Serial.print("index=");
-        Serial.print(k);
-        if (played_count_[k] < 10)
-          Serial.print(" count=0");  // Insert 0 to keep vertical alignment.
-        else
-          Serial.print(" count=");
-        Serial.print(played_count_[k]);
-        if (k == smallest_ind)
-          Serial.print("  v  ");
-        else
-          Serial.print(" min=");
-        Serial.print(min_[k]);
-        if (k == largest_ind)
-          Serial.print("  ^  ");
-        else
-          Serial.print(" max=");
-        Serial.print(max_[k]);
-        if (k%4 == 3)
-          Serial.println();
-        else
-          Serial.print(" ");
-        
-        // Start over for the next display.
-        played_count_[k] = 0;
-        min_[k] = 1.0;
-        max_[k] = 0.0;
-      }
-      Serial.println();
-
+      print_now = true;
     }
     else {
+      print_now = false;
+
       // In between display updates, keep track of statistics.
       for (int k = 0; k < NUM_NOTES; k++) {
         if (position[k] < min_[k])
           min_[k] = position[k];
         else if (position[k] > max_[k])
           max_[k] = position[k];
-
-        // TODO -
-        // This increments while damper is above
-        // threshold so it is not very useful.
-        if (position[k] > damper_threshold)
-          played_count_[k]++;
       }
     }
+    IncrementalPrint(print_now);
   }
 }
 
@@ -285,5 +222,79 @@ void DamperStatus::DisplayProcessingIntervalEnd() {
       Serial.printf("Max processing interval = %d microseconds.\n", interval_max_);
       interval_max_ = 0;
     }
+  }
+}
+
+void DamperStatus::IncrementalPrint(bool print_now) {
+  if (print_now == true) {
+    print_stats_count_ = 0;
+  }
+
+  if (print_stats_count_ == 0) {
+    // Find largest and smallest values, of all the values,
+    // and highlight when display with all capital letters.
+    smallest_ind_ = 0;
+    largest_ind_ = 0;
+    float smallest_value = 1.0;
+    float largest_value = 0.0;
+    for (int k = 0; k < NUM_NOTES; k++) {
+      if (min_[k] < smallest_value) {
+        smallest_value = min_[k];
+        smallest_ind_ = k;
+      }
+      if (max_[k] > largest_value) {
+        largest_value = max_[k];
+        largest_ind_ = k;
+      }
+    }
+  }
+
+  // For each note, display statistics since last time.
+
+  // Print one note each pass at the sample rate.
+  // This keeps the serial print from taking too much of processor.
+  // The check against < NUM_NOTES is not necessary but is an
+  // extra safety to avoid overrunning arrays in case of a bug.
+  if (print_stats_count_ >= 0 && print_stats_count_ < NUM_NOTES) {
+    int k = print_stats_count_;  // Make code easier to read.
+    if (k < 10)
+      Serial.print("index=0");  // Insert 0 to keep vertical alignment.
+    else
+      Serial.print("index=");
+    Serial.print(k);
+    if (played_count_[k] < 10)
+      Serial.print(" count=0");  // Insert 0 to keep vertical alignment.
+    else
+      Serial.print(" count=");
+    Serial.print(played_count_[k]);
+    if (k == smallest_ind_)
+      Serial.print("  v  ");
+    else
+      Serial.print(" min=");
+    if (min_[k] >= 0)
+      Serial.print(" ");
+    else
+      Serial.print("-");
+    Serial.print(abs(min_[k]));
+    if (k == largest_ind_)
+      Serial.print("  ^  ");
+    else
+      Serial.print(" max=");
+    Serial.print(max_[k]);
+    if (k%4 == 3)
+      Serial.println();
+    else
+      Serial.print(" ");
+    min_[k] = 1.0;
+    max_[k] = 0.0;
+    played_count_[k] = 0;
+  }
+
+  if (print_stats_count_ == NUM_NOTES - 1) {
+    print_stats_count_ = -1;
+    Serial.println();
+  }
+  else if (print_stats_count_ >= 0) {
+    print_stats_count_++;
   }
 }

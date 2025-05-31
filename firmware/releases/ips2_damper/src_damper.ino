@@ -257,10 +257,18 @@ void loop() {
       DStat.SCALed();
       DStat.EthernetLed();
       DStat.SerialMonitor(position_adc_counts, calibrated_floats,
-      damper_threshold_med);
+      calibrated_floats[0], position_floats[0],
+      calibrated_floats[1], position_floats[1],
+      calibrated_floats[2], position_floats[2],
+      calibrated_floats[3], position_floats[3],
+      calibrated_floats[4], position_floats[4],
+      calibrated_floats[5], position_floats[5],
+      calibrated_floats[6], position_floats[6],
+      calibrated_floats[7], position_floats[7]);
     }
 
     Tpl.SetTp8(false);
+
   }
 
   DStat.DisplayProcessingIntervalEnd();

@@ -45,11 +45,6 @@ void HammerStatus::Setup(DspPedal *dspp, TestpointLed *testp, int debug_level) {
   ethernet_led_last_change_ = millis();
   ethernet_led_state_ = false;
 
-  serial_interval_ = 10000;
-  serial_last_change_ = millis();
-  filter0_.Setup();
-  filter1_.Setup();
-
   statistics_interval_ = 30000;
   statistics_last_change_ = millis();
   for (int k = 0; k < NUM_NOTES; k++) {
@@ -59,7 +54,7 @@ void HammerStatus::Setup(DspPedal *dspp, TestpointLed *testp, int debug_level) {
   }
   print_stats_count_ = -1;
 
-  interval_interval_ = 15000;
+  interval_interval_ = 63000;
   interval_max_ = 0;
   interval_start_millis_ = millis();
 
@@ -178,27 +173,6 @@ void HammerStatus::EthernetLed() {
 // General information sent to the serial monitor.
 void HammerStatus::SerialMonitor(const int *adc, const float *position,
 const bool *event, bool canbus_enable, bool switch_external_damper_board) {
-
-  if (debug_level_ >= DEBUG_STATS) {
-    // Filter displayed data.
-    unsigned int rs0, rs1;
-    rs0 = filter0_.boxcarFilterUInts(adc[39]);  // Middle C.
-    rs1 = filter1_.boxcarFilterUInts(adc[53]);  // D5.
-    // Display the raw ADC counts and the fully calibrated floats for two notes.
-    if (millis() - serial_last_change_ > serial_interval_) {
-      Serial.print("Hammer Board");
-      Serial.print("    position=(");
-      Serial.print(rs0);
-      Serial.print(")(");
-      Serial.print(position[39]);
-      Serial.print(")    position=(");
-      Serial.print(rs1);
-      Serial.print(")(");
-      Serial.print(position[53]);
-      Serial.println(")");
-      serial_last_change_ = millis();
-    }
-  }
 
   if (debug_level_ >= DEBUG_STATS) {
 
