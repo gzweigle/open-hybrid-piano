@@ -64,10 +64,19 @@ void Network::Setup(bool true_for_tcp_else_udp, const char *computer_ip,
   SetIpAddresses(computer_ip, teensy_ip, port);
   SetupNetwork(false, switch_enable_ethernet, false);
 
+  for (int ind = 0; ind < NUM_CHANNELS; ind++) {
+    true_for_hammer_else_damper_[ind] = true;
+    send_ind_[ind] = ind;
+  }
+
+  // Send A0 damper data as Ethernet channel 1.
+  true_for_hammer_else_damper_[1] = false;
+  send_ind_[1] = 0;
+
 }
 
-void Network::SendPianoPacket(const float *data_in, bool switch_enable_ethernet,
-bool switch_require_tcp_connection, int test_index) {
+void Network::SendPianoPacket(const float *hammer_in, const float *damper_in,
+  bool switch_enable_ethernet, bool switch_require_tcp_connection, int test_index) {
 
   SetupNetwork(switch_require_tcp_connection,
     switch_enable_ethernet, switch_enable_ethernet_last_);
@@ -86,7 +95,12 @@ bool switch_require_tcp_connection, int test_index) {
 
         // Input data is in range -1.0, ... 1.0 as floats.
         // Multiply by 2^15 and limit to signed 16-bit value.
-        data_int = static_cast<int>(data_in[ind]*32767.0);
+        if (true_for_hammer_else_damper_[ind] == true) {
+          data_int = static_cast<int>(hammer_in[send_ind_[ind]]*32767.0);
+        }
+        else {
+          data_int = static_cast<int>(damper_in[send_ind_[ind]]*32767.0);
+        }
         if (data_int > 32767) {
           data_int = 32767;
         }

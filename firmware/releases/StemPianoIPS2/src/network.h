@@ -49,7 +49,7 @@ class Network
   public:
     Network();
     void Setup(bool, const char *, const char *, int, bool, int);
-    void SendPianoPacket(const float *, bool, bool, int);
+    void SendPianoPacket(const float *, const float *, bool, bool, int);
 
   private:
     int debug_level_;
@@ -63,6 +63,9 @@ class Network
     uint8_t ethernet_values_[2*(NUM_CHANNELS)];
     bool network_has_been_initialized_;
     bool switch_enable_ethernet_last_;
+
+    bool true_for_hammer_else_damper_[NUM_CHANNELS];
+    int send_ind_[NUM_CHANNELS];
 
     EthernetUDP Udp;        // For UDP.
     EthernetClient Client;  // For TCP.

@@ -240,8 +240,8 @@ void loop() {
     }
 
     B2B.SendDamperData(calibrated_floats);
-    Eth.SendPianoPacket(calibrated_floats, switch_enable_ethernet,
-    switch_require_tcp_connection, Set.test_index);
+    Eth.SendPianoPacket(calibrated_floats, calibrated_floats,
+      switch_enable_ethernet, switch_require_tcp_connection, Set.test_index);
 
     if (Set.test_index < 0) {
       // Run the TFT display.

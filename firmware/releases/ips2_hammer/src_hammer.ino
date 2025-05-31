@@ -186,12 +186,12 @@ bool switch_disable_and_reset_calibration;
 // Data from ADC.
 unsigned int raw_samples[NUM_CHANNELS];
 unsigned int raw_samples_reordered[NUM_CHANNELS];
-int position_adc_counts[NUM_CHANNELS];
+int hammer_adc_counts[NUM_CHANNELS];
 
 // Damper, hammer, and pedal data.
 bool damper_event[NUM_CHANNELS], hammer_event[NUM_CHANNELS];
-float damper_position[NUM_CHANNELS], calibrated_floats[NUM_CHANNELS],
-position_floats[NUM_CHANNELS];
+float damper_position[NUM_CHANNELS], hammer_position[NUM_CHANNELS],
+hammer_position_uncal[NUM_CHANNELS];
 float damper_velocity[NUM_CHANNELS], hammer_velocity[NUM_CHANNELS];
 
 void loop() {
@@ -262,18 +262,18 @@ void loop() {
     Adc.ReorderAdcValues(raw_samples_reordered, raw_samples);
 
     // Normalize the ADC values.
-    Adc.NormalizeAdcValues(position_adc_counts, position_floats, raw_samples_reordered);
+    Adc.NormalizeAdcValues(hammer_adc_counts, hammer_position_uncal, raw_samples_reordered);
 
     // Undo the position errors due to physical tolerances.
     bool all_notes_using_cal = CalP.Calibration(switch_freeze_cal_values,
-    switch_disable_and_reset_calibration, calibrated_floats, position_floats);
+    switch_disable_and_reset_calibration, hammer_position, hammer_position_uncal);
 
     // Zero out the signal from any unconnected pins to avoid noise
     // or anything else causing an unwanted piano note to play.
     for (int k = 0; k < NUM_CHANNELS; k++) {
       if (Set.connected_channel[k] == false) {
-        position_adc_counts[k] = 0;
-        calibrated_floats[k] = 0.0;
+        hammer_adc_counts[k] = 0;
+        hammer_position[k] = 0.0;
       }
     }
 
@@ -288,15 +288,17 @@ void loop() {
         // No external damper board.
         // Use the hammer position as an estimate of the damper position.
         for (int k = 0; k < NUM_CHANNELS; k++)
-          damper_position[k] = calibrated_floats[k];
+          damper_position[k] = hammer_position[k];
       }
 
       // Process hammer, damper, and pedal data.
       // For hammer and damper get an event boolean flag and velocity.
       // For pedal get the state of the pedal.
+      DspH.GetHammerEventData(hammer_event, hammer_velocity, hammer_position);
       DspD.GetDamperEventData(damper_event, damper_velocity, damper_position);
-      DspH.GetHammerEventData(hammer_event, hammer_velocity, calibrated_floats);
-      DspP.UpdatePedalState(calibrated_floats);
+      DspD.CheckHammerDamperSync(damper_event, damper_velocity, damper_position,
+      hammer_event);
+      DspP.UpdatePedalState(hammer_position);
 
       // Adjust velocity because each physical setup is different.
       CalV.DamperVelocityScale(damper_velocity, damper_event);
@@ -310,29 +312,30 @@ void loop() {
       }
       else {
         Midi.SendNoteOn(&Mute, hammer_event, hammer_velocity);
-        Midi.SendNoteOff(&Mute, damper_event, damper_velocity);
+        Midi.SendNoteOff(&Mute, damper_event, damper_velocity,
+          switch_external_damper_board);
         Midi.SendPedal(&DspP);
       }
     }
 
-    // Send a packet of calibrated data.
-    Eth.SendPianoPacket(calibrated_floats, switch_enable_ethernet,
-      switch_require_tcp_connection, Set.test_index);
+    Eth.SendPianoPacket(hammer_position, damper_position,
+      switch_enable_ethernet, switch_require_tcp_connection,
+      Set.test_index);
 
     if (Set.test_index < 0) {
       // Run the TFT display.
-      Tft.Display(switch_tft_display, calibrated_floats, damper_position);
+      Tft.Display(switch_tft_display, hammer_position, damper_position);
     }
 
     // Debug and display information.
-    HStat.FrontLed(calibrated_floats, Set.damper_threshold,
+    HStat.FrontLed(hammer_position, Set.damper_threshold,
     Set.strike_threshold, Set.test_index);
 
     if (Set.test_index < 0) {
       HStat.LowerRightLed(all_notes_using_cal, Nonv.NonvolatileWasWritten());
       HStat.SCALed();
       HStat.EthernetLed();
-      HStat.SerialMonitor(position_adc_counts, calibrated_floats, hammer_event,
+      HStat.SerialMonitor(hammer_adc_counts, hammer_position, hammer_event,
       Set.canbus_enable, switch_external_damper_board);
     }
 

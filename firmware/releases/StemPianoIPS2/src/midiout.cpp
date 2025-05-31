@@ -42,11 +42,12 @@ int maximum_midi_value, int debug_level) {
 }
 
 void MidiOut::SendNoteOn(AutoMute *mute, const bool *event, const float *velocity) {
-  SendNote(mute, event, velocity, true);
+  SendNote(mute, event, velocity, true, false);
 }
 
-void MidiOut::SendNoteOff(AutoMute *mute, const bool *event, const float *velocity) {
-  SendNote(mute, event, velocity, false);
+void MidiOut::SendNoteOff(AutoMute *mute, const bool *event, const float *velocity,
+bool source) {
+  SendNote(mute, event, velocity, false, source);
 }
 
 void MidiOut::SendPedal(DspPedal *DspP) {
@@ -107,7 +108,7 @@ void MidiOut::SendPedal(DspPedal *DspP) {
 }
 
 void MidiOut::SendNote(AutoMute *mute,
-const bool *event, const float *velocity, bool send_on) {
+const bool *event, const float *velocity, bool send_on, bool source) {
   int velocity_int;
   int midi_note;
   int velocity_potentially_muted;
@@ -122,18 +123,17 @@ const bool *event, const float *velocity, bool send_on) {
         velocity_int = maximum_midi_value_;
       }
       if (debug_level_ >= DEBUG_NOTES) {
-        Serial.print("MIDI note (");
-        Serial.print(midi_note);
-        Serial.print(") index (");
-        Serial.print(key);
-        Serial.print(") velocity (");
-        Serial.print(velocity_int);
-        Serial.print(")");
+        Serial.printf("MIDI note (%2d) index(%2d) velocity(%2d)",
+        midi_note, key, velocity_int);
         if (send_on == true) {
           Serial.println(" ON.");
         }
         else {
-          Serial.println(" OFF.");
+          Serial.print(" OFF ");
+          if (source == false)
+            Serial.println("(int)");
+          else
+            Serial.println("(ext)");
         }
       }
       // Immediately before sending MIDI command, check for certain values and if

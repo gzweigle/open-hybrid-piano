@@ -57,7 +57,7 @@ int adc_sample_period_microseconds, int debug_level) {
   // threshold crossing, unable to compute a velocity.
   // In this case it will be small so select a default small value.
   velocity_if_force_event_ = 0.2;
-  damper_low_threshold_ = 0.8 * damper_threshold_;
+  damper_low_threshold_ = 0.5 * damper_threshold_;
 
 }
 

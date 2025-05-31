@@ -43,7 +43,7 @@ class MidiOut
     MidiOut();
     void Setup(int, MY_MIDI_INTERFACE *, int, int);
     void SendNoteOn(AutoMute *, const bool *, const float *);
-    void SendNoteOff(AutoMute *, const bool *, const float *);
+    void SendNoteOff(AutoMute *, const bool *, const float *, bool);
     void SendPedal(DspPedal *);
 
   private:
@@ -51,7 +51,7 @@ class MidiOut
     int midi_channel_;
     int midi_value_for_A0_;
     MY_MIDI_INTERFACE *mi_;
-    void SendNote(AutoMute *, const bool *, const float *, bool);
+    void SendNote(AutoMute *, const bool *, const float *, bool, bool);
 
     // Some receiving software treats 127 special.
     // So, option for a smaller max value.
