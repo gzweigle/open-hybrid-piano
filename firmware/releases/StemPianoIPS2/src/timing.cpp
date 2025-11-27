@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // timing.cpp
 //
@@ -26,9 +27,14 @@
 
 Timing::Timing() {}
 
-void Timing::Setup(int processing_interval) {
+void Timing::Setup(int processing_interval, int debug_level) {
   last_micros_ = micros();
   processing_interval_ = (unsigned long) processing_interval;
+  debug_level_ = debug_level;
+
+  // Checking for errors in processing interval.
+  start_micros_ = micros();
+  last_long_micros_ = micros();
 }
 
 // Use a separate function for changing the processing interval
@@ -44,5 +50,21 @@ bool Timing::AllowProcessing() {
   }
   else {
     return false;
+  }
+}
+
+void Timing::WarnOnProcessingInterval() {
+  if (debug_level_ >= DEBUG_INFO) {
+    unsigned long now_micros, delta_micros;
+    now_micros = micros();
+    delta_micros = now_micros - start_micros_;
+    start_micros_ = now_micros;
+    if (delta_micros > processing_interval_)
+    {
+      Serial.printf("Warning. Interval too long: %d us > %d us.",
+      delta_micros, processing_interval_);
+      Serial.printf(" Time since last: %d us.\n", micros() - last_long_micros_);
+      last_long_micros_ = micros();
+    }
   }
 }

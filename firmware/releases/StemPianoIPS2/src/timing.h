@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // timing.h
 //
@@ -31,13 +32,17 @@ class Timing
 {
   public:
     Timing();
-    void Setup(int);
+    void Setup(int, int);
     bool AllowProcessing();
     void ResetInterval(int);
+    void WarnOnProcessingInterval();
  
   private:
+    int debug_level_;
     unsigned long last_micros_;
     unsigned long processing_interval_;
+    unsigned long start_micros_;
+    unsigned long last_long_micros_;
 
 };
 

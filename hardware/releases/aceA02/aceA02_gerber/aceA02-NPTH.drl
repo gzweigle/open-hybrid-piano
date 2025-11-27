@@ -1,0 +1,10 @@
+M48
+; DRILL file
+; FORMAT={-:-/ absolute / inch / decimal}
+; #@! TF.FileFunction,NonPlated,1,2,NPTH
+FMAT,2
+INCH
+%
+G90
+G05
+M30

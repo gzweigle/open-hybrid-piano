@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // calibration_velocity.cpp
 //
@@ -140,7 +141,7 @@ const bool *velocity_event) {
     if (velocity_event[key] == true) {
       velocity_data[key] *= fixed_velocity_scale_;
       if (velocity_data[key] > 1.0) {
-        if (debug_level_ >= DEBUG_MINOR) {
+        if (debug_level_ >= DEBUG_ALG) {
           Serial.print("FixedScale(): velocity of key ");
           Serial.print(key);
           Serial.print(" is set at limit, orig velocity was ");
@@ -162,7 +163,7 @@ const bool *velocity_event) {
         max_hammer_velocity_ = velocity_data[key];
         reciprocal_max_hammer_velocity_ = 1.0 / max_hammer_velocity_;
         new_max_velocity_ = true;
-        if (debug_level_ >= DEBUG_STATS) {
+        if (debug_level_ >= DEBUG_ALG) {
           Serial.print("BuildVelocityScale() - new max velocity = ");
           Serial.print(max_hammer_velocity_);
           Serial.print(", key = ");
@@ -181,7 +182,7 @@ const bool *velocity_event) {
     if (velocity_event[key] == true) {
       velocity_data[key] *= reciprocal_max_hammer_velocity_;
       if (velocity_data[key] > 1.0) {
-        if (debug_level_ >= DEBUG_MINOR) {
+        if (debug_level_ >= DEBUG_ALG) {
           Serial.print("ApplyVelocityScale(): velocity of key ");
           Serial.print(key);
           Serial.print(" hit limit, orig velocity was ");
@@ -200,7 +201,7 @@ void CalibrationVelocity::InitializeState(Nonvolatile *Nv) {
   new_max_velocity_ = Nv_->ReadMaxVelocityStoredFlag();
   if (new_max_velocity_ == true) {
     max_hammer_velocity_ = static_cast<float>(Nv_->ReadMaxVelocity());
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_INFO) {
       Serial.print("Read initial velocity scale of ");
       Serial.print(max_hammer_velocity_);
       Serial.println(" from EEPROM.");
@@ -211,13 +212,13 @@ void CalibrationVelocity::InitializeState(Nonvolatile *Nv) {
       // which effectively turns off the scaling.
       max_hammer_velocity_ = 1.0;
       new_max_velocity_ = false;
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.println("EEPROM issue. Velocity scale forced to 1.0.");
       }
     }
   }
   else {
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_INFO) {
       Serial.println("No initial velocity scale was found in EEPROM.");
     }
     max_hammer_velocity_ = 1.0;
@@ -240,7 +241,7 @@ bool switch_disable_and_reset_calibration) {
   switch_freeze_cal_values_last_ == false) {
     if (new_max_velocity_ == true) {
       unsigned long start_write_time = micros();
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.print("Writing max hammer velocity = ");
         Serial.print(max_hammer_velocity_);
         Serial.println(" to EEPROM.");
@@ -248,13 +249,13 @@ bool switch_disable_and_reset_calibration) {
       Nv_->WriteMaxVelocity(static_cast<float>(max_hammer_velocity_));
       Nv_->WriteMaxVelocityStoredFlag(true);
       Nv_->UpdateAndWriteTotalWrites();
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.print("Finished writing EEPROM, write time = ");
         Serial.print(micros() - start_write_time);
         Serial.println(" microseconds.");
       }
     }
-    else if (debug_level_ >= DEBUG_STATS) {
+    else if (debug_level_ >= DEBUG_INFO) {
       Serial.println("No new velocity scale value.");
       Serial.println("Therefore, calibration values not written to EEPROM.");
     }
@@ -269,19 +270,19 @@ bool switch_disable_and_reset_calibration) {
     // To avoid unnecessary writes, only write a false if previous was true.
     if (new_max_velocity_ == true) {
       unsigned long start_write_time = micros();
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.println("Clearing velocity scale from EEPROM.");
       }
       Nv_->WriteMaxVelocityStoredFlag(false);
       Nv_->UpdateAndWriteTotalWrites();
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.print("Finished writing EEPROM, write time = ");
         Serial.print(micros() - start_write_time);
         Serial.println(" microseconds.");
       }
     }
     else {
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         Serial.println("Velocity scale in EEPROM was already clear.");
       }
     }

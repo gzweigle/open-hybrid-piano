@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // hammer_settings.h
 //
@@ -77,9 +78,10 @@ class HammerSettings
     int una_corda_pin;
     int una_corda_connected_pin;
     int midi_channel;
+    bool true_for_tcp_else_udp;
     char teensy_ip[IP_STRING_LENGTH];
     char computer_ip[IP_STRING_LENGTH];
-    int upd_port;
+    int network_port;
     bool canbus_enable;
     bool using_display;
     bool connected_channel[NUM_CHANNELS];

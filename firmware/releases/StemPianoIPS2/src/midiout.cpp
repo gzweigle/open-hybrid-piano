@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // midiout.cpp
 //
@@ -41,11 +42,12 @@ int maximum_midi_value, int debug_level) {
 }
 
 void MidiOut::SendNoteOn(AutoMute *mute, const bool *event, const float *velocity) {
-  SendNote(mute, event, velocity, true);
+  SendNote(mute, event, velocity, true, false);
 }
 
-void MidiOut::SendNoteOff(AutoMute *mute, const bool *event, const float *velocity) {
-  SendNote(mute, event, velocity, false);
+void MidiOut::SendNoteOff(AutoMute *mute, const bool *event, const float *velocity,
+bool source) {
+  SendNote(mute, event, velocity, false, source);
 }
 
 void MidiOut::SendPedal(DspPedal *DspP) {
@@ -54,8 +56,8 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     #ifdef ENABLE_USB_MIDI
     usbMIDI.sendControlChange(64, pedal_midi_value_, midi_channel_);
     #endif
-    if (debug_level_ >= DEBUG_STATS) {
-      Serial.println("MIDI sustain is now ON.");
+    if (debug_level_ >= DEBUG_NOTES) {
+      Serial.println("MIDI sustain ON.");
     }
   }
   else if (DspP->GetSustainCrossedUpThreshold() == true) {
@@ -63,8 +65,8 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     #ifdef ENABLE_USB_MIDI
     usbMIDI.sendControlChange(64, 0, midi_channel_);
     #endif
-    if (debug_level_ >= DEBUG_STATS) {
-      Serial.println("MIDI sustain is now OFF.");
+    if (debug_level_ >= DEBUG_NOTES) {
+      Serial.println("MIDI sustain OFF.");
     }
   }
   if (DspP->GetSostenutoCrossedDownThreshold() == true) {
@@ -72,8 +74,8 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     #ifdef ENABLE_USB_MIDI
     usbMIDI.sendControlChange(66, pedal_midi_value_, midi_channel_);
     #endif
-    if (debug_level_ >= DEBUG_STATS) {
-      Serial.println("MIDI sostenuto is now ON.");
+    if (debug_level_ >= DEBUG_NOTES) {
+      Serial.println("MIDI sostenuto ON.");
     }
   }
   else if (DspP->GetSostenutoCrossedUpThreshold() == true) {
@@ -81,8 +83,8 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     #ifdef ENABLE_USB_MIDI
     usbMIDI.sendControlChange(66, 0, midi_channel_);
     #endif
-    if (debug_level_ >= DEBUG_STATS) {
-      Serial.println("MIDI sostenuto is now OFF.");
+    if (debug_level_ >= DEBUG_NOTES) {
+      Serial.println("MIDI sostenuto OFF.");
     }
   }
   if (DspP->GetUnaCordaCrossedDownThreshold() == true) {
@@ -90,8 +92,8 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     #ifdef ENABLE_USB_MIDI
     usbMIDI.sendControlChange(67, pedal_midi_value_, midi_channel_);
     #endif
-    if (debug_level_ >= DEBUG_STATS) {
-      Serial.println("MIDI una corda is now ON.");
+    if (debug_level_ >= DEBUG_NOTES) {
+      Serial.println("MIDI una corda ON.");
     }
   }
   else if (DspP->GetUnaCordaCrossedUpThreshold() == true) {
@@ -99,14 +101,14 @@ void MidiOut::SendPedal(DspPedal *DspP) {
     #ifdef ENABLE_USB_MIDI
     usbMIDI.sendControlChange(67, 0, midi_channel_);
     #endif
-    if (debug_level_ >= DEBUG_STATS) {
-      Serial.println("MIDI una corda is now OFF.");
+    if (debug_level_ >= DEBUG_NOTES) {
+      Serial.println("MIDI una corda OFF.");
     }
   }
 }
 
 void MidiOut::SendNote(AutoMute *mute,
-const bool *event, const float *velocity, bool send_on) {
+const bool *event, const float *velocity, bool send_on, bool source) {
   int velocity_int;
   int midi_note;
   int velocity_potentially_muted;
@@ -120,25 +122,30 @@ const bool *event, const float *velocity, bool send_on) {
       if (velocity_int > maximum_midi_value_) {
         velocity_int = maximum_midi_value_;
       }
-      if (debug_level_ >= DEBUG_STATS) {
-        Serial.print("MIDI note (");
-        Serial.print(midi_note);
-        Serial.print(") index (");
-        Serial.print(key);
-        Serial.print(") velocity (");
-        Serial.print(velocity_int);
-        Serial.print(")");
+      if (debug_level_ >= DEBUG_NOTES) {
+        Serial.printf("MIDI note (%2d) index(%2d) velocity(%2d)",
+        midi_note, key, velocity_int);
         if (send_on == true) {
-          Serial.println(" is now ON.");
+          Serial.println(" ON.");
         }
         else {
-          Serial.println(" is now OFF.");
+          Serial.print(" OFF ");
+          if (source == false)
+            Serial.println("(int)");
+          else
+            Serial.println("(ext)");
         }
       }
       // Immediately before sending MIDI command, check for certain values and if
       // detected, automatically reduce the volume level.
-      velocity_potentially_muted = 
-      mute->AutomaticallyDecreaseVolume(velocity_int, debug_level_);
+      if (send_on == true) {
+        velocity_potentially_muted = 
+        mute->AutomaticallyDecreaseVolume(velocity_int, debug_level_);
+      }
+      else {
+        // Do not mute for the note off (damper) velocity.
+        velocity_potentially_muted = velocity_int;
+      }
       if (send_on == true) {
         mi_->sendNoteOn(midi_note, velocity_potentially_muted, midi_channel_);
         #ifdef ENABLE_USB_MIDI

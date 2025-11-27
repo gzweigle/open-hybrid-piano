@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // hammer_settings.cpp
 //
@@ -34,11 +35,13 @@ HammerSettings::HammerSettings() {}
 void HammerSettings::SetAllSettingValues() {
 
   // Debug. See stem_piano_ips2.h for information.
-  // DEBUG_NONE
-  // DEBUG_STATS
-  // DEBUG_MINOR
-  // DEBUG_ALL
-  debug_level = DEBUG_STATS;
+  // DEBUG_NONE = Nothing displayed except startup info.
+  // DEBUG_INFO = Occasional code state information.
+  // DEBUG_NOTES = Above plus info about note changes.
+  // DEBUG_STATS = Above plus occasional statistics.
+  // DEBUG_ALG = Above plus algorithm details.
+  // DEBUG_ALL = Above plus useless stuff.
+  debug_level = DEBUG_NOTES;
   Serial.print("Debug level is set to ");
   Serial.println(debug_level);
 
@@ -63,9 +66,9 @@ void HammerSettings::SetAllSettingValues() {
   // Must be longer than the time to sample and collect all NUM_CHANNELS
   // data from the ADC plus the time for processing all of the data.
   // WARNING - For normal operation, this value must match damper board value.
-  adc_sample_period_microseconds = 300;
+  adc_sample_period_microseconds = 250;
   
-  if (debug_level >= DEBUG_STATS) {
+  if (debug_level >= DEBUG_INFO) {
     Serial.print("The sample period is set to ");
     Serial.print(adc_sample_period_microseconds);
     Serial.println(" microseconds.");
@@ -165,7 +168,7 @@ void HammerSettings::SetAllSettingValues() {
     // Value does not need to be precise.
     // Just needs to be large enough to avoid noisy data when hammer
     // is near its rest or check position.
-    strike_threshold = 0.8;
+    strike_threshold = 0.96;
   }
   else {
     // When the hammer shank position crosses this threshold
@@ -220,10 +223,11 @@ void HammerSettings::SetAllSettingValues() {
   ////////
   // Ethernet data.
   //
+  true_for_tcp_else_udp = true;
   MUST EDIT TO ADD VALUES BEFORE RUNNING.
   snprintf(teensy_ip, 16, "X.X.X.X");   // Arbitrary assigned Teensy IP
   snprintf(computer_ip,16, "X.X.X.X");  // Get from ipconfig command on local computer
-  upd_port = X;  // Must match UDP port in receiver code
+  network_port = X;  // Must match UDP port in receiver code
   //
 
   ////////

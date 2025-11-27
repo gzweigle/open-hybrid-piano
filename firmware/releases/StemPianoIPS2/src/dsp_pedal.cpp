@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // dsp_pedal.cpp
 //
@@ -57,7 +58,7 @@ int una_corda_connected_pin, int debug_level) {
 
   debug_level_ = debug_level;
  
-  Timing_.Setup(pedal_sample_interval_microseconds);
+  Timing_.Setup(pedal_sample_interval_microseconds, debug_level);
 
   // Want a small value, just enough to detect a pedal is connected.
   initial_threshold_ = 0.2;
@@ -173,7 +174,7 @@ void DspPedal::UpdateSustainMaxValue(float position) {
   if (max_position_valid_[Ind::sustain] == true) {
     if (position > max_position_[Ind::sustain]) {
       max_position_[Ind::sustain] = position;
-      if (debug_level_ >= DEBUG_ALL) {
+      if (debug_level_ >= DEBUG_ALG) {
         Serial.print("UpdateSustainMaxValue() new max = ");
         Serial.println(position);
       }
@@ -184,7 +185,7 @@ void DspPedal::UpdateSostenutoMaxValue(float position) {
   if (max_position_valid_[Ind::sostenuto] == true) {
     if (position > max_position_[Ind::sostenuto]) {
       max_position_[Ind::sostenuto] = position;
-      if (debug_level_ >= DEBUG_ALL) {
+      if (debug_level_ >= DEBUG_ALG) {
         Serial.print("UpdateSostenutoMaxValue() new max = ");
         Serial.println(position);
       }
@@ -195,7 +196,7 @@ void DspPedal::UpdateUnaCordaMaxValue(float position) {
   if (max_position_valid_[Ind::una_corda] == true) {
     if (position > max_position_[Ind::una_corda]) {
       max_position_[Ind::una_corda] = position;
-      if (debug_level_ >= DEBUG_ALL) {
+      if (debug_level_ >= DEBUG_ALG) {
         Serial.print("UpdateUnaCordaMaxValue() new max = ");
         Serial.println(position);
       }

@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // switches.cpp
 //
@@ -114,7 +115,7 @@ unsigned long *dip_last_micros, const char *switch_name) {
     else if (*dip_last_micros >= switch_pu_do_interval_) {
       *dip_state = 1;
       *dip_last_micros = micros();
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         char display_string[MAX_SWITCH_NAME_LENGTH];
         sprintf(display_string,"DIP %s is now ON", switch_name);
         Serial.println(display_string);
@@ -128,7 +129,7 @@ unsigned long *dip_last_micros, const char *switch_name) {
     else if (*dip_last_micros >= switch_pu_do_interval_) {
       *dip_state = 0;
       *dip_last_micros = micros();
-      if (debug_level_ >= DEBUG_STATS) {
+      if (debug_level_ >= DEBUG_INFO) {
         char display_string[MAX_SWITCH_NAME_LENGTH];
         sprintf(display_string,"DIP %s is now OFF", switch_name);
         Serial.println(display_string);

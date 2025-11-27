@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // damper_status.h
 //
@@ -39,7 +40,11 @@ class DamperStatus
     void LowerRightLed(bool, bool);
     void SCALed();
     void EthernetLed();
-    void SerialMonitor(const int *, const float *, float);
+    void SerialMonitor(const int *, const float *,
+    float, float, float, float, float, float, float, float,
+    float, float, float, float, float, float, float, float);
+    void DisplayProcessingIntervalStart();
+    void DisplayProcessingIntervalEnd();
  
   private:
 
@@ -63,14 +68,21 @@ class DamperStatus
 
     unsigned long serial_interval_;
     unsigned long serial_last_change_;
-    Utilities filter0_;
-    Utilities filter1_;
 
     unsigned long statistics_interval_;
     unsigned long statistics_last_change_;
     float min_[NUM_NOTES];
     float max_[NUM_NOTES];
     int played_count_[NUM_NOTES];
+    int smallest_ind_, largest_ind_;
+    int print_stats_count_ = 0;
+
+    unsigned long interval_start_micros_;
+    unsigned long interval_start_millis_;
+    unsigned long interval_max_;
+    unsigned long interval_interval_;
+
+    void IncrementalPrint(bool);
 
 };
 

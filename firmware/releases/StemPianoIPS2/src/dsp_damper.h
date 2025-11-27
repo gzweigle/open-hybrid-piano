@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // dsp_damper.h
 //
@@ -38,6 +39,7 @@ class DspDamper
     DspDamper();
     void Setup(float, float, int, int);
     void GetDamperEventData(bool *, float *, const float *);
+    void CheckHammerDamperSync(bool *, float *, const float *, const bool *);
     void Enable(bool);
 
   private:
@@ -46,8 +48,13 @@ class DspDamper
     int debug_level_;
 
     float damper_threshold_;
+    float damper_low_threshold_;
 
-    int event_block_counter_[NUM_CHANNELS];
+    int event_block_counter_up_[NUM_CHANNELS];
+    int event_block_counter_down_[NUM_CHANNELS];
+
+    bool hammer_previous_event_[NUM_CHANNELS];
+    float velocity_if_force_event_;
 
     // Look back previous samples for computing velocity.
     float damper_buffer_[NUM_CHANNELS][NUM_DELAY_ELEMENTS];

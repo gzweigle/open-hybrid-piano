@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // src_damper.cpp
 //
@@ -62,16 +63,18 @@ void setup(void) {
   Serial.println(".");
   Serial.println(".");
   Serial.println("welcome to stem piano by gcz");
+  Serial.println("an open source, hybrid piano");
   Serial.println(".");
   Serial.println(".");
 
   // Important information.
   Serial.println("Hardware required:");
-  Serial.println("  IPS2.X damper board.");
+  Serial.println("  IPS2.X hammer board.");
   Serial.println("  SCA0.0 analog board.");
   Serial.println("  HPS 0.8, 0.7, or 0.4 sensor board (any board meeting spec is also ok).");
   Serial.println("License: GNU GPLv3 - for documentation, code, and design see:");
-  Serial.println("  https://github.com/gzweigle/DIY-Grand-Digital-Piano");
+  Serial.println("https://github.com/gzweigle/open-hybrid-piano");
+  Serial.println("https://github.com/stem-piano");
   Serial.println(".");
   Serial.println(".");
 
@@ -79,7 +82,7 @@ void setup(void) {
   Set.SetAllSettingValues();
 
   // Notification messages.
-  if (Set.debug_level >= DEBUG_STATS) {
+  if (Set.debug_level >= DEBUG_INFO) {
     Serial.println("Beginning damper board initialization.");
   }
   Tft.Setup(Set.using_display, Set.debug_level);
@@ -104,7 +107,8 @@ void setup(void) {
   // only required if using a separate set of sensors for the dampers.
   // These two classes are common to hammer and pedal boards.
   Adc.Setup(Set.adc_spi_clock_frequency, Set.adc_is_differential,
-  Set.using18bitadc, Set.sensor_v_max, Set.adc_reference, &Tpl);
+  Set.using18bitadc, Set.sensor_v_max, Set.adc_reference,
+  Set.adc_global_scale, Set.reorder_list, &Tpl);
   B2B.Setup(Set.canbus_enable);
 
   // Diagnostics and status
@@ -112,10 +116,10 @@ void setup(void) {
 
   // Common on hammer and pedal board: Ethernet, test points, TFT display, etc.
   CalP.Setup(Set.calibration_threshold, Set.debug_level, &Nonv);
-  Eth.Setup(Set.computer_ip, Set.teensy_ip, Set.upd_port,
-  SwIPS2.direct_read_switch_2(), Set.debug_level);
+  Eth.Setup(Set.true_for_tcp_else_udp, Set.computer_ip, Set.teensy_ip,
+    Set.network_port, SwIPS2.direct_read_switch_2(), Set.debug_level);
   Tpl.Setup();
-  Tmg.Setup(Set.adc_sample_period_microseconds);
+  Tmg.Setup(Set.adc_sample_period_microseconds, Set.debug_level);
 
   if (Set.test_index >= 0) {
     Serial.println("WARNING - In high-speed test mode.");
@@ -123,7 +127,7 @@ void setup(void) {
   }
 
   // Ready to be a piano (damper).
-  if (Set.debug_level >= DEBUG_STATS) {
+  if (Set.debug_level >= DEBUG_INFO) {
     Serial.println("Finished damper board initialization.");
   }
   delay(1000);
@@ -136,8 +140,8 @@ void setup(void) {
 int startup_counter = 0;
 
 // Switches.
-bool switch_select_key_for_ethernet;
 bool switch_enable_ethernet;
+bool switch_require_tcp_connection;
 bool switch_tft_display;
 bool switch_freeze_cal_values;
 bool switch_disable_and_reset_calibration;
@@ -145,6 +149,7 @@ bool switch_disable_and_reset_calibration;
 // Data from ADC.
 unsigned int raw_samples[NUM_CHANNELS];
 unsigned int raw_samples_reversed[NUM_CHANNELS];
+unsigned int raw_samples_reordered[NUM_CHANNELS];
 int position_adc_counts[NUM_CHANNELS];
 
 // Damper, hammer, and pedal data.
@@ -158,6 +163,9 @@ float damper_threshold_high = 0.75;
 
 void loop() {
 
+  Tmg.WarnOnProcessingInterval();
+  DStat.DisplayProcessingIntervalStart();
+
   // Measure every processing interval so the pickup and
   // dropout timers update. Later, when a switch is read,
   // what is actually read is the internal state of timers.
@@ -166,14 +174,16 @@ void loop() {
   SwSCA2.updatePuDoState("SCA21", "SCA22");
   SwSCA1.updatePuDoState("SCA11", "SCA12");
 
-  // Read switch inputs.
-  switch_select_key_for_ethernet = SwIPS1.read_switch_1();
+  // Read all switch inputs.
+
+  // ips_sw1_position2 (ENABLE_TFT).
+  switch_tft_display = SwIPS1.read_switch_2();
 
   // ips_sw2_position2 (ENABLE_ETHERNET).
   switch_enable_ethernet = SwIPS2.read_switch_2();
 
-  // ips_sw2_position1 (ENABLE_TFT).
-  switch_tft_display = SwIPS2.read_switch_1();
+  // ips_sw2_position1 (REQUIRE_TCP).
+  switch_require_tcp_connection = SwIPS2.read_switch_1();
 
   // sca_sw1_position2 (FREEZE_CAL_VALUES).
   switch_freeze_cal_values = SwSCA1.read_switch_2();
@@ -211,16 +221,14 @@ void loop() {
     }
 
     // Reorder the back row.
-    Adc.ReorderAdcValues(raw_samples_reversed);
+    Adc.ReorderAdcValues(raw_samples_reordered, raw_samples_reversed);
 
     // Normalize the ADC values.
-    Adc.NormalizeAdcValues(position_adc_counts, position_floats, raw_samples_reversed);
+    Adc.NormalizeAdcValues(position_adc_counts, position_floats, raw_samples_reordered);
 
     // Undo the position errors due to physical tolerances.
     bool all_notes_using_cal = CalP.Calibration(switch_freeze_cal_values,
     switch_disable_and_reset_calibration, calibrated_floats, position_floats);
-
-    B2B.SendDamperData(calibrated_floats);
 
     // Zero out the signal from any unconnected pins to avoid noise
     // or anything else causing an unwanted piano note to play.
@@ -231,8 +239,9 @@ void loop() {
       }
     }
 
-    Eth.SendPianoPacket(calibrated_floats, switch_enable_ethernet,
-    switch_select_key_for_ethernet, damper_threshold_med, Set.test_index);
+    B2B.SendDamperData(calibrated_floats);
+    Eth.SendPianoPacket(calibrated_floats, calibrated_floats,
+      switch_enable_ethernet, switch_require_tcp_connection, Set.test_index);
 
     if (Set.test_index < 0) {
       // Run the TFT display.
@@ -248,9 +257,19 @@ void loop() {
       DStat.SCALed();
       DStat.EthernetLed();
       DStat.SerialMonitor(position_adc_counts, calibrated_floats,
-      damper_threshold_med);
+      calibrated_floats[0], position_floats[0],
+      calibrated_floats[1], position_floats[1],
+      calibrated_floats[2], position_floats[2],
+      calibrated_floats[3], position_floats[3],
+      calibrated_floats[4], position_floats[4],
+      calibrated_floats[5], position_floats[5],
+      calibrated_floats[6], position_floats[6],
+      calibrated_floats[7], position_floats[7]);
     }
 
     Tpl.SetTp8(false);
+
   }
+
+  DStat.DisplayProcessingIntervalEnd();
 }

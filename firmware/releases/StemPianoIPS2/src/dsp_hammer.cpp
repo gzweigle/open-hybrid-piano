@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // dsp_hammer.cpp
 //
@@ -143,7 +144,7 @@ void DspHammer::DetectHammerStrike(bool *event, float *velocity, const float *po
     // Therefore, do not allow a 2nd strike until the hammer drops below a threshold.
     released_[key] == true)
     {
-      if (debug_level_ >= DEBUG_ALL) {
+      if (debug_level_ >= DEBUG_ALG) {
         Serial.printf("DetectHammerStrike()");
         Serial.printf("  key=%d pos=%f v_max=%f v_inst=%f repc=%d bufp=%d\n",
         key, position[key], max_velocity_[key], velocity_[key],

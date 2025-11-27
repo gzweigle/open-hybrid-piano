@@ -269,5 +269,28 @@ Step 29 - Fixing Sources of Inaccuracy https://www.youtube.com/watch?v=yqkRKSGX6
 11. Ambient light.
 
 Step 30 - Testing boards from a new manufacturer https://www.youtube.com/watch?v=tyN7v7L9VIQ
+1. Manufacture boards directly from GitHub artifacts (https://github.com/gzweigle/open-hybrid-piano/tree/main/hardware/releases) and with a new manufacturer.
+2. This tests everthing was correctly pushed to GitHub.
+3. Construct a piano based on GitHub instructions (https://github.com/stem-piano) and GitHub firmware (https://github.com/gzweigle/open-hybrid-piano/tree/main/firmware/releases).
+4. This tests that all the GitHub material is correct.
 
 Step 31 - Web application displaying all 96 streaming measurements https://www.youtube.com/watch?v=AWMlzoCq9G0
+1. Write a python server that receives streamed hammer position measurements from the piano.
+2. Write a javascript program that displays values from all 96 sensors in real time.
+3. Write and play a song to go with it.
+4. This tests the full Ethernet datapath.
+
+Step 32 - Another video displaying streaming measurements https://www.youtube.com/watch?v=jlyA7hVRj5U
+1. Modify the python server.
+2. Write a javascript program with another display idea.
+3. Write and play a song to go with it.
+
+Step 33 - Upgrading hammer sensors https://www.youtube.com/watch?v=QIp7ZoWRtdo
+1. Switching to the low-cost sensors (HPS 0.8) and verify that the GitHub HW works. 
+2. Test a set of approximately 400 CNY-70 and sort by peak voltage.
+3. Select 88 CNY-70 with peak voltage in range 2.2 volts to 2.5 volts.
+4. Use r2 = 4300 ohms.
+5. Build 88 sensors based on HPS 0.8.
+6. Build 6 ACE boards based on ACE 0.0 and 0.1.
+7. Replace old hammer sensor HPS with the new HPS.
+8. Test.

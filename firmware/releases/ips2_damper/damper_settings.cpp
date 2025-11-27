@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // damper_settings.cpp
 //
@@ -34,11 +35,13 @@ DamperSettings::DamperSettings() {}
 void DamperSettings::SetAllSettingValues() {
 
   // Debug. See stem_piano_ips2.h for information.
-  // DEBUG_NONE
-  // DEBUG_STATS
-  // DEBUG_MINOR
-  // DEBUG_ALL
-  debug_level = DEBUG_STATS;
+  // DEBUG_NONE = Nothing displayed except startup info.
+  // DEBUG_INFO = Occasional code state information.
+  // DEBUG_NOTES = Above plus info about note changes.
+  // DEBUG_STATS = Above plus occasional statistics.
+  // DEBUG_ALG = Above plus algorithm details.
+  // DEBUG_ALL = Above plus useless stuff.
+  debug_level = DEBUG_NOTES;
   Serial.print("Debug level is set to ");
   Serial.println(debug_level);
 
@@ -63,9 +66,9 @@ void DamperSettings::SetAllSettingValues() {
   // Must be longer than the time to sample and collect all NUM_CHANNELS
   // data from the ADC plus the time for processing all of the data.
   // WARNING - For normal operation, this value must match damper board value.
-  adc_sample_period_microseconds = 300;
+  adc_sample_period_microseconds = 250;
   
-  if (debug_level >= DEBUG_STATS) {
+  if (debug_level >= DEBUG_INFO) {
     Serial.print("The sample period is set to ");
     Serial.print(adc_sample_period_microseconds);
     Serial.println(" microseconds.");
@@ -97,6 +100,10 @@ void DamperSettings::SetAllSettingValues() {
   // the ADC outputs its maximum value.
   adc_reference = 2.5;
 
+  // A global scaling applied to all ADC inputs.
+  // Normally set to 1.0.
+  adc_global_scale = 1.0;
+
   ////////
   // Switch settings.
   switch_debounce_micro = 500000; // Read DIP switches at this interval, microseconds.
@@ -111,17 +118,18 @@ void DamperSettings::SetAllSettingValues() {
 
   ////////
   // Calibration Settings.
-  calibration_threshold = 0.6;
+  calibration_threshold = 0.4;
 
   
   ////////
   // Ethernet data.
   //
   MUST EDIT TO ADD VALUES BEFORE RUNNING.
+  true_for_tcp_else_udp = true;
   snprintf(teensy_ip, 16, "X.X.X.X");   // Arbitrary assigned Teensy IP
   snprintf(computer_ip,16, "X.X.X.X");  // Get from ipconfig command on local computer
   // Recommend different UDP port for hammer and damper boards.
-  upd_port = X;  // Must match UDP port in receiver code
+  network_port = X;  // Must match UDP port in receiver code
   //
   ////////
 
@@ -147,5 +155,25 @@ void DamperSettings::SetAllSettingValues() {
   // Turn off unused pedal inputs.
   for (int channel = NUM_NOTES; channel < NUM_CHANNELS; channel++) {
     connected_channel[channel] = false;
+  }
+
+  ////////
+  // Optional custom reordering.
+  // To customize reordering, place the new source index into reorder_list.
+  //
+  // For example, assume that a sensor at C4 is connected to the lowest
+  // input on IPS 2.0. When starting to number with index 0, C4 is index 39.
+  // So, set reorder_list[39] = 0.
+  // Without reordering, the lowest input on IPS 2.0 is for B0.
+  //
+  // If the sensor at C4 is connected to the 34th input on IPS 2.0, then set
+  // reorder_list[39] = 34.
+  // Without reordering, the 34th input on IPS 2.0 is for G3.
+  //
+  // Use the assembly_manual.md document for IPS 2.0 numbers.
+  //
+  // The default is no custom reordering.
+  for (int channel = 0; channel < NUM_CHANNELS; channel++) {
+    reorder_list[channel] = channel;
   }
 }

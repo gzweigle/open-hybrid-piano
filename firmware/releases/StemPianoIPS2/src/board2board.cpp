@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // board2board.cpp
 //
@@ -85,12 +86,23 @@ void Board2Board::Setup(bool enable) {
 void Board2Board::SendDamperData(const float *position) {
   if (enable_ == true) {
     int p_int[NUM_CHANNELS];
+    int p_int_limit;
     for (int ind = 0; ind < NUM_CHANNELS; ind++) {
       if (ind < 4 || ind > 83) {
-        p_int[ind] = static_cast<int>(16.0 * position[ind]) & 0x0F;
+        p_int_limit = static_cast<int>(16.0 * position[ind]);
+        if (p_int_limit > 15)
+          p_int_limit = 15;
+        else if (p_int_limit < 0)
+          p_int_limit = 0;
+        p_int[ind] = p_int_limit;
       }
       else {
-        p_int[ind] = static_cast<int>(64.0 * position[ind]) & 0x3F;
+        p_int_limit = static_cast<int>(64.0 * position[ind]);
+        if (p_int_limit > 63)
+          p_int_limit = 63;
+        else if (p_int_limit < 0)
+          p_int_limit = 0;
+        p_int[ind] = p_int_limit;
       }
     }
     // First 4 and last 4 of 88 keys are 4 bits each.

@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Greg C. Zweigle
+// Copyright (C) 2025 Greg C. Zweigle
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,7 +14,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // Location of documentation, code, and design:
-// https://github.com/gzweigle/DIY-Grand-Digital-Piano
+// https://github.com/gzweigle/open-hybrid-piano
+// https://github.com/stem-piano
 //
 // nonvolatile.h
 //
@@ -31,7 +32,7 @@ void Nonvolatile::Setup(int debug_level) {
   debug_level_ = debug_level;
 
   if (sizeof(double) != SIZE_DOUBLE) {
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_INFO) {
       Serial.printf("Nonvolatile::Setup() ERROR.\n");
       Serial.printf("Size of double = %d, expected %d\n",
       sizeof(double), SIZE_DOUBLE);
@@ -69,7 +70,7 @@ void Nonvolatile::Setup(int debug_level) {
   // Cleared by NonvolatileWasWritten().
   nonvolatile_was_written_ = false;
 
-  if (debug_level_ >= DEBUG_STATS) {
+  if (debug_level_ >= DEBUG_INFO) {
     Serial.print("Total EEPROM writes = ");
     Serial.print(ReadTotalWrites());
     Serial.print(". ");
@@ -167,7 +168,7 @@ void Nonvolatile::WriteMaxVelocityStoredFlag(bool data) {
 double Nonvolatile::ReadDouble(int address) {
   bool local_enable_memory;
   if (address + SIZE_DOUBLE >= MAX_EEPROM_ADDRESS) {
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_INFO) {
       Serial.printf("Nonvolatile::ReadDouble() ERROR.\n");
       Serial.printf("Size of EEPROM = %d but tried to read from %d\n",
       MAX_EEPROM_ADDRESS, address + SIZE_DOUBLE);
@@ -194,7 +195,7 @@ double Nonvolatile::ReadDouble(int address) {
 void Nonvolatile::WriteDouble(int address, double d) {
   bool local_enable_memory;
   if (address + SIZE_DOUBLE >= MAX_EEPROM_ADDRESS) {
-    if (debug_level_ >= DEBUG_STATS) {
+    if (debug_level_ >= DEBUG_INFO) {
       Serial.printf("Nonvolatile::WriteDouble() ERROR.\n");
       Serial.printf("Size of EEPROM = %d but tried to write to %d\n",
       MAX_EEPROM_ADDRESS, address + SIZE_DOUBLE);
